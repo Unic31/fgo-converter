@@ -1,248 +1,348 @@
 <script>
-    import { createWorker } from 'tesseract.js';
-    import { onMount } from 'svelte';
+	import pako from 'pako';
+	import { onMount } from 'svelte';
 
-    let fileInput;
-    let originalImageUrl = $state(null);
-    let processedImageUrl = $state(null); // ★ Tesseract가 보는 화면(디버그용)
-    let wavePreviews = $state([]);
-    let isLoading = $state(false);
-    let statusMessage = $state('이미지를 업로드해주세요.');
+	let isLoading = $state(false);
+	// sample
+	let url = $state(
+		'https://link.chaldea.center/laplace/share?data=GH4sIAM4jymkA_81XbW_aMBD-L_6cSXZeCd9WtmqVui8b-1ShyZArsXCcNHGioar_fWfnpVS0GdCCJhDOOXd-7p57SXgkmVBXtZAJmcae5xBeFL0YMYc81FBpMn0kwuz4NJ5MGHVIkfIKyBQVQEG2_carlEwJ-01Dz_8dMuaFyyV5ckheaJGryhyQiXWqt7OUC0WmuqzBIYmo-FLC1wYUYtxzWeFmkQulr-r7e7RStZQOqURWS67hsxiULOoP3PtVtFqIpYFnBkjxDHrTbFtpsZrlCVgXBukGo3FNIBIakBgINc6qawEy-dlohL57JFWjrV5AKaNGV2RCz_LaOOujWxsh5U1idKM4DgLq-F7o2yUKArboNG4bo4FY9ruwDINK2m27az94QyfPcMyItw2KiNsYB9EBrjfXeW0FlNJiR1jZkDBBXhxb8dY4e1UC3_Rs415_EDzUomA7aW2t5J5NB43kVHVR5KWebwukkqhcAXHIuuTK8NXl5ckZSAupH41z5rIoNKThihd2naB8Km0WcJQ1d4S1aLLPWldqHW2vkNYayX0TC308ZwHF6hmvs5CZAotCN7CLF55OmEUbCGOt1_GBVfYaXy-qLDiIr50iCw7lCwNY8tWmLvb6dPLPPo2pa0otpl67-GP8de04edGOh_L0ZiHtdV87qN6oosM7zx5jfhZokoCENU5Hg1FCIfkKvkO2hPJGJfAHTKB3LtaC0eWrbkQjk7rFsHwgSGXOpx0_9mpnnuOpWyjnvFxDq2Vnci8jT8bDPDNc4U2dllCluXmuGIqeTNmPo7ELoLEBzb0o2iWYdA9CYx-Oxi6K5p4HjWuNM4Y43cUwZyzgipdo8gmPE9X8yzD4SoEvF1w-9zuqtU3LuiFvXXiH9YDt98a98mDdnTYYu2ZenjUfx-eBvrt_2AXQTusf-hE1dlqVLC5KyrlTcPygpGcdJvT_SXQ_DugJ1uPz4OggFwZ4hnBz--erfRf5C6A3qhVUDgAA&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
+		// 'https://link.chaldea.center/laplace/share?data=GH4sIAO4RymkA_82X32-bMBDH_xc_M8kGTH68rdmqVepetuypiionuMGKMRRMtKjq_747m5Ko1UiTdqxKFGNzvu_dh7NNHkiuzEWjdEqmkygKiCjLp-4IuveNrC2ZPhCFIzGdjMeMBqTMRC3JlAVEGpnvvok6I1PCbmkSxbcJY1GyXJLHgBSlVYWp0UGu1pndzTKhDJnaqpEBSVUtllp-3UoDGndC1zBYFsrYi-buDmaZRuuA1CpvtLDys-qMnOoPGPtVeivQslLkKGRELp-m5rvaqtWsSKULoetdQTYhJqLlVmpIhGKw5lJJnf7cWpC-eSD11qJdQuMRRVOVKzsrGow1hqg2SuurFE1DNko4pwG0cOHaMfQXrdH1Fo1AzX0XjrE0qR92o-4DN2zaCTLsXW8dYw3NBCIQdnNZNBgtxpOVB52VSwke0Gg8cd1rjPaikmLzRBvG0B0HeveNKtnBU_WT9Isp2k0ANHVTlkVl57sSQBJTGEkCsq6EQVrtU3kMOmQYU9jPLOIh5yxgHH8jHgHAc3l5tQ5YeBowGo_7gaH1C2J-1l-IUXo6Mk5j3k9slDAwCUZJyF0DyM4uMad2com9vqb86ntrQUG4S7HaNOXzJRmOKWX9tCY0xKU4oZFv4j5aHor3-iYq7fbksdDjVFp71Hl9zTg3-7UGISdH9qeQR1g60MYhD7Hl_CgO7_g5jvFHw7EAw1RquYbTAD1XstRiJb_LfCmrK5PK3xLTu4G0F2grVu2RBOVkvWdHAVzX6DVsqbiAD84v8LqT1VxUa2n3J99BH-MqciwYmGizStZZodvt6RFXer8aG1Qt7FGj76A2jMpHJfj-akPUIh00NzpobmzQKmGD5fZPVYS1cPySoL3ojmDnZCUqmPIJrlQ9_9K9EFQKXrGF3u_9YOY38AjP8wHRn1LE9D2g0DOgsJOg0DevNTaA2nm7Fh10_6eD7v__sbyCwVbs0SQXKDwDubn7p-5f3_4AC4maL4EQAAA%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
+		// 'https://link.chaldea.center/laplace/share?data=GH4sIANpNyWkA_9VXUW_aMBD-L37OJDsECLytbNWQ2MvGnipUuclBLBwnjR00VPW_784JFJVC2dRGnYRwztx3392X8yU8sFyZq1rplI1HvV7AZFnuzDgO2H0N1rHxA1O0E3Hc5CJgZSYtsDFegYF8-03ajI2ZuOUx57dxlPAkEewxYEXpVGEsBcjVKnPbSSaVYWNX1RCwVFl5p-HrBgxyLKW2uFkWyrirerlElKm1DphVea2lg89q7-RZf-Der7LxQi4HMiciI3PYQfOtdSqZFCn4FPbWFKsJBQ-Yhg1oLIRTsuZagU5_bhxS3zwwu3HkN-QR5-SqcuUmRU25RpjVWmk9Tck1Ho6iPg-Gg7CHCyrU7_NF6zHbkAdS-Q_uunQfVJA123gdNS4jZJFufV3UlBFxZuWBkfi08SbwXuTNGWV0VYFc7xTFPQrXR4Xua1WKgzvXgPQRRHsAlm_rsiwqN9-WKBZbVgpMygK2qqQhTVrtH4P_TJi2Y1plLhKmhXhljoQxhYGzsghManRel0E8QCWCQTyM_ILma7o0UT9yx5wQBiu4k8m6Lp-fK6xI9M_rFIrhiIQKhW8dWkX_Eqkw8F9LdbJp-HNtmtlyomP4xR3jw9DXAiEpaFjhQCMOlxISR6VZga8QS6ug1DKB75DfQTU1Kfz2P92IgC8IL5N20qLAruH1GiGxJU7eauavDsYyRt1CNZfVCtArbEfrzkZfyrrIST80XFaBzQp6PJBsj9T259lEp2xhB2xhp0qKi9jEm7OJTtnC92GTzuHoYUF7sR8_Pkgiq9QPHGXnX56OfKXwHUHqpw10aw5y2A75A3R4OVocoz-JHbydxee4F11LJF4vsk37hRr3YH4xuHcM_ggCnTj7Yads730au6npXefY6UYO_6GdxNu204KIJ0g3939SmheAP2JGBAd8DQAA&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
+	);
+	let decodedData = $state(null);
+	let fgaCommand = $state('');
+	let teamData = $state([]);
+	let mcData = $state(null);
+	let isError = $state(false);
 
-    async function handleFileChange(event) {
-        const file = event.target.files[0];
-        if (!file || !file.type.startsWith('image/')) return;
+	async function fetchSvtDetails(svtList) {
+		if (!svtList) return [];
+		const svtPromises = svtList.map(async (svt) => {
+			// 빈 자리(null)는 그대로 null 반환
+			if (!svt || !svt.svtId) return null;
 
-        wavePreviews = [];
-        isLoading = true;
-        statusMessage = 'OCR 엔진 로딩 중...';
+			try {
+				const res = await fetch(`https://api.atlasacademy.io/nice/JP/svt/${svt.svtId}`);
+				const data = await res.json();
 
-        if (originalImageUrl) URL.revokeObjectURL(originalImageUrl);
-        originalImageUrl = URL.createObjectURL(file);
-        processedImageUrl = null; // 초기화
+				let ceData = null;
+				// 예장은 있는 경우에만
+				if (svt.ceId) {
+					const ceRes = await fetch(`https://api.atlasacademy.io/nice/JP/equip/${svt.ceId}`);
+					ceData = await ceRes.json();
+				}
 
-        try {
-            await processImageWithOcr(file);
-        } catch (error) {
-            console.error('이미지 처리 실패:', error);
-            statusMessage = '⚠️ 분석 중 에러가 발생했습니다.';
-            isLoading = false;
-        }
-    }
+				return {
+					...svt,
+					details: data,
+					ceDetails: ceData
+				};
+			} catch (err) {
+				console.error(`서번트(ID: ${svt.svtId}) 로드 실패:`, err);
+				return { ...svt, details: null, ceDetails: null };
+			}
+		});
+		return await Promise.all(svtPromises);
+	}
 
-    async function processImageWithOcr(imageFile) {
-        statusMessage = '엔진 초기화 중... (kor+eng)';
-        
-        // 1. 한국어+영어 동시 사용 (Wave를 못 읽으면 '턴'을 읽도록 보험)
-        const worker = await createWorker('kor+eng', 1, {
-            logger: m => {
-                if (m.status === 'recognizing text') {
-                    statusMessage = `텍스트 분석 중... (${Math.round(m.progress * 100)}%)`;
-                }
-            }
-        });
+	async function fetchMCDetails(mcId) {
+		if (!mcId) return null;
+		try {
+			const res = await fetch(`https://api.atlasacademy.io/nice/JP/MC/${mcId}`);
+			return await res.json();
+		} catch (err) {
+			console.error(`마스터 예장(ID: ${mcId}) 로드 실패:`, err);
+			return null;
+		}
+	}
 
-        await worker.setParameters({
-            tessedit_pageseg_mode: '11', // Sparse text
-        });
+	async function fncConvertBtn() {
+		try {
+			isLoading = true;
+			isError = false;
+			fgaCommand = '';
+			teamData = [];
+			mcData = null;
 
-        // 2. 안전한 전처리 (부드러운 흑백 반전)
-        statusMessage = '이미지 전처리 중 (흑백 반전)...';
-        
-        const img = new Image();
-        img.src = originalImageUrl;
-        await img.decode();
+			const urlObj = new URL(url.trim());
+			let dataParam = urlObj.searchParams.get('data');
 
-        const prepCanvas = document.createElement('canvas');
-        const pCtx = prepCanvas.getContext('2d');
-        
-        // 해상도 3배 확대
-        const scale = 3; 
-        prepCanvas.width = img.width * scale;
-        prepCanvas.height = img.height * scale;
-        
-        // Tesseract 최신 모델(LSTM)은 안티앨리어싱을 좋아하므로 부드럽게 유지
-        pCtx.imageSmoothingEnabled = true; 
-        pCtx.drawImage(img, 0, 0, prepCanvas.width, prepCanvas.height);
+			// url에 data 없으면
+			if (!dataParam) {
+				isError = true;
+				decodedData = null;
+				return;
+			}
 
-        const imgData = pCtx.getImageData(0, 0, prepCanvas.width, prepCanvas.height);
-        const dataArr = imgData.data;
-        
-        // 부드러운 흑백(Grayscale) 변환 후 색상 반전
-        // 밝은 글자는 어둡게(검은색), 어두운 배경은 밝게(흰색) 만듭니다.
-        for (let i = 0; i < dataArr.length; i += 4) {
-            const r = dataArr[i];
-            const g = dataArr[i + 1];
-            const b = dataArr[i + 2];
-            
-            // 흑백 휘도 계산
-            const gray = (r * 0.299 + g * 0.587 + b * 0.114);
-            const invertedGray = 255 - gray; // 색상 반전
+			if (dataParam.startsWith('G') || dataParam.startsWith('D') || dataParam.startsWith('Z')) {
+				dataParam = dataParam.substring(1);
+			}
 
-            dataArr[i] = invertedGray;
-            dataArr[i + 1] = invertedGray;
-            dataArr[i + 2] = invertedGray;
-        }
-        pCtx.putImageData(imgData, 0, 0);
+			let base64 = dataParam.replace(/-/g, '+').replace(/_/g, '/');
 
-        // ★ 우리가 화면에서 볼 수 있도록 상태 변수에 저장
-        processedImageUrl = prepCanvas.toDataURL('image/png');
+			while (base64.length % 4 !== 0) {
+				base64 += '=';
+			}
 
-        // 3. 이미지 인식 수행
-        const result = await worker.recognize(processedImageUrl);
-        const data = result.data;
+			const binaryString = atob(base64);
+			const len = binaryString.length;
+			const bytes = new Uint8Array(len);
+			for (let i = 0; i < len; i++) {
+				bytes[i] = binaryString.charCodeAt(i);
+			}
+			const decompressed = pako.inflate(bytes);
+			const jsonString = new TextDecoder().decode(new Uint8Array(decompressed));
+			decodedData = JSON.parse(jsonString);
 
-        statusMessage = '영역 계산 중...';
+			// 마스터 예장 api
+			console.log(decodedData.team?.mysticCode);
+			if (decodedData.team?.mysticCode?.mysticCodeId) {
+				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
+			}
 
-        const waveBlocks = [];
-        const lines = data.lines || [];
+			// 서번트 api
+			const team = [
+				...decodedData.team.onFieldSvts, // [0, 1, 2]
+				...decodedData.team.backupSvts // [3, 4, 5]
+			];
+			teamData = await fetchSvtDetails(team);
 
-        console.log("=== 드디어 읽어낸 텍스트 ===");
-        lines.forEach((line) => {
-            const text = line.text.trim()
-            if(text.length > 0) {
-                console.log(text); 
-            }
+			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate, mcData);
+			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
+			const cntRes = 1;
+			console.log(`총 ${cntRes} 번 변환되었습니다.`);
+		} catch (err) {
+			console.error('fncConvertBtn:', err);
+			isError = true;
+			decodedData = null;
+		} finally {
+			isLoading = false;
+		}
+	}
 
-            const match = text.match(/(wave|웨이브|턴|vave|wove)\s*(\d+)/i);
+	function copyToClipboard() {
+		if (!decodedData) return;
 
-            if (match) {
-                waveBlocks.push({
-                    text: text,
-                    waveNum: match[2],
-                    y0: line.bbox.y0 / scale, 
-                    y1: line.bbox.y1 / scale  
-                });
-            }
-        });
+		// 텍스트로 변환 (들여쓰기 2칸 적용)
+		const text = JSON.stringify(decodedData, null, 2);
 
-        // 겹치는 위치 제거 (Y좌표 차이가 20픽셀 이내면 같은 줄로 간주)
-        const uniqueWaveBlocks = [];
-        waveBlocks.sort((a, b) => a.y0 - b.y0).forEach((block) => {
-            if (uniqueWaveBlocks.length === 0) {
-                uniqueWaveBlocks.push(block);
-            } else {
-                const lastBlock = uniqueWaveBlocks[uniqueWaveBlocks.length - 1];
-                if (block.y0 - lastBlock.y0 > 20) {
-                    uniqueWaveBlocks.push(block);
-                }
-            }
-        });
+		// 브라우저 클립보드 API 호출
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				alert('데이터가 복사되었습니다');
+			})
+			.catch((err) => {
+				console.error('복사 실패:', err);
+			});
+	}
 
-        if (uniqueWaveBlocks.length === 0) {
-            statusMessage = '⚠️ 텍스트를 찾지 못했습니다. 우측의 "Tesseract가 보는 화면"에 글자가 잘 보이는지 확인해주세요!';
-            await worker.terminate();
-            isLoading = false;
-            return;
-        }
+	function fncConvert(actions, delegate, mcInfo) {
+		if (!actions) return '';
+		let result = '';
 
-        // 4. 원본 이미지를 Canvas에 로드하여 최종 영역 절삭
-        const finalCanvas = document.createElement('canvas');
-        const fCtx = finalCanvas.getContext('2d');
-        const paddingAbove = 20;
+		// delegate.replaceMemberIndexes 배열을 복사해둠 (오더체인지 시 앞에서부터 꺼내 쓰기 위함)
+		let swaps = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
 
-        for (let i = 0; i < uniqueWaveBlocks.length; i++) {
-            const currentWave = uniqueWaveBlocks[i];
-            const nextWave = uniqueWaveBlocks[i + 1];
+		actions.forEach((action) => {
+			if (action.type === 'skill') {
+				if (action.svt === undefined) {
+					// ★ 마스터 스킬 처리
+					let isOrderChange = false;
+					let isMCTargeting = false; // 마스터 스킬 타겟팅 여부 추가
 
-            const sy = Math.max(0, currentWave.y0 - paddingAbove);
-            const ey = nextWave ? Math.max(0, nextWave.y0 - paddingAbove) : img.height;
-            const cropHeight = ey - sy;
+					// Atlas API 데이터로 스킬 정보 확인
+					if (mcInfo && mcInfo.skills && mcInfo.skills[action.skill]) {
+						const skillData = mcInfo.skills[action.skill];
 
-            if (cropHeight < 50) continue;
+						// 1. 오더체인지 판별
+						isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
 
-            finalCanvas.width = img.width;
-            finalCanvas.height = cropHeight;
-            fCtx.drawImage(img, 0, sy, img.width, cropHeight, 0, 0, img.width, cropHeight);
+						// 2. 타겟팅(아군 1체) 판별
+						isMCTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
+					} else if (action.skill === 2 && swaps.length > 0) {
+						// API 데이터가 모종의 이유로 없을 때의 대비책 (보통 3스킬이 오더체인지)
+						isOrderChange = true;
+					}
 
-            wavePreviews.push({
-                title: `Wave/Turn ${currentWave.waveNum} (인식: ${currentWave.text})`,
-                dataUrl: finalCanvas.toDataURL('image/png')
-            });
-        }
+					if (isOrderChange && swaps.length > 0) {
+						// 오더체인지 명령어: x + 전열타겟 + 후열타겟
+						const swap = swaps.shift();
+						result += `x${swap[0] + 1}${swap[1] + 1}`;
+					} else {
+						// 일반 마스터 스킬: j, k, l + 타겟번호
+						const masterSkills = ['j', 'k', 'l'];
+						result += masterSkills[action.skill];
 
-        await worker.terminate();
-        statusMessage = `✅ 완료: ${wavePreviews.length}개의 영역을 분리했습니다.`;
-        isLoading = false;
-    }
+						// ★ 타겟팅 스킬일 때만 번호 결합
+						if (isMCTargeting && action.options?.playerTarget !== undefined) {
+							result += action.options.playerTarget + 1;
+						}
+					}
+				} else {
+					// ★ 서번트 스킬 처리 (기존과 동일)
+					const skillMap = [
+						['a', 'b', 'c'],
+						['d', 'e', 'f'],
+						['g', 'h', 'i']
+					];
+					result += skillMap[action.svt][action.skill];
+
+					// 타겟팅 필요 여부 판별 로직
+					let isTargeting = false;
+					const svtInfo = teamData[action.svt];
+
+					if (svtInfo?.details?.skills) {
+						const skillSlot = action.skill + 1;
+						const slotSkills = svtInfo.details.skills.filter((s) => s.num === skillSlot);
+						const latestSkill = slotSkills[slotSkills.length - 1];
+
+						if (latestSkill?.functions) {
+							isTargeting = latestSkill.functions.some((f) => f.funcTargetType === 'ptOne');
+						}
+					}
+
+					// 타겟팅 스킬일 때만 번호 추가
+					if (isTargeting && action.options?.playerTarget !== undefined) {
+						result += action.options.playerTarget + 1;
+					}
+				}
+			} else if (action.type === 'attack') {
+				action.attacks.forEach((atk) => {
+					if (atk.isTD) result += atk.svt + 4;
+				});
+				result += ',#,';
+			}
+		});
+
+		return result;
+	}
+	onMount(() => {
+		fncConvertBtn();
+	});
 </script>
 
-<div class="min-h-screen bg-gray-100 p-4 md:p-10">
-    <div class="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-lg">
-        <h1 class="mb-2 text-3xl font-bold text-gray-800">
-            FGO 커맨드 변환기 <span class="text-sm font-normal text-gray-500">(IMG 기반)</span>
-        </h1>
-        <div class="mb-6 text-gray-500">
-            칼데아(Chaldea) 앱의 공유 스크린샷 이미지(IMG)를 FGA용 텍스트로 변환합니다.
-        </div>
+<div class="min-h-screen bg-gray-100 p-10 md:p-10">
+	<div class="mx-auto flex max-w-3xl flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg">
+		<div class="flex justify-between">
+			<h1 class="mb-1 text-3xl font-bold text-gray-800">FGO 커맨드 변환기</h1>
+		</div>
+		<div class="text-2x1 text-gray-500">
+			칼데아(Chaldea) 앱의 공유 URL을 FGA용 텍스트로 변환합니다.
+		</div>
+		<input
+			type="text"
+			bind:value={url}
+			placeholder="https://link.chaldea.center/laplace/share?data=..."
+			class="w-full rounded-lg border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-blue-500"
+		/>
+		<button
+			onclick={fncConvertBtn}
+			class="w-full rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900"
+			style="cursor: pointer;"
+		>
+			변환하기
+		</button>
 
-        <div class="flex flex-col items-center gap-4 rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-6">
-            <input
-                type="file"
-                accept="image/*"
-                bind:this={fileInput}
-                onchange={handleFileChange}
-                class="hidden"
-            />
+		{#if isError}
+			<div class="rounded-lg bg-red-50 p-4 text-red-600">⚠️ 올바른 링크인지 확인해주세요.</div>
+		{/if}
 
-            {#if originalImageUrl}
-                <div class="flex flex-col md:flex-row gap-4 w-full justify-center">
-                    <div class="relative flex flex-col items-center">
-                        <span class="mb-2 text-sm font-bold text-gray-600">원본 이미지</span>
-                        <img src={originalImageUrl} alt="원본" class="max-h-80 rounded-xl border shadow-md object-contain" />
-                        {#if isLoading}
-                            <div class="absolute inset-0 top-7 flex items-center justify-center rounded-xl bg-white/70">
-                                <span class="animate-pulse font-bold text-blue-600">분석 중...</span>
-                            </div>
-                        {/if}
-                    </div>
+		{#if decodedData}
+			<div class="">
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+						<button
+							onclick={copyToClipboard}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
 
-                    {#if processedImageUrl}
-                        <div class="relative flex flex-col items-center">
-                            <span class="mb-2 text-sm font-bold text-red-500">Tesseract가 읽는 화면 (디버그)</span>
-                            <img src={processedImageUrl} alt="전처리" class="max-h-80 rounded-xl border-2 border-red-300 shadow-md object-contain" />
-                        </div>
-                    {/if}
-                </div>
-            {/if}
-
-            <button
-                onclick={() => fileInput.click()}
-                class="mt-4 flex w-full max-w-md items-center justify-center gap-2 rounded-xl bg-blue-600 py-4 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900"
-                disabled={isLoading}
-            >
-                {#if isLoading}
-                    ⏳ 처리 중...
-                {:else}
-                    📷 스크린샷 업로드 및 분석
-                {/if}
-            </button>
-            <p class="text-sm {isLoading ? 'font-medium text-blue-600' : 'text-gray-500'}">
-                {statusMessage}
-            </p>
-        </div>
-
-        {#if wavePreviews.length > 0}
-            <div class="mt-10 space-y-8">
-                <div class="flex items-center justify-between border-b pb-3">
-                    <h2 class="text-2xl font-bold text-gray-800">웨이브 영역 미리보기</h2>
-                </div>
-
-                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    {#each wavePreviews as preview, index}
-                        <div class="rounded-2xl border border-gray-700 bg-gray-900 p-5 shadow-inner">
-                            <div class="mb-3 flex items-center justify-between">
-                                <h3 class="font-mono text-sm font-bold tracking-wider text-green-400">
-                                    {preview.title}
-                                </h3>
-                            </div>
-                            <div class="max-h-96 overflow-auto rounded-lg border border-gray-800 bg-black">
-                                <img src={preview.dataUrl} alt={preview.title} class="w-full object-contain" />
-                            </div>
-                        </div>
-                    {/each}
-                </div>
-            </div>
-        {/if}
-    </div>
+					<div class="max-h-50 overflow-auto text-xs text-green-400">
+						<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+					</div>
+				</div>
+			</div>
+		{/if}
+		{#if teamData && teamData.length > 0}
+			<div class="grid grid-cols-7 gap-3">
+				{#if mcData}
+					<div
+						class="flex flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm"
+					>
+						<img
+							src={mcData.extraAssets.item.male}
+							alt={mcData.name}
+							class="h-full w-full object-cover"
+						/>
+					</div>
+				{/if}
+				{#each teamData as item, idx (idx)}
+					<div
+						class="flex flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm"
+					>
+						{#if item}
+							<div class="relative mb-2 h-20 w-full overflow-hidden rounded-lg bg-white">
+								<img
+									src={item.details.extraAssets.faces.ascension[4]}
+									alt={item.details.name}
+									class="h-full w-full object-cover"
+								/>
+							</div>
+							<div class="relative h-10 w-full">
+								{#if item.ceDetails}
+									<img
+										src={item.ceDetails.extraAssets.equipFace.equip[item.ceDetails.id]}
+										alt={item.id}
+										class="h-full w-full rounded"
+									/>
+									{#if item.equip1.limitBreak}
+										<div
+											class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white"
+										>
+											★
+										</div>
+									{/if}
+								{:else}
+									<div class="h-full w-full rounded bg-gray-100"></div>
+								{/if}
+							</div>
+						{:else}
+							<div
+								class="mb-2 flex h-20 w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300"
+							>
+								Empty
+							</div>
+							<div class="h-10 w-full rounded bg-gray-100"></div>
+						{/if}
+					</div>
+				{/each}
+			</div>
+		{/if}
+		{#if fgaCommand}
+			<div class="rounded-xl border-2 border-blue-200 bg-blue-50 p-5">
+				<h2 class="mb-2 text-lg font-bold text-blue-800">FGA 커맨드</h2>
+				<div class="flex items-center gap-2">
+					<code class="flex-1 rounded border bg-white p-3 font-mono break-all text-blue-600">
+						{fgaCommand}
+					</code>
+					<button
+						onclick={() => {
+							navigator.clipboard.writeText(fgaCommand);
+							alert('커맨드가 복사되었습니다!');
+						}}
+						class="rounded-lg bg-blue-600 px-4 py-3 font-bold text-white hover:bg-blue-700"
+					>
+						복사
+					</button>
+				</div>
+			</div>
+		{/if}
+	</div>
 </div>
+
+<style>
+</style>
