@@ -144,7 +144,6 @@
 			return '';
 		}
 		let command = '';
-		// 스킬 지연 발동 배열
 		let delayedActions = [];
 		// 던전마다 몹 배치가 다르므로 시작 몹 타겟은 설정하지 않음. 스킬 쓸때만 타겟이 적이면 그것만 계산
 		let currentEnemyTarget = null;
@@ -161,104 +160,99 @@
 		];
 		const masterSkill = ['j', 'k', 'l'];
 
-		// // 아라쉬, 진궁, 하베트롯 등 죽음으로 인한 서번트 교체
-		// const svtDeath = (deadSvtIdx) => {
-		// 	// 후열 가장 먼저 대기 중인(null이 아닌) 서번트를 찾음
-		// 	const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
-
-		// 	if (nextIdx !== -1) {
-		// 		// 죽은 서번트 자리 데이터를 후열 서번트 데이터로 교체
-		// 		frontSvtList[deadSvtIdx] = backSvtList[nextIdx];
-		// 		backSvtList[nextIdx] = null; // 해당 후열 서번트는 필드로 나갔으므로 일단 비움
-
-		// 		// 빈자리를 없애고 대기열 서번트들을 앞으로 당김
-		// 		let newBackList = backSvtList.filter((b) => b !== null);
-
-		// 		// 배열 길이를 다시 3으로 맞춤 (빈 자리는 null)
-		// 		while (newBackList.length < 3) {
-		// 			newBackList.push(null);
-		// 		}
-		// 		backSvtList = newBackList;
-		// 	} else {
-		// 		// 후열에 대기중인 서번트가 없으면 전열 빈자리 그대로 둠
-		// 		frontSvtList[deadSvtIdx] = null;
-		// 	}
-		// };
-
-		// // 미스트레인, 수영복 클로에 등 후퇴로 인한 서번트 교체
-		// const svtRetreat = (retreatSvtIdx) => {
-		// 	// 후퇴할 서번트 저장
-		// 	const retreatingSvt = frontSvtList[retreatSvtIdx];
-
-		// 	// 후열 가장 먼저 대기 중인(null이 아닌) 서번트를 찾음
-		// 	const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
-		// 	if (nextIdx !== -1) {
-		// 		// 대기열 첫 번째 서번트를 빈 전열 자리로 이동
-		// 		frontSvtList[retreatSvtIdx] = backSvtList[nextIdx];
-		// 		backSvtList[nextIdx] = null; // 나간 자리는 일단 비움
-
-		// 		// 남은 서번트들을 앞으로 당기고(null 제거), 후퇴한 서번트를 맨 뒤에 넣음
-		// 		let newBackList = backSvtList.filter((b) => b !== null);
-		// 		newBackList.push(retreatingSvt);
-
-		// 		// 배열 길이를 다시 3으로 맞춤 (빈 자리는 null)
-		// 		while (newBackList.length < 3) {
-		// 			newBackList.push(null);
-		// 		}
-		// 		backSvtList = newBackList;
-		// 	} else {
-		// 		// 후열 없으면 위치 교체 없음
-		// 	}
-		// };
-
 		const svtDeath = (deadSvtIdx) => {
 			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
 			if (nextIdx !== -1) {
 				frontSvtList[deadSvtIdx] = backSvtList[nextIdx];
-				backSvtList[nextIdx] = null; // 자리만 비움
+				backSvtList[nextIdx] = null;
 			} else {
 				frontSvtList[deadSvtIdx] = null;
 			}
+			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
+			while (newBackList.length < 3) newBackList.push(null);
+			backSvtList = newBackList;
 		};
-
 		const svtRetreat = (retreatSvtIdx) => {
 			const retreatingSvt = frontSvtList[retreatSvtIdx];
 			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
 			if (nextIdx !== -1) {
 				frontSvtList[retreatSvtIdx] = backSvtList[nextIdx];
-				backSvtList[nextIdx] = retreatingSvt;
+				backSvtList[nextIdx] = null;
 			} else {
 				frontSvtList[retreatSvtIdx] = null;
 			}
+			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
+			newBackList.push(retreatingSvt);
+			while (newBackList.length < 3) newBackList.push(null);
+			backSvtList = newBackList;
 		};
 		actions.forEach((action) => {
-			// console.log(action);
-			// console.log(frontSvtList[action.svt]);
+			let needsEnemyTarget = false;
+
+			if (action.type === 'attack') {
+				action.attacks.forEach((atk) => {
+					if (!atk.isTD) {
+						needsEnemyTarget = true; // 평타 공격은 타겟팅 적용
+					} else {
+						const svtInfo = frontSvtList[atk.svt];
+						const currentNP = svtInfo?.details?.noblePhantasms?.find(
+							(np) => np.id === svtInfo.tdId
+						);
+						if (currentNP?.effectFlags?.includes('attackEnemyOne')) {
+							needsEnemyTarget = true;
+						}
+					}
+				});
+			} else if (action.type === 'skill') {
+				if (action.svt === undefined && mcData) {
+					const skillData = mcData.skills[action.skill];
+					needsEnemyTarget = skillData?.functions?.some((f) => f.funcTargetType === 'enemy');
+				} else {
+					const svtInfo = frontSvtList[action.svt];
+					if (svtInfo?.details?.skills) {
+						const currentSkillId = svtInfo.skillIds[action.skill];
+						const exactSkill = svtInfo.details.skills.find((s) => s.id === currentSkillId);
+						needsEnemyTarget = exactSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
+					}
+				}
+			}
+
 			if (
+				needsEnemyTarget &&
 				action.options?.enemyTarget !== undefined &&
 				action.options.enemyTarget !== currentEnemyTarget
 			) {
 				currentEnemyTarget = action.options.enemyTarget;
-				const targetNum = currentEnemyTarget == 0 ? 3 : currentEnemyTarget == 1 ? 2 : 1;
-				command += `t${targetNum}`; // 0, 1, 2 이므로 +1 해서 기록
+				const targetNum = 3 - currentEnemyTarget;
+				command += `t${targetNum}`;
 			}
+
 			if (action.type === 'skill') {
 				if (action.svt === undefined && mcData) {
 					const skillData = mcData.skills[action.skill];
 					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
-					const isMCTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
+					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
 
 					if (isOrderChange && swaps.length > 0) {
 						const swap = swaps.shift();
-						command += `x${swap[0] + 1}${swap[1] + 1}`;
 						const fieldIdx = swap[0];
 						const backupIdx = swap[1];
+
+						let relativeBackupIdx = 0;
+						for (let i = 0; i <= backupIdx; i++) {
+							if (backSvtList[i] !== null && backSvtList[i] !== undefined) {
+								relativeBackupIdx++;
+							}
+						}
+
+						command += `x${fieldIdx + 1}${relativeBackupIdx}`;
+
 						const temp = frontSvtList[fieldIdx];
 						frontSvtList[fieldIdx] = backSvtList[backupIdx];
 						backSvtList[backupIdx] = temp;
 					} else {
 						command += masterSkill[action.skill];
-						if (isMCTargeting && action.options?.playerTarget !== undefined) {
+						if (isTargeting && action.options?.playerTarget !== undefined) {
 							command += action.options.playerTarget + 1;
 						}
 					}
@@ -266,22 +260,23 @@
 					const svtInfo = frontSvtList[action.svt];
 
 					if (svtInfo?.details?.skills) {
-						const skillSlot = action.skill + 1;
-						// n번째 스킬의 강화 스킬 리스트
-						const slotSkills = svtInfo.details.skills.filter((s) => s.num === skillSlot);
-						// 가장 최신(마지막) 적용
-						const latestSkill = slotSkills[slotSkills.length - 1];
-						const isTargeting = latestSkill.functions.some((f) => f.funcTargetType === 'ptOne');
+						const currentSkillId = svtInfo.skillIds[action.skill];
+						const exactSkill = svtInfo.details.skills.find((s) => s.id === currentSkillId);
+						const isTargeting = exactSkill.functions.some((f) => f.funcTargetType === 'ptOne');
 
 						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
 						if (svtInfo.svtId === 404200 && action.skill === 2) {
 							delayedActions.push({ type: 'death', svtIdx: action.svt });
 						}
+						// 종토리(1102200) 3스킬 -> 턴 종료 시 자폭
+						if (svtInfo.svtId === 1102200 && action.skill === 2) {
+							delayedActions.push({ type: 'death', svtIdx: action.svt });
+						}
 						// 수영복 클로에(1101600) 2스킬 -> 턴 종료 시 후퇴
 						if (svtInfo.svtId === 1101600 && action.skill === 1) {
-							console.log('!');
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
+						
 						command += svtSkillMap[action.svt][action.skill];
 						if (isTargeting && action.options?.playerTarget !== undefined) {
 							command += action.options.playerTarget + 1;
@@ -301,7 +296,7 @@
 						npCommand += atk.svt + 4;
 						const svtInfo = frontSvtList[atk.svt];
 						// 보구강화 리스트 중 해당 서번트가 장착된 보구 가져옴
-						const currentNP = svtInfo.details.noblePhantasms.find((np) => np.id === svtInfo.tdId);
+						const currentNP = svtInfo?.details?.noblePhantasms?.find((np) => np.id === svtInfo.tdId);
 
 						// 자폭
 						if (
