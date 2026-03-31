@@ -5,7 +5,8 @@
 	let isLoading = $state(false);
 	// sample
 	let url = $state(
-		'https://link.chaldea.center/laplace/share?data=GH4sIAFqAymkA_-2W3WvbMBDA_xc9ayD5I3HytmQrC3QvW_ZUQlHtSywi26oth4XS_313suOZlPWLrWwwCMgn7vOnOyl3rNDlotUmY_NZGHKmrD2JScLZbQuNY_M7pmknErgpJGc2Vw2wOX5BCcXxk2pyNmfyWiRCXCdRKtJUsnvOKut0VTbkoNC73B2XudIlm7u6Bc4y3agbAx8PUGKMrTINbtpKl27RbrdoVbbGcNboojXKwXs9KPmoX3Dvm-20MJYDVVCgUhVwMi2OjdPpssrApzBIK6wmkIIzAwcwWIigZMsLDSb7enAY-uqONQdHelMRCUGqutBuWbWUa4RZ7bUxq4xUk-ksigWfToIQFyQUx2LTa1weSAND-R_uumxwKkm6PHiOBpcZRlFuf1G1lBHFzO1ISH3aeAgijLx4SRktalD7E1HcI3cxErpttZWjk-uMzAMT4w2w_Ka1tqrd-mgRFiurEhhnu1qVRKQnf88HLBKTmj3OZZJMkASfJNPILyg-xaXz-k-D-d8vIyxYwI1K9609n6oAbwr5OKaZCLBh-EyE3RI93T6d1xdzGoPpb5iOjDgH010r5qE-xRHPbhbvZjxKcvI4iyCIQ-oZXKMgDmiN4-dMEzo-x5H8bTg2qJiBgR1e6OS5BmtUCp-huIF6VWbwHai8Kyx_Q7oq7V8VbCfXefYUWE_DJzp6etDbEeq1qnfguiLo-RjJlE9VUKOg4PIamryiJ5CA3NNo91GUc9jMjPcfQ0N7J6mq0eQdQtbN-sMwYbXGN0eZnyRRrcMR0HT8iTTPYARvDUO-AoZ8IxjyrWEEr-oMfm4tTsYn5V9bh4P10JXyJda_9SA2FHmJ4db-71k38D8AHWkqN3YKAAA%3D&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
+		'https://link.chaldea.center/laplace/share?data=GH4sIAE0gy2kA_9WWTYvbMBCG_4vOKkiO7Ti5NWmXLuTUpqcSFq2txCKyrLVlQwj5752RHW_Ykq-yhS0E5BGjmXcejaTsSaHMrFE6I9PJaESJsPZoJgklL42sHZnuicKZkMEk45TYXNSSTOFLGlnsvok6J1PCn1jC2FMSpixNOTlQUlqnSlNjgEJtcreb50IZMnVVIynJVC2etfzaSgM51kLXMGlLZdysWa9hlWm0pqRWRaOFk5_V4OSzfoe5n7bzglxOigITGVHI49JiVzuVzstMegmD9QjVBJxRomUrNRTCUKx5UFJnP1oHqX_tSd069BuzkDF0VYVy87JBrSGo2iqtHzN0TcaTMGJ0HAcjGIBQFLFV77Fo0QNS-R_MumwIytFatJ6jhmECWYTbPpQNKsKcuT0xUi8bNoGNQm8uUNGskmJ7JApzGC4CQi-Nsvxk57pF-o8l2i-A8uvG2rJyy50FWGRdKWkyQsmmEgaZ9OwPdAATMD66AiaKAQifAA8ajILrWHzI4Igl6tTFHwiLKY28COX_6Jb-GPVcbsLSL_FcbsUCBTyLdNvYt2eKc8ajy5gCPu76hntCOPLrpLrAd6M6y4a9ZdPdK2fAsPv7BQSzyWUScRIjgDgZh34A8wYMEPXjY8AwK_DOpJYbuM4hPFgi7V8NaBjXBRDOQSMR2n8MzeRrS0UFkj7Bl6qXX4ZDXym47YV-LQXcOj0BdubJ22S12MlqKaqNdK-v2tGG4lF3WSBBMFxeyTov8Y1EcAfczasy2bvLZH8v07cOqPTKgr6VfISz2YJ_ASV4dyh3y1xh4jmkW_q_D11f_gblDkuTFgkAAA%3D%3D&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
+		// 'https://link.chaldea.center/laplace/share?data=GH4sIAFqAymkA_-2W3WvbMBDA_xc9ayD5I3HytmQrC3QvW_ZUQlHtSywi26oth4XS_313suOZlPWLrWwwCMgn7vOnOyl3rNDlotUmY_NZGHKmrD2JScLZbQuNY_M7pmknErgpJGc2Vw2wOX5BCcXxk2pyNmfyWiRCXCdRKtJUsnvOKut0VTbkoNC73B2XudIlm7u6Bc4y3agbAx8PUGKMrTINbtpKl27RbrdoVbbGcNboojXKwXs9KPmoX3Dvm-20MJYDVVCgUhVwMi2OjdPpssrApzBIK6wmkIIzAwcwWIigZMsLDSb7enAY-uqONQdHelMRCUGqutBuWbWUa4RZ7bUxq4xUk-ksigWfToIQFyQUx2LTa1weSAND-R_uumxwKkm6PHiOBpcZRlFuf1G1lBHFzO1ISH3aeAgijLx4SRktalD7E1HcI3cxErpttZWjk-uMzAMT4w2w_Ka1tqrd-mgRFiurEhhnu1qVRKQnf88HLBKTmj3OZZJMkASfJNPILyg-xaXz-k-D-d8vIyxYwI1K9609n6oAbwr5OKaZCLBh-EyE3RI93T6d1xdzGoPpb5iOjDgH010r5qE-xRHPbhbvZjxKcvI4iyCIQ-oZXKMgDmiN4-dMEzo-x5H8bTg2qJiBgR1e6OS5BmtUCp-huIF6VWbwHai8Kyx_Q7oq7V8VbCfXefYUWE_DJzp6etDbEeq1qnfguiLo-RjJlE9VUKOg4PIamryiJ5CA3NNo91GUc9jMjPcfQ0N7J6mq0eQdQtbN-sMwYbXGN0eZnyRRrcMR0HT8iTTPYARvDUO-AoZ8IxjyrWEEr-oMfm4tTsYn5V9bh4P10JXyJda_9SA2FHmJ4db-71k38D8AHWkqN3YKAAA%3D&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
 		// 'https://link.chaldea.center/laplace/share?data=GH4sIABp3ymkA_9WW227bMAyG30XXGiD5EDu-W7MVK9CrLbsagkKJlViILLuWbCAo-u4j5cNadM3WJu0wJIgtieRPf6Tk3JFSmYtW6Zxk8zCkRNT1OEw4JbettI5kd0ThTMTmacrmlNSFsJJkYCCNLA9fhC1IRvgNi0N2k4TbZJuvyT0lVe1UZSwGKNWucIdFIZQhmWtaSUmurFhr-bmTBjS2QluYrCtl3EW73YKXabWmxKqy1cLJj2oy8qpfYe573VuBlpOiRCEjSjm6lgfr1GZR5dKnMI2u4Gl4wCjRspMa7hkmay6V1Pm3zoH0jztiO4d2EYsChqaqVG5RtZhrBFntldZXOZqm6TyOGU3nLPIXPovZarC47tCCM-q_Kw9Ymryf9rP-Awsun9Q4jq47ksUgC5cU5IXbX1YtporJFPWDwcY_D1QngRRweI2pXjRS7CdiMNn1BbttVc0flLR30k9dUJkDF9vWddW45aEGisRURhJKdo0wiGqwvqcPeIXsOK84jDmN0hlCi9IkPoUWaAX_M60Ye-YorWTGsa2SWRD7S3hCd3m1qbt4n_X8BF79Rh5wxX_Fq3fxuOInvLaNgvx_QwweYS02-7Yetqff39PPCgLlUssdHAkgDiOxGU4e2Miuj-2JQWiLUYOBIMnYo2Oq1uIgm6VodtL5NX_UjGMghnlVJVKDRVc00hYVHpcI6x4Le1yNv6ta8A5q_B-pvVHdhHPQZ4QON9OrwAfdiAZcPkA4ZZefpvZvFLxXhP51fIBZ39AcG_fNobBXtRc7B5TgVVDoSUhHbz56h6PzaPy8d_CigrCTu_RYQfgZyv_nvXA-leBtVJ5vLn72HffiNFcovAC5pf972b-MfgLkfmgDNgsAAA%3D%3D&questId=94098809&phase=1&enemyHash=1_0530_73f7fdb'
 		// 'https://link.chaldea.center/laplace/share?data=GH4sIAM4jymkA_81XbW_aMBD-L_6cSXZeCd9WtmqVui8b-1ShyZArsXCcNHGioar_fWfnpVS0GdCCJhDOOXd-7p57SXgkmVBXtZAJmcae5xBeFL0YMYc81FBpMn0kwuz4NJ5MGHVIkfIKyBQVQEG2_carlEwJ-01Dz_8dMuaFyyV5ckheaJGryhyQiXWqt7OUC0WmuqzBIYmo-FLC1wYUYtxzWeFmkQulr-r7e7RStZQOqURWS67hsxiULOoP3PtVtFqIpYFnBkjxDHrTbFtpsZrlCVgXBukGo3FNIBIakBgINc6qawEy-dlohL57JFWjrV5AKaNGV2RCz_LaOOujWxsh5U1idKM4DgLq-F7o2yUKArboNG4bo4FY9ruwDINK2m27az94QyfPcMyItw2KiNsYB9EBrjfXeW0FlNJiR1jZkDBBXhxb8dY4e1UC3_Rs415_EDzUomA7aW2t5J5NB43kVHVR5KWebwukkqhcAXHIuuTK8NXl5ckZSAupH41z5rIoNKThihd2naB8Km0WcJQ1d4S1aLLPWldqHW2vkNYayX0TC308ZwHF6hmvs5CZAotCN7CLF55OmEUbCGOt1_GBVfYaXy-qLDiIr50iCw7lCwNY8tWmLvb6dPLPPo2pa0otpl67-GP8de04edGOh_L0ZiHtdV87qN6oosM7zx5jfhZokoCENU5Hg1FCIfkKvkO2hPJGJfAHTKB3LtaC0eWrbkQjk7rFsHwgSGXOpx0_9mpnnuOpWyjnvFxDq2Vnci8jT8bDPDNc4U2dllCluXmuGIqeTNmPo7ELoLEBzb0o2iWYdA9CYx-Oxi6K5p4HjWuNM4Y43cUwZyzgipdo8gmPE9X8yzD4SoEvF1w-9zuqtU3LuiFvXXiH9YDt98a98mDdnTYYu2ZenjUfx-eBvrt_2AXQTusf-hE1dlqVLC5KyrlTcPygpGcdJvT_SXQ_DugJ1uPz4OggFwZ4hnBz--erfRf5C6A3qhVUDgAA&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
 		// 'https://link.chaldea.center/laplace/share?data=GH4sIAO4RymkA_82X32-bMBDH_xc_M8kGTH68rdmqVepetuypiionuMGKMRRMtKjq_747m5Ko1UiTdqxKFGNzvu_dh7NNHkiuzEWjdEqmkygKiCjLp-4IuveNrC2ZPhCFIzGdjMeMBqTMRC3JlAVEGpnvvok6I1PCbmkSxbcJY1GyXJLHgBSlVYWp0UGu1pndzTKhDJnaqpEBSVUtllp-3UoDGndC1zBYFsrYi-buDmaZRuuA1CpvtLDys-qMnOoPGPtVeivQslLkKGRELp-m5rvaqtWsSKULoetdQTYhJqLlVmpIhGKw5lJJnf7cWpC-eSD11qJdQuMRRVOVKzsrGow1hqg2SuurFE1DNko4pwG0cOHaMfQXrdH1Fo1AzX0XjrE0qR92o-4DN2zaCTLsXW8dYw3NBCIQdnNZNBgtxpOVB52VSwke0Gg8cd1rjPaikmLzRBvG0B0HeveNKtnBU_WT9Isp2k0ANHVTlkVl57sSQBJTGEkCsq6EQVrtU3kMOmQYU9jPLOIh5yxgHH8jHgHAc3l5tQ5YeBowGo_7gaH1C2J-1l-IUXo6Mk5j3k9slDAwCUZJyF0DyM4uMad2com9vqb86ntrQUG4S7HaNOXzJRmOKWX9tCY0xKU4oZFv4j5aHor3-iYq7fbksdDjVFp71Hl9zTg3-7UGISdH9qeQR1g60MYhD7Hl_CgO7_g5jvFHw7EAw1RquYbTAD1XstRiJb_LfCmrK5PK3xLTu4G0F2grVu2RBOVkvWdHAVzX6DVsqbiAD84v8LqT1VxUa2n3J99BH-MqciwYmGizStZZodvt6RFXer8aG1Qt7FGj76A2jMpHJfj-akPUIh00NzpobmzQKmGD5fZPVYS1cPySoL3ojmDnZCUqmPIJrlQ9_9K9EFQKXrGF3u_9YOY38AjP8wHRn1LE9D2g0DOgsJOg0DevNTaA2nm7Fh10_6eD7v__sbyCwVbs0SQXKDwDubn7p-5f3_4AC4maL4EQAAA%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
@@ -16,11 +17,23 @@
 	let teamData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
+	let isDarkMode = $state(false);
 
 	// 해아할거
 	// 몹 타겟 변경
 	// 특수 스킬, 보구 서번트들 예외사항 추가
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
+	// 커맨드 제일 마지묵 ,#, 제거
+
+	function toggleBansi() {
+		isDarkMode = !isDarkMode;
+
+		if (isDarkMode) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+		}
+	}
 
 	async function fetchSvtDetails(svtList) {
 		if (!svtList) return [];
@@ -103,7 +116,6 @@
 
 			if (decodedData.team?.mysticCode?.mysticCodeId) {
 				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
-				console.log(mcData);
 			}
 
 			// 서번트 api
@@ -127,7 +139,11 @@
 	}
 
 	function fncConvert(actions, delegate) {
-		if (!actions) return '';
+		console.log(actions.length);
+		if (actions.length <= 0) {
+			alert('등록된 전투 데이터가 없습니다.');
+			return '';
+		}
 		let command = '';
 
 		// 스킬 지연 발동 배열
@@ -194,13 +210,10 @@
 				// 후열 없으면 위치 교체 없음
 			}
 		};
-
 		actions.forEach((action) => {
 			let isOrderChange = false;
 			let isMCTargeting = false;
 			let isTargeting = false;
-			let isJapog = false; // 자폭스킬(하베트롯)
-			let isRetreat = false; // 후퇴스킬(수영복 클로에)
 			if (action.type === 'skill') {
 				if (action.svt === undefined && mcData) {
 					const skillData = mcData.skills[action.skill];
@@ -236,12 +249,12 @@
 						isTargeting = latestSkill.functions.some((f) => f.funcTargetType === 'ptOne');
 
 						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
-						if (currentSvtId === 404200 && action.skill === 2) {
+						if (svtInfo.id === 404200 && action.skill === 2) {
 							delayedActions.push({ type: 'death', svtIdx: action.svt });
 						}
 
 						// 수영복 클로에(1101600) 2스킬 -> 턴 종료 시 후퇴
-						if (currentSvtId === 1101600 && action.skill === 1) {
+						if (svtInfo.id === 1101600 && action.skill === 1) {
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
 					}
@@ -254,9 +267,6 @@
 			} else if (action.type === 'attack') {
 				let atkCnt = 0; // 보구 전 평타 횟수
 				let npCommand = ''; // 보구 커맨드 문자열
-				const japogSvt = [201300, 403800, 704900]; // 아라쉬, 노부카츠, 소쥬로
-				const shootSvt = [1000200]; // 진궁
-				const retreatSvt = [604200]; // 미스크레인
 				action.attacks.forEach((atk) => {
 					if (!atk.isTD) {
 						// 보구를 안 썼을 때만 평타 횟수 추가
@@ -266,20 +276,40 @@
 					} else {
 						npCommand += atk.svt + 4;
 						const svtInfo = frontSvtList[atk.svt];
-						if (svtInfo) {
-							if (japogSvt.includes(svtInfo.svtId)) {
-								svtDeath(atk.svt);
-							} else if (shootSvt.includes(svtInfo.svtId)) {
-								// 자신을 제외한 가장 왼쪽(0번부터) 서번트 희생
-								for (let i = 0; i < 3; i++) {
-									if (i !== atk.svt && frontSvtList[i] !== null) {
-										svtDeath(i);
-										break;
-									}
+						// 보구강화 리스트 중 해당 서번트가 장착된 보구 가져옴
+						const currentNP = svtInfo.details.noblePhantasms.find((np) => np.id === svtInfo.tdId);
+
+						// 자폭
+						if (
+							currentNP?.functions?.some(
+								(func) => func.funcType === 'forceInstantDeath' && func.funcTargetType === 'self'
+							)
+						) {
+							svtDeath(atk.svt);
+						}
+						// 발사
+						else if (
+							currentNP?.functions?.some(
+								(func) =>
+									func.funcType === 'forceInstantDeath' &&
+									func.funcTargetType === 'ptSelfAnotherFirst'
+							)
+						) {
+							// 자신을 제외한 가장 왼쪽(0번부터) 서번트 희생
+							for (let i = 0; i < 3; i++) {
+								if (i !== atk.svt && frontSvtList[i] !== null) {
+									svtDeath(i);
+									break;
 								}
-							} else if (retreatSvt.includes(svtInfo.svtId)) {
-								svtRetreat(atk.svt);
 							}
+						}
+						// 후퇴
+						else if (
+							currentNP?.functions?.some(
+								(func) => func.funcType === 'moveToLastSubmember' && func.funcTargetType === 'self'
+							)
+						) {
+							svtRetreat(atk.svt);
 						}
 					}
 				});
@@ -290,7 +320,7 @@
 				command += npCommand;
 				command += ',#,';
 
-				// 예약해둔 지연 발동(자폭, 후퇴) 일괄 실행
+				// 예약해둔 지연스킬 발동(자폭, 후퇴) 일괄 실행
 				if (delayedActions.length > 0) {
 					delayedActions.forEach((delAct) => {
 						if (delAct.type === 'death') {
@@ -340,93 +370,83 @@
 	}
 
 	onMount(() => {
-		fncConvertBtn();
+		// fncConvertBtn();
 	});
 </script>
 
-<div class="min-h-screen bg-gray-100 p-10 md:p-10">
-	<div class="mx-auto flex max-w-3xl flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg">
-		<div class="flex justify-between">
-			<h1 class="mb-1 text-3xl font-bold text-gray-800">FGO 커맨드 변환기</h1>
+<div
+	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
+>
+	<div
+		class="mx-auto flex max-w-5xl flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800 dark:shadow-gray-900/50"
+	>
+		<div class="flex items-end justify-between gap-3">
+			<div>
+				<h1 class="mb-1 text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100">
+					FGO 커맨드 변환기
+				</h1>
+				<div class="text-2xl text-gray-500 transition-colors dark:text-gray-400">
+					칼데아(Chaldea) 앱의 공유 URL을 FGA용 텍스트로 변환합니다.<br />
+				</div>
+			</div>
+
+			<img
+				src={isDarkMode ? '/images/bansi3_no_bg.png' : '/images/bansi1_no_bg.png'}
+				alt="Theme Toggle"
+				class="h-30 w-30 cursor-pointer transition-transform hover:scale-105 active:scale-95"
+				onclick={toggleBansi}
+			/>
 		</div>
-		<div class="text-2x1 text-gray-500">
-			칼데아(Chaldea) 앱의 공유 URL을 FGA용 텍스트로 변환합니다.
-		</div>
-		<div class="text-2x1 text-gray-500">강화퀘스트, 보구강화퀘스트 모두 적용된 상태</div>
+
 		<input
 			type="text"
 			bind:value={url}
 			placeholder="https://link.chaldea.center/laplace/share?data=..."
-			class="w-full rounded-lg border border-gray-300 p-3 outline-none focus:ring-2 focus:ring-blue-500"
+			class="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
 		/>
 		<button
 			onclick={fncConvertBtn}
-			class="w-full rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900"
-			style="cursor: pointer;"
+			class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
 		>
 			{isLoading ? '데이터를 불러오는 중...' : '변환하기'}
 		</button>
 
 		{#if isError}
-			<div class="rounded-lg bg-red-50 p-4 text-red-600">⚠️ 올바른 링크인지 확인해주세요.</div>
+			<div class="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+				⚠️ 올바른 링크인지 확인해주세요.
+			</div>
 		{/if}
 
-		<!-- {#if decodedData}
-			<div class="relative rounded-lg bg-gray-900 p-4">
-				<div class="mb-2 flex items-center justify-between">
-					<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
-					<button
-						onclick={copyToClipboardAll}
-						class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-					>
-						복사하기 📑
-					</button>
-				</div>
-
-				<div class="max-h-50 overflow-auto text-xs text-green-400">
-					<pre>{JSON.stringify(decodedData, null, 2)}</pre>
-				</div>
-			</div>
-			<div class="relative rounded-lg bg-gray-900 p-4">
-				<div class="mb-2 flex items-center justify-between">
-					<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
-					<button
-						onclick={copyToClipboardActions}
-						class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-					>
-						복사하기 📑
-					</button>
-				</div>
-
-				<div class="max-h-50 overflow-auto text-xs text-blue-400">
-					<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
-				</div>
-			</div>
-		{/if} -->
 		{#if teamData && teamData.length > 0}
-			<div class="grid grid-cols-7 gap-3">
+			<div class="custom-scrollbar mt-4 flex flex-nowrap gap-3 overflow-x-auto pb-2">
 				{#if mcData}
 					<div
-						class="flex flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm"
+						class="flex min-w-30 flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 					>
 						<img
 							src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
 							alt={mcData?.name || ''}
-							class="h-full w-full object-cover"
+							class="h-full w-full rounded-lg object-cover"
 						/>
 					</div>
 				{/if}
+
 				{#each teamData as item, idx (idx)}
 					<div
-						class="flex flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm"
+						class="flex min-w-30 flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 					>
 						{#if item && item.details}
-							<div class="relative mb-2 h-20 w-full overflow-hidden rounded-lg bg-white">
+							<div
+								class="relative mb-2 h-26 w-full overflow-hidden rounded-lg bg-white dark:bg-gray-800"
+							>
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 								<img
 									src={item.details.extraAssets?.faces?.ascension?.[4] ||
 										item.details.extraAssets?.faces?.ascension?.[1]}
 									alt={item.details.name}
-									class="h-full w-full object-cover"
+									class="h-full w-full cursor-pointer object-cover transition-opacity hover:opacity-80"
+									onclick={() => console.log(item)}
 								/>
 							</div>
 							<div class="relative h-10 w-full">
@@ -434,36 +454,41 @@
 									<img
 										src={item.ceDetails.extraAssets?.equipFace?.equip?.[item.ceDetails.id]}
 										alt={item.ceDetails.name}
-										class="h-full w-full rounded"
+										class="h-full w-full rounded object-cover"
 									/>
 									{#if item.equip1?.limitBreak}
 										<div
-											class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white"
+											class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white dark:border-gray-700"
 										>
 											★
 										</div>
 									{/if}
 								{:else}
-									<div class="h-full w-full rounded bg-gray-100"></div>
+									<div class="h-full w-full rounded bg-gray-100 dark:bg-gray-600"></div>
 								{/if}
 							</div>
 						{:else}
 							<div
-								class="mb-2 flex h-20 w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300"
+								class="mb-2 flex h-26 w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
 							>
 								Empty
 							</div>
-							<div class="h-10 w-full rounded bg-gray-100"></div>
+							<div class="h-10 w-full rounded bg-gray-100 dark:bg-gray-600"></div>
 						{/if}
 					</div>
 				{/each}
 			</div>
 		{/if}
+
 		{#if fgaCommand}
-			<div class="rounded-xl border-2 border-blue-200 bg-blue-50 p-5">
-				<h2 class="mb-2 text-lg font-bold text-blue-800">FGA 커맨드</h2>
+			<div
+				class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-5 transition-colors dark:border-gray-600 dark:bg-gray-800"
+			>
+				<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">FGA 커맨드</h2>
 				<div class="flex items-center gap-2">
-					<code class="flex-1 rounded border bg-white p-3 font-mono break-all text-blue-600">
+					<code
+						class="flex-1 rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+					>
 						{fgaCommand}
 					</code>
 					<button
@@ -471,7 +496,7 @@
 							navigator.clipboard.writeText(fgaCommand);
 							alert('커맨드가 복사되었습니다!');
 						}}
-						class="rounded-lg bg-blue-600 px-4 py-3 font-bold text-white hover:bg-blue-700"
+						class="cursor-pointer rounded-lg bg-blue-600 px-4 py-3 font-bold text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
 					>
 						복사
 					</button>
@@ -482,4 +507,18 @@
 </div>
 
 <style>
+	.custom-scrollbar::-webkit-scrollbar {
+		height: 6px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background-color: #cbd5e1; /* 연한 회색 (라이트 모드) */
+		border-radius: 10px;
+	}
+	:global(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
+		background-color: #4b5563; /* 진한 회색 (다크 모드) */
+	}
 </style>
