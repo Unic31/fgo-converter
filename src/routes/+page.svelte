@@ -436,7 +436,7 @@
 			<div class="flex items-end justify-between gap-3">
 				<div>
 					<h1 class="mb-1 text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100">
-						FGO 커맨드 변환기
+						FGO Converter
 					</h1>
 					<div class="text-2xl text-gray-500 transition-colors dark:text-gray-400">
 						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.
