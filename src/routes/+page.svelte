@@ -6,12 +6,6 @@
 	// sample
 	let url = $state(
 		'https://link.chaldea.center/laplace/share?data=GH4sIAMyGy2kA_9WYbW_aMBDHv4tfZ5LtPCzh3cpWrVL3ZmOvKlS5yQEWzkMTBw1V_e67cyCl7QotBbQKJMfmfP_zz3d2xB3LdXHWapOxQeL7HlNVte7GscduW2gsG9wxTSMBx0EuPFbNVANsgE9QQL78rpoZGzBxzWPOr-Mg5Wkq2L3HysrqsmjIQa6nM7sczpQu2MDWLXgs0426MfBtAQVqTJRpcLAqdWHP2skEZxWtMR5rdN4aZeGL7o2c6k8c-111VqhlQeUkVKgc1lPzZWN1OiwzcCH0vQtcjRTcYwYWYHAhnIItzjWY7NfCovTVHWsWluwCHkhOpjrXdli2FGuAUc21MRcZmcZxEobcixMeuEZEIR-vLC4XZIFS7jt2gKHIumE36j74g816NUG9ywUbhCiLTYzyys7Py5ZCpWBm1UYndevB3eF-4LqXFOpZDWq-Ro1j6EegP7htdSU2trSbZJ5NMW4CcmnaqiprO1pWSJEVZQHMY9NaFYRqtSX3Xs8r5EG0g1fkRwQqChyvKAy38OqwOKc9FtFFl3wkLBg-345FSh9xJIJySfpUSjugOJdyDUW-MVeCeDsUsn5Oxc16gQrnr8WCS7hR6bytnhZbtLPYEk7p4iU86prPu5MnelRTHzF5MB14-JQLf5w9fJU5PHF5hK0f7UTTOf6f2Uxqjeflv-jQET9G-wwMTPEuII0aKqNS-AH5DdQXRQZ_gNZ9JT0xJluVri4kTDnbCTg86L8h13KFy9HduL3Q6xLqkaqn0JF3N9BGn4Irc0KHHTuroZmVdIsSsXvaye1q4g1qck81vtfaxLvVxAlIPqjJLWpifzVlLR5YzFs99IeWc5KqGqd8Qve6GX3ta6DW-LqhTP_WQmZdVgs6AY8R5gE2_LhbcHg1cQKS4lUk5cHVjlQ6Lyez2CuZvXeUgtxaCvykG8g_yga-oCZPemfJI98ip1F5_ZrEwdbET6IijqNy2MNDvukm3BnmmISHKDdy_wZ0b4p_Ac7GteLlEAAA&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIAE0gy2kA_9WWTYvbMBCG_4vOKkiO7Ti5NWmXLuTUpqcSFq2txCKyrLVlQwj5752RHW_Ykq-yhS0E5BGjmXcejaTsSaHMrFE6I9PJaESJsPZoJgklL42sHZnuicKZkMEk45TYXNSSTOFLGlnsvok6J1PCn1jC2FMSpixNOTlQUlqnSlNjgEJtcreb50IZMnVVIynJVC2etfzaSgM51kLXMGlLZdysWa9hlWm0pqRWRaOFk5_V4OSzfoe5n7bzglxOigITGVHI49JiVzuVzstMegmD9QjVBJxRomUrNRTCUKx5UFJnP1oHqX_tSd069BuzkDF0VYVy87JBrSGo2iqtHzN0TcaTMGJ0HAcjGIBQFLFV77Fo0QNS-R_MumwIytFatJ6jhmECWYTbPpQNKsKcuT0xUi8bNoGNQm8uUNGskmJ7JApzGC4CQi-Nsvxk57pF-o8l2i-A8uvG2rJyy50FWGRdKWkyQsmmEgaZ9OwPdAATMD66AiaKAQifAA8ajILrWHzI4Igl6tTFHwiLKY28COX_6Jb-GPVcbsLSL_FcbsUCBTyLdNvYt2eKc8ajy5gCPu76hntCOPLrpLrAd6M6y4a9ZdPdK2fAsPv7BQSzyWUScRIjgDgZh34A8wYMEPXjY8AwK_DOpJYbuM4hPFgi7V8NaBjXBRDOQSMR2n8MzeRrS0UFkj7Bl6qXX4ZDXym47YV-LQXcOj0BdubJ22S12MlqKaqNdK-v2tGG4lF3WSBBMFxeyTov8Y1EcAfczasy2bvLZH8v07cOqPTKgr6VfISz2YJ_ASV4dyh3y1xh4jmkW_q_D11f_gblDkuTFgkAAA%3D%3D&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIAFqAymkA_-2W3WvbMBDA_xc9ayD5I3HytmQrC3QvW_ZUQlHtSywi26oth4XS_313suOZlPWLrWwwCMgn7vOnOyl3rNDlotUmY_NZGHKmrD2JScLZbQuNY_M7pmknErgpJGc2Vw2wOX5BCcXxk2pyNmfyWiRCXCdRKtJUsnvOKut0VTbkoNC73B2XudIlm7u6Bc4y3agbAx8PUGKMrTINbtpKl27RbrdoVbbGcNboojXKwXs9KPmoX3Dvm-20MJYDVVCgUhVwMi2OjdPpssrApzBIK6wmkIIzAwcwWIigZMsLDSb7enAY-uqONQdHelMRCUGqutBuWbWUa4RZ7bUxq4xUk-ksigWfToIQFyQUx2LTa1weSAND-R_uumxwKkm6PHiOBpcZRlFuf1G1lBHFzO1ISH3aeAgijLx4SRktalD7E1HcI3cxErpttZWjk-uMzAMT4w2w_Ka1tqrd-mgRFiurEhhnu1qVRKQnf88HLBKTmj3OZZJMkASfJNPILyg-xaXz-k-D-d8vIyxYwI1K9609n6oAbwr5OKaZCLBh-EyE3RI93T6d1xdzGoPpb5iOjDgH010r5qE-xRHPbhbvZjxKcvI4iyCIQ-oZXKMgDmiN4-dMEzo-x5H8bTg2qJiBgR1e6OS5BmtUCp-huIF6VWbwHai8Kyx_Q7oq7V8VbCfXefYUWE_DJzp6etDbEeq1qnfguiLo-RjJlE9VUKOg4PIamryiJ5CA3NNo91GUc9jMjPcfQ0N7J6mq0eQdQtbN-sMwYbXGN0eZnyRRrcMR0HT8iTTPYARvDUO-AoZ8IxjyrWEEr-oMfm4tTsYn5V9bh4P10JXyJda_9SA2FHmJ4db-71k38D8AHWkqN3YKAAA%3D&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIABp3ymkA_9WW227bMAyG30XXGiD5EDu-W7MVK9CrLbsagkKJlViILLuWbCAo-u4j5cNadM3WJu0wJIgtieRPf6Tk3JFSmYtW6Zxk8zCkRNT1OEw4JbettI5kd0ThTMTmacrmlNSFsJJkYCCNLA9fhC1IRvgNi0N2k4TbZJuvyT0lVe1UZSwGKNWucIdFIZQhmWtaSUmurFhr-bmTBjS2QluYrCtl3EW73YKXabWmxKqy1cLJj2oy8qpfYe573VuBlpOiRCEjSjm6lgfr1GZR5dKnMI2u4Gl4wCjRspMa7hkmay6V1Pm3zoH0jztiO4d2EYsChqaqVG5RtZhrBFntldZXOZqm6TyOGU3nLPIXPovZarC47tCCM-q_Kw9Ymryf9rP-Awsun9Q4jq47ksUgC5cU5IXbX1YtporJFPWDwcY_D1QngRRweI2pXjRS7CdiMNn1BbttVc0flLR30k9dUJkDF9vWddW45aEGisRURhJKdo0wiGqwvqcPeIXsOK84jDmN0hlCi9IkPoUWaAX_M60Ye-YorWTGsa2SWRD7S3hCd3m1qbt4n_X8BF79Rh5wxX_Fq3fxuOInvLaNgvx_QwweYS02-7Yetqff39PPCgLlUssdHAkgDiOxGU4e2Miuj-2JQWiLUYOBIMnYo2Oq1uIgm6VodtL5NX_UjGMghnlVJVKDRVc00hYVHpcI6x4Le1yNv6ta8A5q_B-pvVHdhHPQZ4QON9OrwAfdiAZcPkA4ZZefpvZvFLxXhP51fIBZ39AcG_fNobBXtRc7B5TgVVDoSUhHbz56h6PzaPy8d_CigrCTu_RYQfgZyv_nvXA-leBtVJ5vLn72HffiNFcovAC5pf972b-MfgLkfmgDNgsAAA%3D%3D&questId=94098809&phase=1&enemyHash=1_0530_73f7fdb'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIAM4jymkA_81XbW_aMBD-L_6cSXZeCd9WtmqVui8b-1ShyZArsXCcNHGioar_fWfnpVS0GdCCJhDOOXd-7p57SXgkmVBXtZAJmcae5xBeFL0YMYc81FBpMn0kwuz4NJ5MGHVIkfIKyBQVQEG2_carlEwJ-01Dz_8dMuaFyyV5ckheaJGryhyQiXWqt7OUC0WmuqzBIYmo-FLC1wYUYtxzWeFmkQulr-r7e7RStZQOqURWS67hsxiULOoP3PtVtFqIpYFnBkjxDHrTbFtpsZrlCVgXBukGo3FNIBIakBgINc6qawEy-dlohL57JFWjrV5AKaNGV2RCz_LaOOujWxsh5U1idKM4DgLq-F7o2yUKArboNG4bo4FY9ruwDINK2m27az94QyfPcMyItw2KiNsYB9EBrjfXeW0FlNJiR1jZkDBBXhxb8dY4e1UC3_Rs415_EDzUomA7aW2t5J5NB43kVHVR5KWebwukkqhcAXHIuuTK8NXl5ckZSAupH41z5rIoNKThihd2naB8Km0WcJQ1d4S1aLLPWldqHW2vkNYayX0TC308ZwHF6hmvs5CZAotCN7CLF55OmEUbCGOt1_GBVfYaXy-qLDiIr50iCw7lCwNY8tWmLvb6dPLPPo2pa0otpl67-GP8de04edGOh_L0ZiHtdV87qN6oosM7zx5jfhZokoCENU5Hg1FCIfkKvkO2hPJGJfAHTKB3LtaC0eWrbkQjk7rFsHwgSGXOpx0_9mpnnuOpWyjnvFxDq2Vnci8jT8bDPDNc4U2dllCluXmuGIqeTNmPo7ELoLEBzb0o2iWYdA9CYx-Oxi6K5p4HjWuNM4Y43cUwZyzgipdo8gmPE9X8yzD4SoEvF1w-9zuqtU3LuiFvXXiH9YDt98a98mDdnTYYu2ZenjUfx-eBvrt_2AXQTusf-hE1dlqVLC5KyrlTcPygpGcdJvT_SXQ_DugJ1uPz4OggFwZ4hnBz--erfRf5C6A3qhVUDgAA&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIAO4RymkA_82X32-bMBDH_xc_M8kGTH68rdmqVepetuypiionuMGKMRRMtKjq_747m5Ko1UiTdqxKFGNzvu_dh7NNHkiuzEWjdEqmkygKiCjLp-4IuveNrC2ZPhCFIzGdjMeMBqTMRC3JlAVEGpnvvok6I1PCbmkSxbcJY1GyXJLHgBSlVYWp0UGu1pndzTKhDJnaqpEBSVUtllp-3UoDGndC1zBYFsrYi-buDmaZRuuA1CpvtLDys-qMnOoPGPtVeivQslLkKGRELp-m5rvaqtWsSKULoetdQTYhJqLlVmpIhGKw5lJJnf7cWpC-eSD11qJdQuMRRVOVKzsrGow1hqg2SuurFE1DNko4pwG0cOHaMfQXrdH1Fo1AzX0XjrE0qR92o-4DN2zaCTLsXW8dYw3NBCIQdnNZNBgtxpOVB52VSwke0Gg8cd1rjPaikmLzRBvG0B0HeveNKtnBU_WT9Isp2k0ANHVTlkVl57sSQBJTGEkCsq6EQVrtU3kMOmQYU9jPLOIh5yxgHH8jHgHAc3l5tQ5YeBowGo_7gaH1C2J-1l-IUXo6Mk5j3k9slDAwCUZJyF0DyM4uMad2com9vqb86ntrQUG4S7HaNOXzJRmOKWX9tCY0xKU4oZFv4j5aHor3-iYq7fbksdDjVFp71Hl9zTg3-7UGISdH9qeQR1g60MYhD7Hl_CgO7_g5jvFHw7EAw1RquYbTAD1XstRiJb_LfCmrK5PK3xLTu4G0F2grVu2RBOVkvWdHAVzX6DVsqbiAD84v8LqT1VxUa2n3J99BH-MqciwYmGizStZZodvt6RFXer8aG1Qt7FGj76A2jMpHJfj-akPUIh00NzpobmzQKmGD5fZPVYS1cPySoL3ojmDnZCUqmPIJrlQ9_9K9EFQKXrGF3u_9YOY38AjP8wHRn1LE9D2g0DOgsJOg0DevNTaA2nm7Fh10_6eD7v__sbyCwVbs0SQXKDwDubn7p-5f3_4AC4maL4EQAAA%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIANpNyWkA_9VXUW_aMBD-L37OJDsECLytbNWQ2MvGnipUuclBLBwnjR00VPW_784JFJVC2dRGnYRwztx3392X8yU8sFyZq1rplI1HvV7AZFnuzDgO2H0N1rHxA1O0E3Hc5CJgZSYtsDFegYF8-03ajI2ZuOUx57dxlPAkEewxYEXpVGEsBcjVKnPbSSaVYWNX1RCwVFl5p-HrBgxyLKW2uFkWyrirerlElKm1DphVea2lg89q7-RZf-Der7LxQi4HMiciI3PYQfOtdSqZFCn4FPbWFKsJBQ-Yhg1oLIRTsuZagU5_bhxS3zwwu3HkN-QR5-SqcuUmRU25RpjVWmk9Tck1Ho6iPg-Gg7CHCyrU7_NF6zHbkAdS-Q_uunQfVJA123gdNS4jZJFufV3UlBFxZuWBkfi08SbwXuTNGWV0VYFc7xTFPQrXR4Xua1WKgzvXgPQRRHsAlm_rsiwqN9-WKBZbVgpMygK2qqQhTVrtH4P_TJi2Y1plLhKmhXhljoQxhYGzsghManRel0E8QCWCQTyM_ILma7o0UT9yx5wQBiu4k8m6Lp-fK6xI9M_rFIrhiIQKhW8dWkX_Eqkw8F9LdbJp-HNtmtlyomP4xR3jw9DXAiEpaFjhQCMOlxISR6VZga8QS6ug1DKB75DfQTU1Kfz2P92IgC8IL5N20qLAruH1GiGxJU7eauavDsYyRt1CNZfVCtArbEfrzkZfyrrIST80XFaBzQp6PJBsj9T259lEp2xhB2xhp0qKi9jEm7OJTtnC92GTzuHoYUF7sR8_Pkgiq9QPHGXnX56OfKXwHUHqpw10aw5y2A75A3R4OVocoz-JHbydxee4F11LJF4vsk37hRr3YH4xuHcM_ggCnTj7Yads730au6npXefY6UYO_6GdxNu204KIJ0g3939SmheAP2JGBAd8DQAA&questId=94098801&phase=1&enemyHash=1_0800_84c0cc1'
 	);
 	let decodedData = $state(null);
 	let fgaCommand = $state('');
@@ -21,9 +15,8 @@
 	let isDarkMode = $state(false);
 
 	// 해아할거
-	// 몹 타겟 변경
-	// 특수 스킬, 보구 서번트들 예외사항 추가
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
+	// 사용 방법 추가
 
 	function toggleBansi() {
 		isDarkMode = !isDarkMode;
@@ -276,7 +269,7 @@
 						if (svtInfo.svtId === 1101600 && action.skill === 1) {
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
-						
+
 						command += svtSkillMap[action.svt][action.skill];
 						if (isTargeting && action.options?.playerTarget !== undefined) {
 							command += action.options.playerTarget + 1;
@@ -296,7 +289,9 @@
 						npCommand += atk.svt + 4;
 						const svtInfo = frontSvtList[atk.svt];
 						// 보구강화 리스트 중 해당 서번트가 장착된 보구 가져옴
-						const currentNP = svtInfo?.details?.noblePhantasms?.find((np) => np.id === svtInfo.tdId);
+						const currentNP = svtInfo?.details?.noblePhantasms?.find(
+							(np) => np.id === svtInfo.tdId
+						);
 
 						// 자폭
 						if (
@@ -442,9 +437,9 @@
 			onclick={fncConvertBtn}
 			class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
 		>
-			{isLoading ? '데이터를 불러오는 중...' : '변환하기'}
+			{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
 		</button>
-		{#if decodedData}
+		<!-- {#if decodedData}
 			<div class="relative rounded-lg bg-gray-900 p-4">
 				<div class="mb-2 flex items-center justify-between">
 					<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
@@ -475,7 +470,7 @@
 					<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
 				</div>
 			</div>
-		{/if}
+		{/if} -->
 
 		{#if isError}
 			<div class="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/30 dark:text-red-400">
