@@ -1,0 +1,31 @@
+# 1. 의존성 및 빌드 결과물 (가장 중요)
+node_modules/
+.svelte-kit/
+build/
+dist/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+
+# 2. 환경 변수 및 보안 (절대 공유 금지)
+.env
+.env.*
+!.env.example
+!.env.test
+
+# 3. 운영체제 및 에디터 설정
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/extensions.json
+.idea/
+
+# 4. 로그 및 임시 파일
+*-debug.log*
+*-error.log*
+vite.config.*.timestamp-*
+
+# 5. 테스트 및 커버리지
+/tests/test-results/
+/coverage/
