@@ -5,16 +5,19 @@
     <img alt="logo" src="https://unic31.github.io/fgo-converter/images/nunnos.png" width="128">
   </a>
 </p>
+<p align="center">
+  <strong>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.</strong>
+</p>
 
-### 칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.
+## 관련 프로젝트 (References)
 
-## 해당 사이트를 참고하여 제작되었습니다.
+본 프로젝트는 아래 사이트들의 데이터를 기반으로 제작되었습니다.
 
-- **Chaldea** https://chaldea.center/ | https://github.com/chaldea-center/chaldea
-- **FGA** https://fate-grand-automata.github.io/ | https://github.com/Fate-Grand-Automata/FGA
-- **Atlasacademy** https://api.atlasacademy.io/docs | https://github.com/atlasacademy/fgo-game-data-api
+- **Chaldea:** [Website](https://chaldea.center/) | [GitHub](https://github.com/chaldea-center/chaldea)
+- **FGA (Fate-Grand-Automata):** [Website](https://fate-grand-automata.github.io/) | [GitHub](https://github.com/Fate-Grand-Automata/FGA)
+- **Atlas Academy:** [API Docs](https://api.atlasacademy.io/docs) | [GitHub](https://github.com/atlasacademy/fgo-game-data-api)
 
-## 주의사항
+## 주의사항 (Disclaimer)
 
 - 오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.
 - 반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.
@@ -24,10 +27,10 @@
 
 ## 피드백 (Feedback)
 
-#### 버그신고나 기능요청 등 연락 바랍니다.
+버그신고나 기능요청 등 연락 바랍니다.
 
-- **Mail** uenic31@gmail.com
-- **X(Twitter)** @u_nic31
+- **Mail:** [uenic31@gmail.com](mailto:uenic31@gmail.com)
+- **X (Twitter):** [@u_nic31](https://x.com/u_nic31)
 
 ## 기술 스택 (Tech Stack)
 
