@@ -5,21 +5,22 @@
 
 	let isLoading = $state(false);
 	// sample
-	let url = $state('');
+	let url = $state(
+		'https://link.chaldea.center/laplace/share?data=GH4sIAIn9zWkA_9WXUW_aMBDHv4ufM8l2CE14W9mqVepeNvY0ocolB7FwnDRx0FDV776zHVJKWwoUmKZEcmzO9_f9fGeLB5JLfdlIlZJBEoYBEWW56sYsIPcN1IYMHoi0Iz2aRCHF4TITNZABfoGGfPlN1BkZEHZL-yy6pamgIkrJY0CK0shC19ZBLmeZWQ4zITUZmKqBgKSyFncKvi5Ao8ZUqBoHy0Jqc9lMpzhLN0oFpJZ5o4SBz7Izcqo_cOxX6a1Qy4DIrZAWOaym5svayMmwSMEtoetdYzSc0YAoWIDCQKhdrL6SoNKfC4PSvx9IvTDWjlGKr7WVuTTDorGL7eGy5lKp69Taxqzfj2gQs4vINXEU8XFrcbOwFqjl3rEjDDr1w27UPfiDSZ_kmO3eLBxihU2C-sLMr4rGWWAvK9c6ExcR7k8Ycde9sWu9rEDMV7BxzLqLEN59I0u2tql-knoxRbkJSKZuyrKozGhZIkeiCw0kILNKaAur3ZTHoCPGI8r4dmKcR7FlhW3i2z7F9lBoXpGvoEV-7fF70NYptZnlMdFNSj6d1Et7q0P3R9Sn7OI9QiFy6UWOjoO1ASfApwPg_PGNpIl3TBqWXOyfNH7SR5MGA7gTk3lTblYdj10dbCOUUG6rLqGhb3r9DySQk9u76s6eQM5NB6lHe-_UWRy78oqRjmvYBxg5NbZRYzsfTEmyPccofe1kcrPeSDK6M7YxGqagYIY3hvVeQanEBL5DfgfVtU7hD9iYMWg-trZi0l5bmI_Ge3bE0HVtvdKWIObNszsOvS6hGolqBt7K3VNrfbuuIrfUsGOyCuqsUP7Qp4_2eGjVhDFYFSRoP7rKcE4mosIpn3AnZD360mGsJF5uQj0lIpp5LKEts1Ms8xkUdhAUdqDa0xbQE6v9i5jYWdW2xcaPpMZ2iu34avTEaidVOe4xwLYeA_yshcnPWjL8fymZtzecH7Dh_LgbPrbCQ5QbuX9a_mr9C__Z1hpBDgAA&questId=94095301&phase=1&enemyHash=1_0615_0da0a5d'
+	);
 	let decodedData = $state(null);
 	let fgaCommand = $state('');
 	let teamData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
 	let isDarkMode = $state(false);
-	let isModal = $state(true);
+	let isModal = $state(false);
+	let emptySvtList = ['jeanne', '1', '2', '3', '4', '5'];
 	$effect(() => {
 		if (isModal) {
-			// 모달이 열리면 스크롤 숨김 처리
 			document.body.style.overflow = 'hidden';
-			document.documentElement.style.overflow = 'hidden'; // html 태그 스크롤도 차단
+			document.documentElement.style.overflow = 'hidden';
 		} else {
-			// 모달이 닫히면 원래대로 복구
 			document.body.style.overflow = '';
 			document.documentElement.style.overflow = '';
 		}
@@ -522,41 +523,45 @@
 				</div>
 			{/if}
 
-			{#if teamData && teamData.length > 0}
-				<div class="custom-scrollbar mt-4 flex flex-nowrap gap-3 overflow-x-auto pb-2">
+			<div class="custom-scrollbar mt-4 flex flex-nowrap gap-3 overflow-x-auto pb-2">
+				<div
+					class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+				>
 					{#if mcData}
+						<img
+							src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
+							alt={mcData?.name || ''}
+							class="h-full w-full rounded-lg object-cover"
+						/>
+					{:else}
+						<img
+							src="{base}/images/bansi_mystic_code.png"
+							alt="bansi_mystic_code"
+							class="h-full w-full rounded-lg object-cover"
+						/>
+					{/if}
+				</div>
+
+				{#if teamData.length === 0}
+					{#each emptySvtList as svtName, idx (idx)}
 						<div
-							class="flex min-w-30 flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 						>
 							<img
-								src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
-								alt={mcData?.name || ''}
-								class="h-full w-full rounded-lg object-cover"
+								src="{base}/images/{svtName}.png"
+								alt={svtName}
+								class="h-full w-full rounded-lg object-cover opacity-80"
 							/>
 						</div>
-					{:else}
-						<div
-							class="flex min-w-30 flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-						>
-							<div
-								class="flex h-full w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
-							>
-								<img
-									src="{base}/images/bansi_mystic_code.png"
-									alt="bansi_mystic_code"
-									class="h-full w-full rounded-lg object-cover"
-								/>
-							</div>
-						</div>
-					{/if}
-
+					{/each}
+				{:else}
 					{#each teamData as item, idx (idx)}
 						<div
-							class="flex min-w-30 flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 						>
 							{#if item && item.details}
 								<div
-									class="relative mb-2 h-26 w-full overflow-hidden rounded-lg bg-white dark:bg-gray-800"
+									class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
 								>
 									<img
 										src={item.details.extraAssets?.faces?.ascension?.[4] ||
@@ -565,7 +570,7 @@
 										class="h-full w-full object-cover transition-opacity hover:opacity-80"
 									/>
 								</div>
-								<div class="relative h-10 w-full">
+								<div class="relative h-10 w-full shrink-0">
 									{#if item.ceDetails}
 										<img
 											src={item.ceDetails.extraAssets?.equipFace?.equip?.[item.ceDetails.id]}
@@ -585,38 +590,36 @@
 								</div>
 							{:else}
 								<div
-									class="mb-2 flex h-26 w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
+									class="mb-2 flex h-26 w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
 								>
 									Empty
 								</div>
-								<div class="h-10 w-full rounded bg-gray-100 dark:bg-gray-600"></div>
+								<div class="h-10 w-full shrink-0 rounded bg-gray-100 dark:bg-gray-600"></div>
 							{/if}
 						</div>
 					{/each}
-				</div>
-			{/if}
+				{/if}
+			</div>
 
-			{#if fgaCommand}
-				<div
-					class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-5 transition-colors dark:border-gray-600 dark:bg-gray-800"
-				>
-					<div class="flex items-end justify-between">
-						<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">FGA 커맨드</h2>
-					</div>
-					<div
-						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
-						onclick={() => {
-							navigator.clipboard.writeText(fgaCommand);
-							alert('커맨드가 복사되었습니다!');
-						}}
-					>
-						<div class="flex-1">
-							{fgaCommand}
-						</div>
-						<div>📑</div>
-					</div>
+			<div
+				class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-5 transition-colors dark:border-gray-600 dark:bg-gray-800"
+			>
+				<div class="flex items-end justify-between">
+					<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">FGA 커맨드</h2>
 				</div>
-			{/if}
+				<div
+					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+					onclick={() => {
+						navigator.clipboard.writeText(fgaCommand);
+						alert('커맨드가 복사되었습니다!');
+					}}
+				>
+					<div class="flex-1">
+						{fgaCommand}
+					</div>
+					<div class="ms-3">📑</div>
+				</div>
+			</div>
 			<div class="text-red-600 transition-colors dark:text-red-400">
 				⚠️ 주의사항 ⚠️
 				<ul class="list-disc pl-5">
@@ -641,25 +644,15 @@
 				</ul>
 			</div>
 		</div>
-		<ul class="space-y-1 text-end text-sm text-gray-500">
+		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
 			<li>
 				<a
 					href="https://www.pixiv.net/users/12102224"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline"
+					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
 				>
-					Illustration by KANYA
-				</a>
-			</li>
-			<li>
-				<a
-					href="https://x.com/u_nic31"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline"
-				>
-					X(twitter)
+					Illustrated by KANYA
 				</a>
 			</li>
 			<li>
@@ -667,9 +660,9 @@
 					href="https://github.com/Unic31/fgo-converter"
 					target="_blank"
 					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline"
+					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
 				>
-					Github
+					Developed by Unic
 				</a>
 			</li>
 		</ul>
