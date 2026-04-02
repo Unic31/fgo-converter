@@ -27,10 +27,14 @@
 
 ## 피드백 (Feedback)
 
-버그신고나 기능요청 등 연락 바랍니다.
+버그신고나 기능요청 등 연락 바랍니다. 버그 신고시 오류가 발생했던 URL 첨부 부탁드립니다.
 
 - **Mail:** [uenic31@gmail.com](mailto:uenic31@gmail.com)
 - **X (Twitter):** [@u_nic31](https://x.com/u_nic31)
+
+## 쌀먹 (Donation)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W41X3N7F)
 
 ## 기술 스택 (Tech Stack)
 

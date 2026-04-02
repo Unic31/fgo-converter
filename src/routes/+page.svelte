@@ -120,11 +120,11 @@
 			const decompressed = pako.inflate(bytes);
 			const jsonString = new TextDecoder().decode(new Uint8Array(decompressed));
 			decodedData = JSON.parse(jsonString);
-			console.log("decodedData :", $state.snapshot(decodedData));
+			console.log('decodedData :', $state.snapshot(decodedData));
 
 			if (decodedData.team?.mysticCode?.mysticCodeId) {
 				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
-				console.log("mcData :", $state.snapshot(mcData));
+				console.log('mcData :', $state.snapshot(mcData));
 			}
 
 			// 서번트 api
@@ -133,7 +133,7 @@
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
 			teamData = await fetchSvtDetails(team);
-			console.log("teamData :", $state.snapshot(teamData));
+			console.log('teamData :', $state.snapshot(teamData));
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
@@ -633,6 +633,16 @@
 					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
 				>
 					Developed by Unic
+				</a>
+			</li>
+			<li>
+				<a
+					href="https://ko-fi.com/unic31"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+				>
+					Buy me a Saint Quartz
 				</a>
 			</li>
 		</ul>
