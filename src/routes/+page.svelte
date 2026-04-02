@@ -1,21 +1,25 @@
 <script>
+	import { dev } from '$app/environment';
 	import pako from 'pako';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 
 	let isLoading = $state(false);
-	let url = $state(
-		'https://link.chaldea.center/laplace/share?data=GH4sIAK13zmkA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
-		// 'https://link.chaldea.center/laplace/share?data=GH4sIAIn9zWkA_9WXUW_aMBDHv4ufM8l2CE14W9mqVepeNvY0ocolB7FwnDRx0FDV776zHVJKWwoUmKZEcmzO9_f9fGeLB5JLfdlIlZJBEoYBEWW56sYsIPcN1IYMHoi0Iz2aRCHF4TITNZABfoGGfPlN1BkZEHZL-yy6pamgIkrJY0CK0shC19ZBLmeZWQ4zITUZmKqBgKSyFncKvi5Ao8ZUqBoHy0Jqc9lMpzhLN0oFpJZ5o4SBz7Izcqo_cOxX6a1Qy4DIrZAWOaym5svayMmwSMEtoetdYzSc0YAoWIDCQKhdrL6SoNKfC4PSvx9IvTDWjlGKr7WVuTTDorGL7eGy5lKp69Taxqzfj2gQs4vINXEU8XFrcbOwFqjl3rEjDDr1w27UPfiDSZ_kmO3eLBxihU2C-sLMr4rGWWAvK9c6ExcR7k8Ycde9sWu9rEDMV7BxzLqLEN59I0u2tql-knoxRbkJSKZuyrKozGhZIkeiCw0kILNKaAur3ZTHoCPGI8r4dmKcR7FlhW3i2z7F9lBoXpGvoEV-7fF70NYptZnlMdFNSj6d1Et7q0P3R9Sn7OI9QiFy6UWOjoO1ASfApwPg_PGNpIl3TBqWXOyfNH7SR5MGA7gTk3lTblYdj10dbCOUUG6rLqGhb3r9DySQk9u76s6eQM5NB6lHe-_UWRy78oqRjmvYBxg5NbZRYzsfTEmyPccofe1kcrPeSDK6M7YxGqagYIY3hvVeQanEBL5DfgfVtU7hD9iYMWg-trZi0l5bmI_Ge3bE0HVtvdKWIObNszsOvS6hGolqBt7K3VNrfbuuIrfUsGOyCuqsUP7Qp4_2eGjVhDFYFSRoP7rKcE4mosIpn3AnZD360mGsJF5uQj0lIpp5LKEts1Ms8xkUdhAUdqDa0xbQE6v9i5jYWdW2xcaPpMZ2iu34avTEaidVOe4xwLYeA_yshcnPWjL8fymZtzecH7Dh_LgbPrbCQ5QbuX9a_mr9C__Z1hpBDgAA&questId=94095301&phase=1&enemyHash=1_0615_0da0a5d'
-	);
+	let url = $state('');
 	let decodedData = $state(null);
 	let fgaCommand = $state('');
-	let teamData = $state([]);
+	let svtData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
-	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', '3', '4', '5'];
+	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', '4', '5'];
+	const svtSkillMap = [
+		['a', 'b', 'c'],
+		['d', 'e', 'f'],
+		['g', 'h', 'i']
+	];
+	const masterSkill = ['j', 'k', 'l'];
 	$effect(() => {
 		if (isModal) {
 			document.body.style.overflow = 'hidden';
@@ -28,19 +32,23 @@
 
 	// 해아할거
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
+	// 특정 서번트 스킬 사용시 옵션 선택
+	// 1스
+	// 쿠쿨칸(2501100) a[Ch2A] a[Ch2B] (옵션1, 2 선택)
+	// 반고흐-마이너(305600) a[Ch3A] a[Ch3B] a[Ch3C] (옵션1, 2, 3 선택)
+	// 2스
+	// 스페이스 이슈타르(1100900) b1 b2 b3 (서번트 대상 스킬 사용시 서번트 선택 위치에 옵션1(quick) 옵션2(arts) 옵션3(buster) 이 위치해서 타깃으로 지정방식 사용)
+	// 쿠쿨칸(2501100) b([Ch2A]1) b([Ch2B]3)
+	// 3스
+	// 에미야(200100) c7, c8 (옵션1, 2 선택)
+	// BB두바이(2300600) c7, c8 (옵션1(광역보구), 옵션2(버프보구) 선택. 보구 타입 변경이므로 계산 신경써야함) 기본은 뭐지?
+	// 쿠쿨칸(2501100) c[Ch2A] c[Ch2B] (옵션1, 2 선택)
+	// UDK바게스트(204900) c[Ch2A]  c[Ch2B] (옵션1-전체공격보구, 옵션2-단일공격보구 선택, 보구 타입 변경이므로 타겟 선택에 신경써야함) 스킬 사용 안할시 기본상태가 전체공격보구.
+	// 멜루진 cM (영기재림이 1, 2단계 모습일때 변신. 3단계일땐 무시.  변신시에는 보구 타입이 단일-광역 으로 변경이므로 타겟 선택에 신경써야함)
+	// 프톨레마이오스 cM (영기재림이 1, 2단계일때는 3단계로. 영기재림이 3단계 일때는 1단계로 변신이므로 변신. 멜루진과 달리 무시하는 옵션 없음. 영기 재림이 1, 2 단계일때는 단일보구, 3단계 일때는 광역보구 이므로 변신시에는 보구 타입 변경이므로 타겟 선택에 신경써야함)
+	// 코르데, 소쥬로, 하쿠노 c[Ch3A] c[Ch3B] c[Ch3C]  (옵션1, 2, 3 선택. 선택에 따른 보구 변화 없음.)
+	// a[Ch2A]3 -> 제일 앞 a는 1번스킬, Ch숫자 는 선택지의 갯수, A B C 는 옵션 1 2 3, 마지막 숫자는 타깃지정(1~3) 로 추측됨. 타깃 지정하지 않는 경우는 마지막 숫자 없음.
 	// 사용 방법 추가
-	// 만붕이 2스 강퀘 전 후, 앙리 5턴 후 사망
-
-	function toggleBansi() {
-		isDarkMode = !isDarkMode;
-		if (isDarkMode) {
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		}
-	}
 
 	async function fetchSvtDetails(svtList) {
 		if (!svtList) return [];
@@ -59,14 +67,34 @@
 					ceData = await ceRes.json();
 				}
 
+				// 서번트가 사용하는 보구, 스킬
+				// const currentNP = data.noblePhantasms?.find((np) => np.id === svt.tdId) || null;
+				// const activeSkills = svt.skillIds
+				// 	? svt.skillIds.map((skillId) => {
+				// 			return data.skills?.find((s) => s.id === skillId) || null;
+				// 		})
+				// 	: [];
+
+				// 무조건 강화퀘스트 적용된 보구, 스킬
+				const currentNP = data.noblePhantasms?.find((np) => np.id === svt.tdId);
+				const targetNpNum = currentNP ? currentNP.npNum : 1;
+				const sameTypeNpList = data.noblePhantasms?.filter((np) => np.npNum === targetNpNum) || [];
+				const activeNP = sameTypeNpList[sameTypeNpList.length - 1];
+				const activeSkills = [1, 2, 3].map((num) => {
+					const slotSkills = data.skills?.filter((s) => s.num === num) || [];
+					return slotSkills[slotSkills.length - 1];
+				});
+
 				return {
 					...svt,
 					details: data,
-					ceDetails: ceData
+					ceDetails: ceData,
+					activeNP,
+					activeSkills
 				};
 			} catch (err) {
 				console.error(`서번트(ID: ${svt.svtId}) 로드 실패:`, err);
-				return { ...svt, details: null, ceDetails: null };
+				return { ...svt, details: null, ceDetails: null, activeNP: null, activeSkills: null };
 			}
 		});
 		return await Promise.all(svtPromises);
@@ -85,11 +113,12 @@
 
 	async function fncConvertBtn() {
 		try {
+			decodedData = null;
+			fgaCommand = '';
+			svtData = [];
+			mcData = null;
 			isLoading = true;
 			isError = false;
-			fgaCommand = '';
-			teamData = [];
-			mcData = null;
 
 			const urlObj = new URL(url.trim());
 			let dataParam = urlObj.searchParams.get('data');
@@ -97,16 +126,13 @@
 			// url에 data 없으면
 			if (!dataParam) {
 				isError = true;
-				decodedData = null;
 				return;
 			}
 
 			if (dataParam.startsWith('G') || dataParam.startsWith('D') || dataParam.startsWith('Z')) {
 				dataParam = dataParam.substring(1);
 			}
-
 			let base64 = dataParam.replace(/-/g, '+').replace(/_/g, '/');
-
 			while (base64.length % 4 !== 0) {
 				base64 += '=';
 			}
@@ -132,8 +158,8 @@
 				...decodedData.team.onFieldSvts, // [0, 1, 2]
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
-			teamData = await fetchSvtDetails(team);
-			console.log('teamData :', $state.snapshot(teamData));
+			svtData = await fetchSvtDetails(team);
+			console.log('svtData :', $state.snapshot(svtData));
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
@@ -150,7 +176,7 @@
 
 	function fncConvert(actions, delegate) {
 		if (actions.length <= 0) {
-			alert('등록된 전투 데이터가 없습니다.');
+			alert('URL에 등록된 전투 데이터가 없습니다.');
 			return '';
 		}
 		let command = '';
@@ -160,44 +186,29 @@
 		// 서번트 교체가 있었을경우 해당 위치 미리 저장
 		let swapList = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
 		// 스킬에 선택 옵션이 있을 경우
-		let skillSelectList = delegate?.skillActSelectSelections ? [...delegate.skillActSelectSelections] : [];
-		let frontSvtList = [teamData[0], teamData[1], teamData[2]];
-		let backSvtList = [teamData[3], teamData[4], teamData[5]];
+		let skillSelectList = delegate?.skillActSelectSelections
+			? [...delegate.skillActSelectSelections]
+			: [];
+		let frontSvtList = [svtData[0], svtData[1], svtData[2]];
+		let backSvtList = [svtData[3], svtData[4], svtData[5]];
 
-		// 서번트 스킬
-		const svtSkillMap = [
-			['a', 'b', 'c'],
-			['d', 'e', 'f'],
-			['g', 'h', 'i']
-		];
-		const masterSkill = ['j', 'k', 'l'];
-
-		const svtDeath = (deadSvtIdx) => {
+		const replaceSvt = (fieldIdx, isRetreat = false) => {
+			const retreatingSvt = isRetreat ? frontSvtList[fieldIdx] : null;
 			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
+
 			if (nextIdx !== -1) {
-				frontSvtList[deadSvtIdx] = backSvtList[nextIdx];
+				frontSvtList[fieldIdx] = backSvtList[nextIdx];
 				backSvtList[nextIdx] = null;
 			} else {
-				frontSvtList[deadSvtIdx] = null;
+				frontSvtList[fieldIdx] = null;
 			}
+
 			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
+			if (isRetreat) newBackList.push(retreatingSvt);
 			while (newBackList.length < 3) newBackList.push(null);
 			backSvtList = newBackList;
 		};
-		const svtRetreat = (retreatSvtIdx) => {
-			const retreatingSvt = frontSvtList[retreatSvtIdx];
-			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
-			if (nextIdx !== -1) {
-				frontSvtList[retreatSvtIdx] = backSvtList[nextIdx];
-				backSvtList[nextIdx] = null;
-			} else {
-				frontSvtList[retreatSvtIdx] = null;
-			}
-			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
-			newBackList.push(retreatingSvt);
-			while (newBackList.length < 3) newBackList.push(null);
-			backSvtList = newBackList;
-		};
+
 		actions.forEach((action) => {
 			let needsEnemyTarget = false;
 
@@ -207,10 +218,7 @@
 						needsEnemyTarget = true; // 평타 공격은 타겟팅 적용
 					} else {
 						const svtInfo = frontSvtList[atk.svt];
-						const currentNP = svtInfo?.details?.noblePhantasms?.find(
-							(np) => np.id === svtInfo.tdId
-						);
-						if (currentNP?.effectFlags?.includes('attackEnemyOne')) {
+						if (svtInfo?.activeNP?.effectFlags?.includes('attackEnemyOne')) {
 							needsEnemyTarget = true;
 						}
 					}
@@ -222,15 +230,10 @@
 				} else {
 					const svtInfo = frontSvtList[action.svt];
 					if (svtInfo?.details?.skills) {
-						// 해당 서번트가 사용하는 스킬
-						// const currentSkillId = svtInfo.skillIds[action.skill];
-						// const exactSkill = svtInfo.details.skills.find((s) => s.id === currentSkillId);
-						// needsEnemyTarget = exactSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
-
-						// 무조건 강퀘 적용
-						const slotSkills = svtInfo.details.skills.filter((s) => s.num === action.skill + 1);
-						const latestSkill = slotSkills[slotSkills.length - 1]; // 배열의 가장 마지막(최신) 스킬 선택
-						needsEnemyTarget = latestSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
+						if (svtInfo?.activeSkills) {
+							const latestSkill = svtInfo.activeSkills[action.skill];
+							needsEnemyTarget = latestSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
+						}
 					}
 				}
 			}
@@ -241,12 +244,12 @@
 				action.options.enemyTarget !== currentEnemyTarget
 			) {
 				currentEnemyTarget = action.options.enemyTarget;
-				const targetNum = 3 - currentEnemyTarget;
-				command += `t${targetNum}`;
+				command += `t${3 - currentEnemyTarget}`;
 			}
 
 			if (action.type === 'skill') {
 				if (action.svt === undefined && mcData) {
+					// 마스터 스킬
 					const skillData = mcData.skills[action.skill];
 					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
 					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
@@ -275,17 +278,10 @@
 						}
 					}
 				} else {
+					// 서번트 스킬
 					const svtInfo = frontSvtList[action.svt];
-
 					if (svtInfo?.details?.skills) {
-						// 해당 서번트가 사용한 스킬
-						// const currentSkillId = svtInfo.skillIds[action.skill];
-						// const exactSkill = svtInfo.details.skills.find((s) => s.id === currentSkillId);
-						// const isTargeting = exactSkill.functions.some((f) => f.funcTargetType === 'ptOne');
-
-						// 무조건 강퀘 적용
-						const slotSkills = svtInfo.details.skills.filter((s) => s.num === action.skill + 1);
-						const latestSkill = slotSkills[slotSkills.length - 1]; // 배열의 가장 마지막(최신) 스킬 선택
+						const latestSkill = svtInfo.activeSkills[action.skill];
 						const isTargeting = latestSkill?.functions?.some((f) => f.funcTargetType === 'ptOne');
 
 						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
@@ -318,16 +314,11 @@
 				action.attacks.forEach((atk) => {
 					if (!atk.isTD) {
 						// 보구를 안 썼을 때만 평타 횟수 추가
-						if (npCommand === '') {
-							atkCnt++;
-						}
+						if (npCommand === '') atkCnt++;
 					} else {
 						npCommand += atk.svt + 4;
 						const svtInfo = frontSvtList[atk.svt];
-						// 보구강화 리스트 중 해당 서번트가 장착된 보구 가져옴
-						const currentNP = svtInfo?.details?.noblePhantasms?.find(
-							(np) => np.id === svtInfo.tdId
-						);
+						const currentNP = svtInfo?.activeNP;
 
 						// 자폭
 						if (
@@ -339,7 +330,8 @@
 							if (svtInfo.id === '605200' && isNyoboCnt < 1) {
 								isNyoboCnt++;
 							} else {
-								svtDeath(atk.svt);
+								atk.svt;
+								replaceSvt(atk.svt, false);
 							}
 						}
 						// 발사
@@ -353,7 +345,7 @@
 							// 자신을 제외한 가장 왼쪽(0번부터) 서번트 희생
 							for (let i = 0; i < 3; i++) {
 								if (i !== atk.svt && frontSvtList[i] !== null) {
-									svtDeath(i);
+									replaceSvt(atk.svt, false);
 									break;
 								}
 							}
@@ -364,7 +356,8 @@
 								(func) => func.funcType === 'moveToLastSubmember' && func.funcTargetType === 'self'
 							)
 						) {
-							svtRetreat(atk.svt);
+							replaceSvt(atk.svt, true);
+							alert(atk.svt);
 						}
 					}
 				});
@@ -379,9 +372,9 @@
 				if (delayedActions.length > 0) {
 					delayedActions.forEach((delAct) => {
 						if (delAct.type === 'death') {
-							svtDeath(delAct.svtIdx);
+							replaceSvt(delAct.svtIdx, false);
 						} else if (delAct.type === 'retreat') {
-							svtRetreat(delAct.svtIdx);
+							replaceSvt(delAct.svtIdx, true);
 						}
 					});
 					delayedActions = [];
@@ -392,6 +385,17 @@
 			command = command.slice(0, -3);
 		}
 		return command;
+	}
+
+	function toggleBansi() {
+		isDarkMode = !isDarkMode;
+		if (isDarkMode) {
+			document.documentElement.classList.add('dark');
+			localStorage.setItem('theme', 'dark');
+		} else {
+			document.documentElement.classList.remove('dark');
+			localStorage.setItem('theme', 'light');
+		}
 	}
 
 	function copyToClipboardActions() {
@@ -428,7 +432,11 @@
 	}
 
 	onMount(() => {
-		fncConvertBtn();
+		if (dev) {
+			url =
+				'https://link.chaldea.center/laplace/share?data=GH4sIADmMzmkA_9VWbWvbMBD-L_qsgeSXrvG3JV1ZIZ-27NMIRY0vsYgsq5ZkCCH_fSfZcULbwTb6Csbyibt7nnukO7wntdRTL1VJikmaUiKMOZqXl5Tce7COFHsiw07GGeOMU2IqYYEU-AUa6t03YStSEH7LJiy7hRLy1UVGDpQ0xslG25CglpvK7WaVkJoUrvVASSmtuFPwtQONGGuhLG6aRmo39es1RmmvFCVW1l4JB1_k6BRRv-PeT9N7IZYDUQcgLWo4htY76-Rq1pQQKYzWTXn0UNCBIgULZPW1BFX-6BxC_9oT27ngl6SM5Yyhq6ylmzU-kM2Q1lYqdVMG34RNeJ4zimuS9mt6kbPl4DTvghNnND6468pTYh7MeUeKHBFw4QlCCbe9bjy6sABcmWjwaKwi-UnGWJpFcx5oTVsQ26OuuBcSYUK499Lw0_kNQepRSETOUQTrjWlat9gZlIzoRgOhZNMKHXQZ9D_Qdy_OZwx-KM5wdwZ1nhCnD1KPQyL0-xWH9wwnZ9rwN9Zm3UrQ5RPqYA13YrX1Zmiz2IXja4mJSlCwwdZGcLTEapgg2JCuzy2cwwyEDh9js2IXYwWiRcKfsARpF1djR7QSO1-oU6Ho1lNNAqWzOWWU2EG7EO0G-oxx1pzZoaCmDnKj4aoWbNWEeRlUPoTTH2jGA0SWR2a9HcR9CbSPKAr_K1H4M6Elb4TGXgGNvyoae2m0P19m_l-Xme7HQ3nmVvjnIpcBeIZwi_i70g_F30WwJ56GCQAA&questId=94100101&phase=1&enemyHash=1_0904_ede5c64';
+			fncConvertBtn();
+		}
 		const savedTheme = localStorage.getItem('theme');
 		if (
 			savedTheme === 'dark' ||
@@ -457,8 +465,6 @@
 					</div>
 				</div>
 
-				<!-- svelte-ignore a11y_click_events_have_key_events -->
-				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div
 					class="h-30 min-h-20 w-30 min-w-20 cursor-pointer transition-transform hover:scale-105 active:scale-90"
 					onclick={toggleBansi}
@@ -489,7 +495,7 @@
 			>
 				{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
 			</button>
-			{#if decodedData}
+			{#if dev}
 				<div class="relative rounded-lg bg-gray-900 p-4">
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
@@ -562,7 +568,7 @@
 					{/if}
 				</div>
 
-				{#if teamData.length === 0}
+				{#if svtData.length === 0}
 					{#each emptySvtList as svtName, idx (idx)}
 						<div
 							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
@@ -575,7 +581,7 @@
 						</div>
 					{/each}
 				{:else}
-					{#each teamData as item, idx (idx)}
+					{#each svtData as item, idx (idx)}
 						<div
 							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 						>
@@ -645,7 +651,7 @@
 				<ul class="list-disc pl-5">
 					<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
 					<li>반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.</li>
-					<li>스킬은 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
+					<li>스킬과 보구는 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
 					<li>앙리 마유의 3 스킬의 사망 로직은 계산하지 않습니다. 사용에 주의해 주세요.</li>
 					<li>예장이나 스킬 효과로 인한 거츠를 계산하지 않습니다.(추후 업데이트 예정)</li>
 					<li>
