@@ -120,9 +120,11 @@
 			const decompressed = pako.inflate(bytes);
 			const jsonString = new TextDecoder().decode(new Uint8Array(decompressed));
 			decodedData = JSON.parse(jsonString);
+			console.log("decodedData :", $state.snapshot(decodedData));
 
 			if (decodedData.team?.mysticCode?.mysticCodeId) {
 				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
+				console.log("mcData :", $state.snapshot(mcData));
 			}
 
 			// 서번트 api
@@ -131,6 +133,7 @@
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
 			teamData = await fetchSvtDetails(team);
+			console.log("teamData :", $state.snapshot(teamData));
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
@@ -387,39 +390,6 @@
 			command = command.slice(0, -3);
 		}
 		return command;
-	}
-
-	function copyToClipboardActions() {
-		if (!decodedData) return;
-
-		// 텍스트로 변환 (들여쓰기 2칸 적용)
-		const text = JSON.stringify(decodedData.actions, null, 2);
-
-		// 브라우저 클립보드 API 호출
-		navigator.clipboard
-			.writeText(text)
-			.then(() => {
-				alert('데이터가 복사되었습니다');
-			})
-			.catch((err) => {
-				console.error('복사 실패:', err);
-			});
-	}
-	function copyToClipboardAll() {
-		if (!decodedData) return;
-
-		// 텍스트로 변환 (들여쓰기 2칸 적용)
-		const text = JSON.stringify(decodedData, null, 2);
-
-		// 브라우저 클립보드 API 호출
-		navigator.clipboard
-			.writeText(text)
-			.then(() => {
-				alert('데이터가 복사되었습니다');
-			})
-			.catch((err) => {
-				console.error('복사 실패:', err);
-			});
 	}
 
 	onMount(() => {
