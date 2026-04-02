@@ -12,6 +12,18 @@
 	let mcData = $state(null);
 	let isError = $state(false);
 	let isDarkMode = $state(false);
+	let isModal = $state(true);
+	$effect(() => {
+		if (isModal) {
+			// 모달이 열리면 스크롤 숨김 처리
+			document.body.style.overflow = 'hidden';
+			document.documentElement.style.overflow = 'hidden'; // html 태그 스크롤도 차단
+		} else {
+			// 모달이 닫히면 원래대로 복구
+			document.body.style.overflow = '';
+			document.documentElement.style.overflow = '';
+		}
+	});
 
 	// 해아할거
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
@@ -546,8 +558,6 @@
 								<div
 									class="relative mb-2 h-26 w-full overflow-hidden rounded-lg bg-white dark:bg-gray-800"
 								>
-									<!-- svelte-ignore a11y_click_events_have_key_events -->
-									<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 									<img
 										src={item.details.extraAssets?.faces?.ascension?.[4] ||
 											item.details.extraAssets?.faces?.ascension?.[1]}
@@ -615,6 +625,19 @@
 					<li>스킬은 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
 					<li>앙리 마유의 3 스킬의 사망 로직은 계산하지 않습니다. 사용에 주의해 주세요.</li>
 					<li>예장이나 스킬 효과로 인한 거츠를 계산하지 않습니다.(추후 업데이트 예정)</li>
+					<li>
+						<div class="flex">
+							<div>
+								오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
+								않는 서번트라도 편성하는걸 추천드립니다.<span
+									class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
+									onclick={() => (isModal = true)}
+								>
+									설명
+								</span>
+							</div>
+						</div>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -652,6 +675,56 @@
 		</ul>
 	</div>
 </div>
+{#if isModal}
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+		onclick={() => (isModal = false)}
+	>
+		<div
+			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
+			onclick={(e) => e.stopPropagation()}
+		>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-xl font-bold">오더 체인지, 자폭, 후퇴 편성 주의</h2>
+				<button
+					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+					onclick={() => (isModal = false)}
+				>
+					✕
+				</button>
+			</div>
+
+			<div
+				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
+			>
+				<div class="flex flex-col gap-1">
+					<div>시뮬레이터 파티 구성시</div>
+					<img src="{base}/images/sample1.png" class="w-150" />
+					<div>위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데</div>
+					<img src="{base}/images/sample2.png" class="w-150" />
+					<div>보통 인게임 파티 편성시 코스트가 남으면 아무 서번트나 배치하게 됩니다.</div>
+					<div>이를 오더 체인지로 확인해보면</div>
+					<img src="{base}/images/sample3.png" class="w-150" />
+					<img src="{base}/images/sample4.png" class="w-150" />
+					<div>후열 서번트 배치가 아예 달라지는걸 확인할 수 있습니다.</div>
+					<div>
+						오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
+						않는 서번트도 편성하는걸 추천드립니다.
+					</div>
+				</div>
+			</div>
+
+			<div class="mt-4 flex justify-end">
+				<button
+					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+					onclick={() => (isModal = false)}
+				>
+					확인
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.custom-scrollbar::-webkit-scrollbar {
