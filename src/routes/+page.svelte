@@ -5,7 +5,7 @@
 
 	let isLoading = $state(false);
 	let url = $state(
-		''
+		'https://link.chaldea.center/laplace/share?data=GH4sIAK13zmkA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb'
 		// 'https://link.chaldea.center/laplace/share?data=GH4sIAIn9zWkA_9WXUW_aMBDHv4ufM8l2CE14W9mqVepeNvY0ocolB7FwnDRx0FDV776zHVJKWwoUmKZEcmzO9_f9fGeLB5JLfdlIlZJBEoYBEWW56sYsIPcN1IYMHoi0Iz2aRCHF4TITNZABfoGGfPlN1BkZEHZL-yy6pamgIkrJY0CK0shC19ZBLmeZWQ4zITUZmKqBgKSyFncKvi5Ao8ZUqBoHy0Jqc9lMpzhLN0oFpJZ5o4SBz7Izcqo_cOxX6a1Qy4DIrZAWOaym5svayMmwSMEtoetdYzSc0YAoWIDCQKhdrL6SoNKfC4PSvx9IvTDWjlGKr7WVuTTDorGL7eGy5lKp69Taxqzfj2gQs4vINXEU8XFrcbOwFqjl3rEjDDr1w27UPfiDSZ_kmO3eLBxihU2C-sLMr4rGWWAvK9c6ExcR7k8Ycde9sWu9rEDMV7BxzLqLEN59I0u2tql-knoxRbkJSKZuyrKozGhZIkeiCw0kILNKaAur3ZTHoCPGI8r4dmKcR7FlhW3i2z7F9lBoXpGvoEV-7fF70NYptZnlMdFNSj6d1Et7q0P3R9Sn7OI9QiFy6UWOjoO1ASfApwPg_PGNpIl3TBqWXOyfNH7SR5MGA7gTk3lTblYdj10dbCOUUG6rLqGhb3r9DySQk9u76s6eQM5NB6lHe-_UWRy78oqRjmvYBxg5NbZRYzsfTEmyPccofe1kcrPeSDK6M7YxGqagYIY3hvVeQanEBL5DfgfVtU7hD9iYMWg-trZi0l5bmI_Ge3bE0HVtvdKWIObNszsOvS6hGolqBt7K3VNrfbuuIrfUsGOyCuqsUP7Qp4_2eGjVhDFYFSRoP7rKcE4mosIpn3AnZD360mGsJF5uQj0lIpp5LKEts1Ms8xkUdhAUdqDa0xbQE6v9i5jYWdW2xcaPpMZ2iu34avTEaidVOe4xwLYeA_yshcnPWjL8fymZtzecH7Dh_LgbPrbCQ5QbuX9a_mr9C__Z1hpBDgAA&questId=94095301&phase=1&enemyHash=1_0615_0da0a5d'
 	);
 	let decodedData = $state(null);
@@ -15,7 +15,7 @@
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
-	let emptySvtList = ['jeanne', '1', '2', '3', '4', '5'];
+	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', '3', '4', '5'];
 	$effect(() => {
 		if (isModal) {
 			document.body.style.overflow = 'hidden';
@@ -158,7 +158,9 @@
 		// 던전마다 몹 배치가 다르므로 시작 몹 타겟은 설정하지 않음. 스킬 쓸때만 타겟이 적이면 그것만 계산
 		let currentEnemyTarget = null;
 		// 서번트 교체가 있었을경우 해당 위치 미리 저장
-		let swaps = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
+		let swapList = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
+		// 스킬에 선택 옵션이 있을 경우
+		let skillSelectList = delegate?.skillActSelectSelections ? [...delegate.skillActSelectSelections] : [];
 		let frontSvtList = [teamData[0], teamData[1], teamData[2]];
 		let backSvtList = [teamData[3], teamData[4], teamData[5]];
 
@@ -249,8 +251,8 @@
 					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
 					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
 
-					if (isOrderChange && swaps.length > 0) {
-						const swap = swaps.shift();
+					if (isOrderChange && swapList.length > 0) {
+						const swap = swapList.shift();
 						const fieldIdx = swap[0];
 						const backupIdx = swap[1];
 
@@ -392,8 +394,41 @@
 		return command;
 	}
 
+	function copyToClipboardActions() {
+		if (!decodedData) return;
+
+		// 텍스트로 변환 (들여쓰기 2칸 적용)
+		const text = JSON.stringify(decodedData.actions, null, 2);
+
+		// 브라우저 클립보드 API 호출
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				alert('데이터가 복사되었습니다');
+			})
+			.catch((err) => {
+				console.error('복사 실패:', err);
+			});
+	}
+	function copyToClipboardAll() {
+		if (!decodedData) return;
+
+		// 텍스트로 변환 (들여쓰기 2칸 적용)
+		const text = JSON.stringify(decodedData, null, 2);
+
+		// 브라우저 클립보드 API 호출
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				alert('데이터가 복사되었습니다');
+			})
+			.catch((err) => {
+				console.error('복사 실패:', err);
+			});
+	}
+
 	onMount(() => {
-		// fncConvertBtn();
+		fncConvertBtn();
 		const savedTheme = localStorage.getItem('theme');
 		if (
 			savedTheme === 'dark' ||
@@ -454,38 +489,53 @@
 			>
 				{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
 			</button>
-			<!-- {#if decodedData}
-			<div class="relative rounded-lg bg-gray-900 p-4">
-				<div class="mb-2 flex items-center justify-between">
-					<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
-					<button
-						onclick={copyToClipboardAll}
-						class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-					>
-						복사하기 📑
-					</button>
-				</div>
+			{#if decodedData}
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+						<button
+							onclick={copyToClipboardAll}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
 
-				<div class="max-h-50 overflow-auto text-xs text-green-400">
-					<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+					<div class="max-h-50 overflow-auto text-xs text-green-400">
+						<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+					</div>
 				</div>
-			</div>
-			<div class="relative rounded-lg bg-gray-900 p-4">
-				<div class="mb-2 flex items-center justify-between">
-					<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
-					<button
-						onclick={copyToClipboardActions}
-						class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-					>
-						복사하기 📑
-					</button>
-				</div>
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
+						<button
+							onclick={copyToClipboardAll}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
 
-				<div class="max-h-50 overflow-auto text-xs text-blue-400">
-					<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+					<div class="max-h-50 overflow-auto text-xs text-green-400">
+						<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
+					</div>
 				</div>
-			</div>
-		{/if} -->
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
+						<button
+							onclick={copyToClipboardActions}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
+
+					<div class="max-h-50 overflow-auto text-xs text-blue-400">
+						<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+					</div>
+				</div>
+			{/if}
 
 			{#if isError}
 				<div class="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/30 dark:text-red-400">
@@ -520,7 +570,7 @@
 							<img
 								src="{base}/images/{svtName}.png"
 								alt={svtName}
-								class="h-full w-full rounded-lg object-cover opacity-80"
+								class="h-full w-full rounded-lg object-cover"
 							/>
 						</div>
 					{/each}
