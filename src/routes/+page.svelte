@@ -13,7 +13,7 @@
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
-	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', '4', '5'];
+	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', '5'];
 	const svtSkillMap = [
 		['a', 'b', 'c'],
 		['d', 'e', 'f'],
@@ -32,23 +32,11 @@
 
 	// 해아할거
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
-	// 특정 서번트 스킬 사용시 옵션 선택
-	// 1스
-	// @쿠쿨칸(2501100) a[Ch2A] a[Ch2B] (옵션1, 2 선택)
-	// @반고흐-마이너(305600) a[Ch3A] a[Ch3B] a[Ch3C] (옵션1, 2, 3 선택)
-	// 2스
-	// 스페이스 이슈타르(1100900) b1 b2 b3 (서번트 대상 스킬 사용시 서번트 선택 위치에 옵션1(quick) 옵션2(arts) 옵션3(buster) 이 위치해서 타깃으로 지정방식 사용)
-	// @쿠쿨칸(2501100) b([Ch2A]1) b([Ch2B]3)
+	// 사용 방법 추가
 	// 3스
-	// 에미야(200100) c7, c8 (옵션1, 2 선택)
-	// BB두바이(2300600) c7, c8 (옵션1(광역보구), 옵션2(버프보구) 선택. 보구 타입 변경이므로 계산 신경써야함) 기본은 뭐지?
-	// @쿠쿨칸(2501100) c[Ch2A] c[Ch2B] (옵션1, 2 선택)
-	// UDK바게스트(204900) c[Ch2A]  c[Ch2B] (옵션1-전체공격보구, 옵션2-단일공격보구 선택, 보구 타입 변경이므로 타겟 선택에 신경써야함) 스킬 사용 안할시 기본상태가 전체공격보구.
+	// BB두바이(2300600) c7, c8 (옵션1(광역보구), 옵션2(버프보구) 선택. 보구 타입 변경이므로 계산 신경써야함) 기본이 광역
 	// 멜루진(304800) cM (영기재림이 1, 2단계 모습일때 변신. 3단계일땐 무시.  변신시에는 보구 타입이 단일-광역 으로 변경이므로 타겟 선택에 신경써야함)
 	// 프톨레마이오스(205000) cM (영기재림이 1, 2단계일때는 3단계로. 영기재림이 3단계 일때는 1단계로 변신이므로 변신. 멜루진과 달리 무시하는 옵션 없음. 영기 재림이 1, 2 단계일때는 단일보구, 3단계 일때는 광역보구 이므로 변신시에는 보구 타입 변경이므로 타겟 선택에 신경써야함)
-	// 코르데(603800), 소쥬로(704900), 하쿠노(2300700, 2300800 별개의 서번트지만 이름과 보구 스킬은 같음) c[Ch3A] c[Ch3B] c[Ch3C]  (옵션1, 2, 3 선택. 선택에 따른 보구 변화 없음.)
-	// a[Ch2A]3 -> 제일 앞 a는 1번스킬, Ch숫자 는 선택지의 갯수, A B C 는 옵션 1 2 3, 마지막 숫자는 타깃지정(1~3) 로 추측됨. 타깃 지정하지 않는 경우는 마지막 숫자 없음.
-	// 사용 방법 추가
 
 	async function fetchSvtDetails(svtList) {
 		if (!svtList) return [];
@@ -146,7 +134,6 @@
 			const decompressed = pako.inflate(bytes);
 			const jsonString = new TextDecoder().decode(new Uint8Array(decompressed));
 			decodedData = JSON.parse(jsonString);
-			console.log('decodedData :', $state.snapshot(decodedData));
 
 			if (decodedData.team?.mysticCode?.mysticCodeId) {
 				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
@@ -187,7 +174,7 @@
 		let skillSelectList = delegate?.skillActSelectSelections
 			? [...delegate.skillActSelectSelections]
 			: [];
-		console.log(skillSelectList);
+		let tdTypeChangeList = delegate?.tdTypeChanges ? [...delegate.tdTypeChanges] : [];
 		let frontSvtList = [svtData[0], svtData[1], svtData[2]];
 		let backSvtList = [svtData[3], svtData[4], svtData[5]];
 
@@ -288,15 +275,15 @@
 							delayedActions.push({ type: 'death', svtIdx: action.svt });
 						}
 						// 종토리(1102200) 3스킬 -> 턴 종료 시 자폭
-						if (svtInfo.svtId === 1102200 && action.skill === 2) {
+						else if (svtInfo.svtId === 1102200 && action.skill === 2) {
 							delayedActions.push({ type: 'death', svtIdx: action.svt });
 						}
 						// 만붕이(403900) 2스킬 -> 턴 종료 시 자폭
-						if (svtInfo.svtId === 403900 && action.skill === 1) {
+						else if (svtInfo.svtId === 403900 && action.skill === 1) {
 							delayedActions.push({ type: 'death', svtIdx: action.svt });
 						}
 						// 수영복 클로에(1101600) 2스킬 -> 턴 종료 시 후퇴
-						if (svtInfo.svtId === 1101600 && action.skill === 1) {
+						else if (svtInfo.svtId === 1101600 && action.skill === 1) {
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
 
@@ -307,17 +294,55 @@
 								? (action.options.playerTarget + 1).toString()
 								: '';
 
-						if (svtInfo.svtId === 2501100) {
-							const choiceIdx = skillSelectList.shift();
-							if (choiceIdx !== undefined) {
-								const options = ['[Ch2A]', '[Ch2B]'];
-								optionCmd = options[choiceIdx] || '';
+						if (latestSkill?.script?.SelectAddInfo) {
+							const optionCount = latestSkill.script.SelectAddInfo[0]?.btn?.length || 0;
+							if (optionCount > 0) {
+								const choiceIdx = skillSelectList.shift();
+								if (choiceIdx !== undefined) {
+									const options = [];
+									const alphabet = ['A', 'B', 'C', 'D', 'E'];
+									for (let i = 0; i < optionCount; i++) {
+										options.push(`[Ch${optionCount}${alphabet[i]}]`);
+									}
+									optionCmd = options[choiceIdx] || '';
+
+									// 수영복 시키 2스
+									if (svtInfo.svtId === 2301100 && action.skill === 1) {
+										if (choiceIdx === 0) {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+										} else {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
+										}
+									}
+									// UDK 바게스트 3스
+									else if (svtInfo.svtId === 204900 && action.skill === 2) {
+										if (choiceIdx === 0) {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+										} else {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
+										}
+									}
+								}
 							}
-						} else if (svtInfo.svtId === 305600 && action.skill === 0) {
-							const choiceIdx = skillSelectList.shift();
-							if (choiceIdx !== undefined) {
-								const options = ['[Ch3A]', '[Ch3B]', '[Ch3C]'];
-								optionCmd = options[choiceIdx] || '';
+						}
+
+						// 어린슈 2스킬은 선택 타입에 따라 타깃지정하는방식
+						if (svtInfo.svtId === 1100900 && action.skill === 1) {
+							const changeType = tdTypeChangeList.shift();
+							if (changeType !== undefined) {
+								// 1: Arts -> 2, 2: Buster -> 3, 3: Quick -> 1
+								const typeMap = { 1: '2', 2: '3', 3: '1' };
+								targetCmd = typeMap[changeType] || '';
+							}
+						}
+						// 에미야 3스킬 보구 색상 변경
+						else if (svtInfo.svtId === 200100 && action.skill === 2) {
+							const changeType = tdTypeChangeList.shift();
+							if (changeType !== undefined) {
+								// 1: Arts -> 7, 2: Buster -> 8
+								// 타깃선택 스킬은 아니지만 옵션 붙이는 용도로 targetCmd 변수 사용
+								const typeMap = { 1: '7', 2: '8' };
+								targetCmd = typeMap[changeType] || '';
 							}
 						}
 						if (optionCmd && targetCmd) {
@@ -354,7 +379,7 @@
 								replaceSvt(atk.svt, false);
 							}
 						}
-						// 발사
+						// 진궁으로 발사
 						else if (
 							currentNP?.functions?.some(
 								(func) =>
@@ -418,27 +443,11 @@
 		}
 	}
 
-	function copyToClipboardActions() {
+	function copyToClipboard(json) {
 		if (!decodedData) return;
 
 		// 텍스트로 변환 (들여쓰기 2칸 적용)
-		const text = JSON.stringify(decodedData.actions, null, 2);
-
-		// 브라우저 클립보드 API 호출
-		navigator.clipboard
-			.writeText(text)
-			.then(() => {
-				alert('데이터가 복사되었습니다');
-			})
-			.catch((err) => {
-				console.error('복사 실패:', err);
-			});
-	}
-	function copyToClipboardAll() {
-		if (!decodedData) return;
-
-		// 텍스트로 변환 (들여쓰기 2칸 적용)
-		const text = JSON.stringify(decodedData, null, 2);
+		const text = JSON.stringify(json, null, 2);
 
 		// 브라우저 클립보드 API 호출
 		navigator.clipboard
@@ -478,7 +487,7 @@
 			<div class="flex items-end justify-between gap-3">
 				<div>
 					<h1 class="mb-1 text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100">
-						FGO Converter
+						FGO Converter(개발진행중)
 					</h1>
 					<div class="text-2xl text-gray-500 transition-colors dark:text-gray-400">
 						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.
@@ -520,7 +529,7 @@
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
 						<button
-							onclick={copyToClipboardAll}
+							onclick={copyToClipboard(decodedData)}
 							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
 						>
 							복사하기 📑
@@ -535,7 +544,7 @@
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
 						<button
-							onclick={copyToClipboardAll}
+							onclick={copyToClipboard(decodedData.delegate)}
 							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
 						>
 							복사하기 📑
@@ -550,7 +559,7 @@
 					<div class="mb-2 flex items-center justify-between">
 						<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
 						<button
-							onclick={copyToClipboardActions}
+							onclick={copyToClipboard(decodedData.actions)}
 							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
 						>
 							복사하기 📑
@@ -667,6 +676,13 @@
 					</div>
 					<div class="ms-3">📑</div>
 				</div>
+				{#if dev}
+					<input
+						type="text"
+						placeholder="비교 개발용"
+						class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+					/>
+				{/if}
 			</div>
 			<div class="text-red-600 transition-colors dark:text-red-400">
 				⚠️ 주의사항 ⚠️
@@ -674,8 +690,10 @@
 					<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
 					<li>반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.</li>
 					<li>스킬과 보구는 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
-					<li>앙리 마유의 3 스킬의 사망 로직은 계산하지 않습니다. 사용에 주의해 주세요.</li>
-					<li>예장이나 스킬 효과로 인한 거츠를 계산하지 않습니다.(추후 업데이트 예정)</li>
+					<li>
+						앙리 마유의 3 스킬의 사망 로직은 계산하지 않습니다. 예장이나 스킬 효과로 인한 거츠를
+						계산하지 않습니다.(추후 업데이트 예정)
+					</li>
 					<li>
 						<div class="flex">
 							<div>
