@@ -8,12 +8,14 @@
 	let url = $state('');
 	let decodedData = $state(null);
 	let fgaCommand = $state('');
+	let fgaCommand2 = $state('');
+	let testCommand = $state('');
 	let svtData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
-	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', '5'];
+	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
 	const svtSkillMap = [
 		['a', 'b', 'c'],
 		['d', 'e', 'f'],
@@ -147,6 +149,7 @@
 			svtData = await fetchSvtDetails(team);
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
+			fgaCommand2 = fncConvert2(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
 			// const cntRes = 1;
 			// console.log(`총 ${cntRes} 번 변환되었습니다.`);
@@ -402,7 +405,6 @@
 							)
 						) {
 							replaceSvt(atk.svt, true);
-							alert(atk.svt);
 						}
 					}
 				});
@@ -412,6 +414,292 @@
 				}
 				command += npCommand;
 				command += ',#,';
+
+				// 예약해둔 지연스킬 발동(자폭, 후퇴) 일괄 실행
+				if (delayedActions.length > 0) {
+					delayedActions.forEach((delAct) => {
+						if (delAct.type === 'death') {
+							replaceSvt(delAct.svtIdx, false);
+						} else if (delAct.type === 'retreat') {
+							replaceSvt(delAct.svtIdx, true);
+						}
+					});
+					delayedActions = [];
+				}
+			}
+		});
+		if (command.endsWith(',#,')) {
+			command = command.slice(0, -3);
+		}
+		return command;
+	}
+
+	function fncConvert2(actions, delegate) {
+		if (actions.length <= 0) {
+			alert('URL에 등록된 전투 데이터가 없습니다.');
+			return '';
+		}
+		let command = '';
+		let delayedActions = [];
+		// 던전마다 몹 배치가 다르므로 시작 몹 타겟은 설정하지 않음. 스킬 쓸때만 타겟이 적이면 그것만 계산
+		let currentEnemyTarget = null;
+		// 서번트 교체가 있었을경우 해당 위치 미리 저장
+		let swapList = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
+		// 스킬에 선택 옵션이 있을 경우
+		let skillSelectList = delegate?.skillActSelectSelections
+			? [...delegate.skillActSelectSelections]
+			: [];
+		let tdTypeChangeList = delegate?.tdTypeChanges ? [...delegate.tdTypeChanges] : [];
+		let frontSvtList = [svtData[0], svtData[1], svtData[2]];
+		let backSvtList = [svtData[3], svtData[4], svtData[5]];
+
+		const replaceSvt = (fieldIdx, isRetreat = false) => {
+			const retreatingSvt = isRetreat ? frontSvtList[fieldIdx] : null;
+			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
+
+			if (nextIdx !== -1) {
+				frontSvtList[fieldIdx] = backSvtList[nextIdx];
+				backSvtList[nextIdx] = null;
+			} else {
+				frontSvtList[fieldIdx] = null;
+			}
+
+			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
+			if (isRetreat) newBackList.push(retreatingSvt);
+			while (newBackList.length < 3) newBackList.push(null);
+			backSvtList = newBackList;
+		};
+
+		actions.forEach((action) => {
+			let enemyTargetCmd = '';
+			if (action.type === 'skill') {
+				// 타겟검사
+				let needsEnemyTarget = false;
+				if (action.svt === undefined && mcData) {
+					const skillData = mcData.skills[action.skill];
+					needsEnemyTarget = skillData?.functions?.some((f) => f.funcTargetType === 'enemy');
+				} else {
+					const svtInfo = frontSvtList[action.svt];
+					if (svtInfo?.details?.skills && svtInfo?.activeSkills) {
+						const latestSkill = svtInfo.activeSkills[action.skill];
+						needsEnemyTarget = latestSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
+					}
+				}
+				// 타겟이 있거나 타겟 바꼈으면 커맨드 추가
+				if (
+					needsEnemyTarget &&
+					action.options?.enemyTarget !== undefined &&
+					action.options.enemyTarget !== currentEnemyTarget
+				) {
+					currentEnemyTarget = action.options.enemyTarget;
+					enemyTargetCmd = `t${3 - currentEnemyTarget}`;
+				}
+
+				// 스킬커맨드생성
+				let skillActionCmd = '';
+				if (action.svt === undefined && mcData) {
+					// 마스터 스킬
+					const skillData = mcData.skills[action.skill];
+					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
+					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
+
+					if (isOrderChange && swapList.length > 0) {
+						const swap = swapList.shift();
+						const fieldIdx = swap[0];
+						const backupIdx = swap[1];
+
+						let relativeBackupIdx = 0;
+						for (let i = 0; i <= backupIdx; i++) {
+							if (backSvtList[i] !== null && backSvtList[i] !== undefined) {
+								relativeBackupIdx++;
+							}
+						}
+
+						skillActionCmd += `x${fieldIdx + 1}${relativeBackupIdx}`;
+
+						const temp = frontSvtList[fieldIdx];
+						frontSvtList[fieldIdx] = backSvtList[backupIdx];
+						backSvtList[backupIdx] = temp;
+					} else {
+						skillActionCmd += masterSkill[action.skill];
+						if (isTargeting && action.options?.playerTarget !== undefined) {
+							skillActionCmd += action.options.playerTarget + 1;
+						}
+					}
+				} else {
+					// 서번트 스킬
+					const svtInfo = frontSvtList[action.svt];
+					if (svtInfo?.details?.skills) {
+						const latestSkill = svtInfo.activeSkills[action.skill];
+						const isTargeting = latestSkill?.functions?.some((f) => f.funcTargetType === 'ptOne');
+
+						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
+						if (svtInfo.svtId === 404200 && action.skill === 2) {
+							delayedActions.push({ type: 'death', svtIdx: action.svt });
+						}
+						// 종토리(1102200) 3스킬 -> 턴 종료 시 자폭
+						else if (svtInfo.svtId === 1102200 && action.skill === 2) {
+							delayedActions.push({ type: 'death', svtIdx: action.svt });
+						}
+						// 만붕이(403900) 2스킬 -> 턴 종료 시 자폭
+						else if (svtInfo.svtId === 403900 && action.skill === 1) {
+							delayedActions.push({ type: 'death', svtIdx: action.svt });
+						}
+						// 수영복 클로에(1101600) 2스킬 -> 턴 종료 시 후퇴
+						else if (svtInfo.svtId === 1101600 && action.skill === 1) {
+							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
+						}
+
+						let skillCmd = svtSkillMap[action.svt][action.skill];
+						let optionCmd = '';
+						let targetCmd =
+							isTargeting && action.options?.playerTarget !== undefined
+								? (action.options.playerTarget + 1).toString()
+								: '';
+
+						if (latestSkill?.script?.SelectAddInfo) {
+							const optionCount = latestSkill.script.SelectAddInfo[0]?.btn?.length || 0;
+							if (optionCount > 0) {
+								const choiceIdx = skillSelectList.shift();
+								if (choiceIdx !== undefined) {
+									const options = [];
+									const alphabet = ['A', 'B', 'C', 'D', 'E'];
+									for (let i = 0; i < optionCount; i++) {
+										options.push(`[Ch${optionCount}${alphabet[i]}]`);
+									}
+									optionCmd = options[choiceIdx] || '';
+
+									// 수영복 시키 2스
+									if (svtInfo.svtId === 2301100 && action.skill === 1) {
+										if (choiceIdx === 0) {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+										} else {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
+										}
+									}
+									// UDK 바게스트 3스
+									else if (svtInfo.svtId === 204900 && action.skill === 2) {
+										if (choiceIdx === 0) {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+										} else {
+											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
+										}
+									}
+								}
+							}
+						}
+
+						// 어린슈 2스킬은 선택 타입에 따라 타깃지정하는방식
+						if (svtInfo.svtId === 1100900 && action.skill === 1) {
+							const changeType = tdTypeChangeList.shift();
+							if (changeType !== undefined) {
+								// 1: Arts -> 2, 2: Buster -> 3, 3: Quick -> 1
+								const typeMap = { 1: '2', 2: '3', 3: '1' };
+								targetCmd = typeMap[changeType] || '';
+							}
+						}
+						// 에미야 3스킬 보구 색상 변경
+						else if (svtInfo.svtId === 200100 && action.skill === 2) {
+							const changeType = tdTypeChangeList.shift();
+							if (changeType !== undefined) {
+								// 1: Arts -> 7, 2: Buster -> 8
+								// 타깃선택 스킬은 아니지만 옵션 붙이는 용도로 targetCmd 변수 사용
+								const typeMap = { 1: '7', 2: '8' };
+								targetCmd = typeMap[changeType] || '';
+							}
+						}
+						if (optionCmd && targetCmd) {
+							skillActionCmd += `${skillCmd}(${optionCmd}${targetCmd})`;
+						} else {
+							skillActionCmd += skillCmd + optionCmd + targetCmd;
+						}
+					}
+				}
+				command += enemyTargetCmd + skillActionCmd;
+			} else if (action.type === 'attack') {
+				// 타겟검사
+				let needsEnemyTarget = false;
+				action.attacks.forEach((atk) => {
+					if (!atk.isTD) {
+						needsEnemyTarget = true;
+					} else {
+						const svtInfo = frontSvtList[atk.svt];
+						if (svtInfo?.activeNP?.effectFlags?.includes('attackEnemyOne')) {
+							needsEnemyTarget = true;
+						}
+					}
+				});
+				// 타겟이 있거나 타겟 바꼈으면 커맨드 추가
+				if (
+					needsEnemyTarget &&
+					action.options?.enemyTarget !== undefined &&
+					action.options.enemyTarget !== currentEnemyTarget
+				) {
+					currentEnemyTarget = action.options.enemyTarget;
+					enemyTargetCmd = `t${3 - currentEnemyTarget}`;
+				}
+
+				// 공격커맨드생성
+				let atkCnt = 0; // 보구 전 평타 횟수
+				let npCommand = ''; // 보구 커맨드 문자열
+				let isNyoboCnt = 0;
+				let attackActionCmd = '';
+
+				action.attacks.forEach((atk) => {
+					if (!atk.isTD) {
+						// 보구를 안 썼을 때만 평타 횟수 추가
+						if (npCommand === '') atkCnt++;
+					} else {
+						npCommand += atk.svt + 4;
+						const svtInfo = frontSvtList[atk.svt];
+						const currentNP = svtInfo?.activeNP;
+
+						// 자폭
+						if (
+							currentNP?.functions?.some(
+								(func) => func.funcType === 'forceInstantDeath' && func.funcTargetType === 'self'
+							)
+						) {
+							// 뇨보는 보구 두번 사용시 사망
+							if (svtInfo.id === '605200' && isNyoboCnt < 1) {
+								isNyoboCnt++;
+							} else {
+								atk.svt;
+								replaceSvt(atk.svt, false);
+							}
+						}
+						// 진궁으로 발사
+						else if (
+							currentNP?.functions?.some(
+								(func) =>
+									func.funcType === 'forceInstantDeath' &&
+									func.funcTargetType === 'ptSelfAnotherFirst'
+							)
+						) {
+							// 자신을 제외한 가장 왼쪽(0번부터) 서번트 희생
+							for (let i = 0; i < 3; i++) {
+								if (i !== atk.svt && frontSvtList[i] !== null) {
+									replaceSvt(atk.svt, false);
+									break;
+								}
+							}
+						}
+						// 후퇴
+						else if (
+							currentNP?.functions?.some(
+								(func) => func.funcType === 'moveToLastSubmember' && func.funcTargetType === 'self'
+							)
+						) {
+							replaceSvt(atk.svt, true);
+						}
+					}
+				});
+				if (atkCnt > 0) {
+					attackActionCmd += `n${atkCnt}`;
+				}
+				attackActionCmd += npCommand;
+				attackActionCmd += ',#,';
+				command += enemyTargetCmd + attackActionCmd;
 
 				// 예약해둔 지연스킬 발동(자폭, 후퇴) 일괄 실행
 				if (delayedActions.length > 0) {
@@ -667,7 +955,7 @@
 				<div
 					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 					onclick={() => {
-						navigator.clipboard.writeText(fgaCommand);
+						navigator.clipboard.writeText(fgaCommand2);
 						alert('커맨드가 복사되었습니다!');
 					}}
 				>
@@ -677,11 +965,44 @@
 					<div class="ms-3">📑</div>
 				</div>
 				{#if dev}
+					<br />
+					<div
+						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+						onclick={() => {
+							navigator.clipboard.writeText(fgaCommand1);
+							alert('커맨드가 복사되었습니다!');
+						}}
+					>
+						<div class="flex-1">
+							{fgaCommand2}
+						</div>
+						<div class="ms-3">📑</div>
+					</div>
 					<input
 						type="text"
 						placeholder="비교 개발용"
+						bind:value={testCommand}
 						class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 					/>
+					{#if fgaCommand == fgaCommand2 && fgaCommand == testCommand}
+						<input
+							type="text"
+							value="세개 같음"
+							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-green-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-green-400"
+						/>
+					{:else if fgaCommand == fgaCommand2}
+						<input
+							type="text"
+							value="두개 같음"
+							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+						/>
+					{:else if fgaCommand != fgaCommand2}
+						<input
+							type="text"
+							value="모두 다름"
+							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-red-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-red-400"
+						/>
+					{/if}
 				{/if}
 			</div>
 			<div class="text-red-600 transition-colors dark:text-red-400">
