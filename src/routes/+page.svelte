@@ -34,15 +34,15 @@
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
 	// 특정 서번트 스킬 사용시 옵션 선택
 	// 1스
-	// 쿠쿨칸(2501100) a[Ch2A] a[Ch2B] (옵션1, 2 선택)
-	// 반고흐-마이너(305600) a[Ch3A] a[Ch3B] a[Ch3C] (옵션1, 2, 3 선택)
+	// @쿠쿨칸(2501100) a[Ch2A] a[Ch2B] (옵션1, 2 선택)
+	// @반고흐-마이너(305600) a[Ch3A] a[Ch3B] a[Ch3C] (옵션1, 2, 3 선택)
 	// 2스
 	// 스페이스 이슈타르(1100900) b1 b2 b3 (서번트 대상 스킬 사용시 서번트 선택 위치에 옵션1(quick) 옵션2(arts) 옵션3(buster) 이 위치해서 타깃으로 지정방식 사용)
-	// 쿠쿨칸(2501100) b([Ch2A]1) b([Ch2B]3)
+	// @쿠쿨칸(2501100) b([Ch2A]1) b([Ch2B]3)
 	// 3스
 	// 에미야(200100) c7, c8 (옵션1, 2 선택)
 	// BB두바이(2300600) c7, c8 (옵션1(광역보구), 옵션2(버프보구) 선택. 보구 타입 변경이므로 계산 신경써야함) 기본은 뭐지?
-	// 쿠쿨칸(2501100) c[Ch2A] c[Ch2B] (옵션1, 2 선택)
+	// @쿠쿨칸(2501100) c[Ch2A] c[Ch2B] (옵션1, 2 선택)
 	// UDK바게스트(204900) c[Ch2A]  c[Ch2B] (옵션1-전체공격보구, 옵션2-단일공격보구 선택, 보구 타입 변경이므로 타겟 선택에 신경써야함) 스킬 사용 안할시 기본상태가 전체공격보구.
 	// 멜루진(304800) cM (영기재림이 1, 2단계 모습일때 변신. 3단계일땐 무시.  변신시에는 보구 타입이 단일-광역 으로 변경이므로 타겟 선택에 신경써야함)
 	// 프톨레마이오스(205000) cM (영기재림이 1, 2단계일때는 3단계로. 영기재림이 3단계 일때는 1단계로 변신이므로 변신. 멜루진과 달리 무시하는 옵션 없음. 영기 재림이 1, 2 단계일때는 단일보구, 3단계 일때는 광역보구 이므로 변신시에는 보구 타입 변경이므로 타겟 선택에 신경써야함)
@@ -150,7 +150,6 @@
 
 			if (decodedData.team?.mysticCode?.mysticCodeId) {
 				mcData = await fetchMCDetails(decodedData.team.mysticCode.mysticCodeId);
-				console.log('mcData :', $state.snapshot(mcData));
 			}
 
 			// 서번트 api
@@ -159,7 +158,6 @@
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
 			svtData = await fetchSvtDetails(team);
-			console.log('svtData :', $state.snapshot(svtData));
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
@@ -189,6 +187,7 @@
 		let skillSelectList = delegate?.skillActSelectSelections
 			? [...delegate.skillActSelectSelections]
 			: [];
+		console.log(skillSelectList);
 		let frontSvtList = [svtData[0], svtData[1], svtData[2]];
 		let backSvtList = [svtData[3], svtData[4], svtData[5]];
 
@@ -301,9 +300,30 @@
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
 
-						command += svtSkillMap[action.svt][action.skill];
-						if (isTargeting && action.options?.playerTarget !== undefined) {
-							command += action.options.playerTarget + 1;
+						let skillCmd = svtSkillMap[action.svt][action.skill];
+						let optionCmd = '';
+						let targetCmd =
+							isTargeting && action.options?.playerTarget !== undefined
+								? (action.options.playerTarget + 1).toString()
+								: '';
+
+						if (svtInfo.svtId === 2501100) {
+							const choiceIdx = skillSelectList.shift();
+							if (choiceIdx !== undefined) {
+								const options = ['[Ch2A]', '[Ch2B]'];
+								optionCmd = options[choiceIdx] || '';
+							}
+						} else if (svtInfo.svtId === 305600 && action.skill === 0) {
+							const choiceIdx = skillSelectList.shift();
+							if (choiceIdx !== undefined) {
+								const options = ['[Ch3A]', '[Ch3B]', '[Ch3C]'];
+								optionCmd = options[choiceIdx] || '';
+							}
+						}
+						if (optionCmd && targetCmd) {
+							command += `${skillCmd}(${optionCmd}${targetCmd})`;
+						} else {
+							command += skillCmd + optionCmd + targetCmd;
 						}
 					}
 				}
@@ -434,7 +454,7 @@
 	onMount(() => {
 		if (dev) {
 			url =
-				'https://link.chaldea.center/laplace/share?data=GH4sIADmMzmkA_9VWbWvbMBD-L_qsgeSXrvG3JV1ZIZ-27NMIRY0vsYgsq5ZkCCH_fSfZcULbwTb6Csbyibt7nnukO7wntdRTL1VJikmaUiKMOZqXl5Tce7COFHsiw07GGeOMU2IqYYEU-AUa6t03YStSEH7LJiy7hRLy1UVGDpQ0xslG25CglpvK7WaVkJoUrvVASSmtuFPwtQONGGuhLG6aRmo39es1RmmvFCVW1l4JB1_k6BRRv-PeT9N7IZYDUQcgLWo4htY76-Rq1pQQKYzWTXn0UNCBIgULZPW1BFX-6BxC_9oT27ngl6SM5Yyhq6ylmzU-kM2Q1lYqdVMG34RNeJ4zimuS9mt6kbPl4DTvghNnND6468pTYh7MeUeKHBFw4QlCCbe9bjy6sABcmWjwaKwi-UnGWJpFcx5oTVsQ26OuuBcSYUK499Lw0_kNQepRSETOUQTrjWlat9gZlIzoRgOhZNMKHXQZ9D_Qdy_OZwx-KM5wdwZ1nhCnD1KPQyL0-xWH9wwnZ9rwN9Zm3UrQ5RPqYA13YrX1Zmiz2IXja4mJSlCwwdZGcLTEapgg2JCuzy2cwwyEDh9js2IXYwWiRcKfsARpF1djR7QSO1-oU6Ho1lNNAqWzOWWU2EG7EO0G-oxx1pzZoaCmDnKj4aoWbNWEeRlUPoTTH2jGA0SWR2a9HcR9CbSPKAr_K1H4M6Elb4TGXgGNvyoae2m0P19m_l-Xme7HQ3nmVvjnIpcBeIZwi_i70g_F30WwJ56GCQAA&questId=94100101&phase=1&enemyHash=1_0904_ede5c64';
+				'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
 			fncConvertBtn();
 		}
 		const savedTheme = localStorage.getItem('theme');
@@ -558,6 +578,7 @@
 							src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
 							alt={mcData?.name || ''}
 							class="h-full w-full rounded-lg object-cover"
+							onclick={() => console.log('mcData :', $state.snapshot(mcData))}
 						/>
 					{:else}
 						<img
@@ -593,6 +614,7 @@
 										src={item.details.extraAssets?.faces?.ascension?.[4] ||
 											item.details.extraAssets?.faces?.ascension?.[1]}
 										alt={item.details.name}
+										onclick={() => console.log('svtData :', $state.snapshot(item))}
 										class="h-full w-full object-cover transition-opacity hover:opacity-80"
 									/>
 								</div>
