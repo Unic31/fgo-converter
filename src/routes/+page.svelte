@@ -772,18 +772,49 @@
 		<div
 			class="flex flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800 dark:shadow-gray-900/50"
 		>
-			<div class="flex items-end justify-between gap-3">
+			<!-- <div class="flex items-end justify-between gap-3">
 				<div>
 					<h1 class="mb-1 text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100">
 						FGO Converter(개발진행중)
 					</h1>
-					<div class="text-2xl text-gray-500 transition-colors dark:text-gray-400">
+					<div class="text-1xl text-gray-500 transition-colors dark:text-gray-400">
 						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.
 					</div>
 				</div>
 
 				<div
 					class="h-30 min-h-20 w-30 min-w-20 cursor-pointer transition-transform hover:scale-105 active:scale-90"
+					onclick={toggleBansi}
+				>
+					<img
+						src="{base}/images/bansi1_no_bg.png"
+						alt="Bansi Light Mode"
+						class="h-full w-full object-contain dark:hidden"
+					/>
+
+					<img
+						src="{base}/images/bansi3_no_bg.png"
+						alt="Bansi Dark Mode"
+						class="hidden h-full w-full object-contain dark:block"
+					/>
+				</div>
+			</div> -->
+
+			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 md:grid-rows-[1fr_auto] md:gap-y-1">
+				<h1
+					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100"
+				>
+					FGO Converter<br>(개발중)
+				</h1>
+
+				<div
+					class="col-span-2 row-start-2 self-start text-1xl text-gray-500 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+				>
+					칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
+				</div>
+
+				<div
+					class="col-start-2 row-start-1 h-30 min-h-20 w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
 					onclick={toggleBansi}
 				>
 					<img
@@ -812,53 +843,6 @@
 			>
 				{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
 			</button>
-			{#if dev}
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
-					</div>
-
-					<div class="max-h-50 overflow-auto text-xs text-green-400">
-						<pre>{JSON.stringify(decodedData, null, 2)}</pre>
-					</div>
-				</div>
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData.delegate)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
-					</div>
-
-					<div class="max-h-50 overflow-auto text-xs text-green-400">
-						<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
-					</div>
-				</div>
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData.actions)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
-					</div>
-
-					<div class="max-h-50 overflow-auto text-xs text-blue-400">
-						<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
-					</div>
-				</div>
-			{/if}
 
 			{#if isError}
 				<div class="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/30 dark:text-red-400">
@@ -950,7 +934,7 @@
 				class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-5 transition-colors dark:border-gray-600 dark:bg-gray-800"
 			>
 				<div class="flex items-end justify-between">
-					<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">FGA 커맨드</h2>
+					<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">변환된 커맨드</h2>
 				</div>
 				<div
 					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
@@ -969,7 +953,7 @@
 					<div
 						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 						onclick={() => {
-							navigator.clipboard.writeText(fgaCommand1);
+							navigator.clipboard.writeText(fgaCommand);
 							alert('커맨드가 복사되었습니다!');
 						}}
 					>
@@ -980,7 +964,7 @@
 					</div>
 					<input
 						type="text"
-						placeholder="비교 개발용"
+						placeholder="비교용"
 						bind:value={testCommand}
 						class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 					/>
@@ -1005,6 +989,53 @@
 					{/if}
 				{/if}
 			</div>
+			{#if dev}
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+						<button
+							onclick={copyToClipboard(decodedData)}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
+
+					<div class="max-h-50 overflow-auto text-xs text-green-400">
+						<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+					</div>
+				</div>
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
+						<button
+							onclick={copyToClipboard(decodedData.delegate)}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
+
+					<div class="max-h-50 overflow-auto text-xs text-green-400">
+						<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
+					</div>
+				</div>
+				<div class="relative rounded-lg bg-gray-900 p-4">
+					<div class="mb-2 flex items-center justify-between">
+						<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
+						<button
+							onclick={copyToClipboard(decodedData.actions)}
+							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+						>
+							복사하기 📑
+						</button>
+					</div>
+
+					<div class="max-h-50 overflow-auto text-xs text-blue-400">
+						<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+					</div>
+				</div>
+			{/if}
 			<div class="text-red-600 transition-colors dark:text-red-400">
 				⚠️ 주의사항 ⚠️
 				<ul class="list-disc pl-5">
@@ -1012,8 +1043,8 @@
 					<li>반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.</li>
 					<li>스킬과 보구는 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
 					<li>
-						현재 앙리 마유의 3스킬의 사망 로직(사용 후 5턴 뒤 사망)과 예장이나 스킬 효과로 인한 거츠를
-						계산하지 않습니다.(추후 업데이트 예정)
+						현재 앙리 마유의 3스킬의 사망 로직(사용 후 5턴 뒤 사망)과 예장이나 스킬 효과로 인한
+						거츠를 계산하지 않습니다.(추후 업데이트 예정)
 					</li>
 					<li>
 						<div class="flex">

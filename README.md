@@ -6,7 +6,7 @@
   </a>
 </p>
 <p align="center">
-  <strong>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.</strong>
+  <strong>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.</strong>
 </p>
 
 ## 관련 프로젝트 (References)
