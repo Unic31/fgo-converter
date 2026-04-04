@@ -14,6 +14,7 @@
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
+	let isManual = $state(false);
 	let language = $state('KR');
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
 	const svtSkillMap = [
@@ -24,6 +25,15 @@
 	const masterSkill = ['j', 'k', 'l'];
 	$effect(() => {
 		if (isModal) {
+			document.body.style.overflow = 'hidden';
+			document.documentElement.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = '';
+			document.documentElement.style.overflow = '';
+		}
+	});
+	$effect(() => {
+		if (isManual) {
 			document.body.style.overflow = 'hidden';
 			document.documentElement.style.overflow = 'hidden';
 		} else {
@@ -148,7 +158,9 @@
 			svtData = await fetchSvtDetails(team);
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
-			const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
+			const cntRes = await (
+				await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)
+			).json((e) => e.json);
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
 			isError = true;
@@ -557,11 +569,29 @@
 					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
 				>
 					{#if language == 'KR'}
-						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
+						<span>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.</span>
+						<button
+							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+							onclick={() => (isManual = !isManual)}
+						>
+							사용방법
+						</button>
 					{:else if language == 'JP'}
-						カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。
+						<span>カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。</span>
+						<button
+							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+							onclick={() => (isManual = !isManual)}
+						>
+							使い方
+						</button>
 					{:else}
-						Converts the shared URL of Chaldea to a command for FGA.
+						<span>Converts the shared URL of Chaldea to a command for FGA.</span>
+						<button
+							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+							onclick={() => (isManual = !isManual)}
+						>
+							How to use
+						</button>
 					{/if}
 				</div>
 
@@ -1025,6 +1055,97 @@
 				<button
 					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
 					onclick={() => (isModal = false)}
+				>
+					{#if language === 'KR'}
+						확인
+					{:else if language === 'JP'}
+						確認
+					{:else}
+						OK
+					{/if}
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+{#if isManual}
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+		onclick={() => (isManual = false)}
+	>
+		<div
+			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
+			onclick={(e) => e.stopPropagation()}
+		>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-xl font-bold">
+					{#if language === 'KR'}
+						사용방법
+					{:else if language === 'JP'}
+						使い方
+					{:else}
+						How to use
+					{/if}
+				</h2>
+				<button
+					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+					onclick={() => (isManual = false)}
+				>
+					✕
+				</button>
+			</div>
+
+			<div
+				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
+			>
+				<div class="flex flex-col gap-1">
+					{#if language === 'KR'}
+						<div>1. 이미 등록된 전투 시뮬레이터 가져오기</div>
+					{:else if language === 'JP'}
+						<div>1. 登録済みの戦闘シミュレーターからURLを取得する</div>
+					{:else}
+						<div>1. Import an already saved battle simulator</div>
+					{/if}
+
+					<img src="{base}/images/manual1.png" class="w-150" alt="sample1" />
+
+					{#if language === 'KR'}
+						<div>꼭!! 두번째 링크 클릭해서 URL 복사</div>
+					{:else if language === 'JP'}
+						<div>必ず！！2番目のリンクをクリックしてURLをコピーしてください</div>
+					{:else}
+						<div>Make sure to click the SECOND link to copy the URL!</div>
+					{/if}
+
+					<br />
+
+					{#if language === 'KR'}
+						<div>2. 직접 테스트한 전투 시뮬레이터 등록하고 가져오기</div>
+					{:else if language === 'JP'}
+						<div>2. 自分でテストした戦闘シミュレーターを保存して読み込む</div>
+					{:else}
+						<div>2. Save and import a custom battle simulator</div>
+					{/if}
+
+					<img src="{base}/images/manual2.png" class="w-150" alt="sample2" />
+
+					{#if language === 'KR'}
+						<div>서버가 아닌 기기에 해당 팀에 등록하고 가져오는 방법입니다.</div>
+					{:else if language === 'JP'}
+						<div>サーバー上ではなく、端末の編成スロットに保存してから読み込む方法です。</div>
+					{:else}
+						<div>
+							This method saves the team setup locally on your device rather than on the server
+							before importing.
+						</div>
+					{/if}
+				</div>
+			</div>
+
+			<div class="mt-4 flex justify-end">
+				<button
+					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+					onclick={() => (isManual = false)}
 				>
 					{#if language === 'KR'}
 						확인
