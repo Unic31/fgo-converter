@@ -749,11 +749,11 @@
 	}
 
 	onMount(() => {
-		if (dev) {
-			url =
-				'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
-			fncConvertBtn();
-		}
+		// if (dev) {
+		// 	url =
+		// 		'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
+		// 	fncConvertBtn();
+		// }
 		const savedTheme = localStorage.getItem('theme');
 		if (
 			savedTheme === 'dark' ||
@@ -770,51 +770,23 @@
 >
 	<div class="container mx-auto max-w-5xl">
 		<div
-			class="flex flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800 dark:shadow-gray-900/50"
+			class="flex flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
-			<!-- <div class="flex items-end justify-between gap-3">
-				<div>
-					<h1 class="mb-1 text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100">
-						FGO Converter(개발진행중)
-					</h1>
-					<div class="text-1xl text-gray-500 transition-colors dark:text-gray-400">
-						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 텍스트로 변환합니다.
-					</div>
-				</div>
-
-				<div
-					class="h-30 min-h-20 w-30 min-w-20 cursor-pointer transition-transform hover:scale-105 active:scale-90"
-					onclick={toggleBansi}
-				>
-					<img
-						src="{base}/images/bansi1_no_bg.png"
-						alt="Bansi Light Mode"
-						class="h-full w-full object-contain dark:hidden"
-					/>
-
-					<img
-						src="{base}/images/bansi3_no_bg.png"
-						alt="Bansi Dark Mode"
-						class="hidden h-full w-full object-contain dark:block"
-					/>
-				</div>
-			</div> -->
-
-			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 md:grid-rows-[1fr_auto]">
+			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 grid-rows-[1fr_auto]">
 				<h1
-					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100"
+					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
 					FGO Converter<br>(개발중)
 				</h1>
 
 				<div
-					class="col-span-2 row-start-2 self-start text-1xl text-gray-500 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+					class="col-span-2 row-start-2 self-start text-1xl text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
 				>
 					칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
 				</div>
 
 				<div
-					class="col-start-2 row-start-1 h-30 min-h-20 w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
+					class="col-start-2 row-start-1 max-h-30 max-w-30 min-h-20 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
 					onclick={toggleBansi}
 				>
 					<img
