@@ -529,7 +529,7 @@
 				<h1
 					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
-					FGO Converter<br />(개발중)
+					FGO Converter
 				</h1>
 
 				<div
