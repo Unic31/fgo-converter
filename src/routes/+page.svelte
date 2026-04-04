@@ -800,7 +800,7 @@
 				</div>
 			</div> -->
 
-			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 md:grid-rows-[1fr_auto] md:gap-y-1">
+			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 md:grid-rows-[1fr_auto]">
 				<h1
 					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-800 transition-colors dark:text-gray-100"
 				>
@@ -820,7 +820,7 @@
 					<img
 						src="{base}/images/bansi1_no_bg.png"
 						alt="Bansi Light Mode"
-						class="h-full w-full object-contain dark:hidden"
+						class="block h-full w-full object-contain dark:hidden"
 					/>
 
 					<img
@@ -940,7 +940,7 @@
 					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 					onclick={() => {
 						navigator.clipboard.writeText(fgaCommand2);
-						alert('커맨드가 복사되었습니다!');
+						alert('클립보드에 저장되었습니다!');
 					}}
 				>
 					<div class="flex-1">
@@ -954,7 +954,7 @@
 						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 						onclick={() => {
 							navigator.clipboard.writeText(fgaCommand);
-							alert('커맨드가 복사되었습니다!');
+							alert('클립보드에 저장되었습니다!');
 						}}
 					>
 						<div class="flex-1">
