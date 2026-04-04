@@ -8,7 +8,6 @@
 	let url = $state('');
 	let decodedData = $state(null);
 	let fgaCommand = $state('');
-	let fgaCommand2 = $state('');
 	let testCommand = $state('');
 	let svtData = $state([]);
 	let mcData = $state(null);
@@ -36,7 +35,6 @@
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
 	// 사용 방법 추가
 	// 3스
-	// BB두바이(2300600) c7, c8 (옵션1(광역보구), 옵션2(버프보구) 선택. 보구 타입 변경이므로 계산 신경써야함) 기본이 광역
 	// 멜루진(304800) cM (영기재림이 1, 2단계 모습일때 변신. 3단계일땐 무시.  변신시에는 보구 타입이 단일-광역 으로 변경이므로 타겟 선택에 신경써야함)
 	// 프톨레마이오스(205000) cM (영기재림이 1, 2단계일때는 3단계로. 영기재림이 3단계 일때는 1단계로 변신이므로 변신. 멜루진과 달리 무시하는 옵션 없음. 영기 재림이 1, 2 단계일때는 단일보구, 3단계 일때는 광역보구 이므로 변신시에는 보구 타입 변경이므로 타겟 선택에 신경써야함)
 
@@ -58,22 +56,21 @@
 				}
 
 				// 서번트가 사용하는 보구, 스킬
-				// const currentNP = data.noblePhantasms?.find((np) => np.id === svt.tdId) || null;
-				// const activeSkills = svt.skillIds
-				// 	? svt.skillIds.map((skillId) => {
-				// 			return data.skills?.find((s) => s.id === skillId) || null;
-				// 		})
-				// 	: [];
-
+				const activeNP = data.noblePhantasms?.find((np) => np.id === svt.tdId) || null;
+				const activeSkills = svt.skillIds
+					? svt.skillIds.map((skillId) => {
+							return data.skills?.find((s) => s.id === skillId) || null;
+						})
+					: [];
 				// 무조건 강화퀘스트 적용된 보구, 스킬
-				const currentNP = data.noblePhantasms?.find((np) => np.id === svt.tdId);
-				const targetNpNum = currentNP ? currentNP.npNum : 1;
-				const sameTypeNpList = data.noblePhantasms?.filter((np) => np.npNum === targetNpNum) || [];
-				const activeNP = sameTypeNpList[sameTypeNpList.length - 1];
-				const activeSkills = [1, 2, 3].map((num) => {
-					const slotSkills = data.skills?.filter((s) => s.num === num) || [];
-					return slotSkills[slotSkills.length - 1];
-				});
+				// const currentNP = data.noblePhantasms?.find((np) => np.id === svt.tdId);
+				// const targetNpNum = currentNP ? currentNP.npNum : 1;
+				// const sameTypeNpList = data.noblePhantasms?.filter((np) => np.npNum === targetNpNum) || [];
+				// const activeNP = sameTypeNpList[sameTypeNpList.length - 1];
+				// const activeSkills = [1, 2, 3].map((num) => {
+				// 	const slotSkills = data.skills?.filter((s) => s.num === num) || [];
+				// 	return slotSkills[slotSkills.length - 1];
+				// });
 
 				return {
 					...svt,
@@ -149,7 +146,6 @@
 			svtData = await fetchSvtDetails(team);
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
-			fgaCommand2 = fncConvert2(decodedData.actions, decodedData.delegate);
 			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
 			// const cntRes = 1;
 			// console.log(`총 ${cntRes} 번 변환되었습니다.`);
@@ -163,278 +159,6 @@
 	}
 
 	function fncConvert(actions, delegate) {
-		if (actions.length <= 0) {
-			alert('URL에 등록된 전투 데이터가 없습니다.');
-			return '';
-		}
-		let command = '';
-		let delayedActions = [];
-		// 던전마다 몹 배치가 다르므로 시작 몹 타겟은 설정하지 않음. 스킬 쓸때만 타겟이 적이면 그것만 계산
-		let currentEnemyTarget = null;
-		// 서번트 교체가 있었을경우 해당 위치 미리 저장
-		let swapList = delegate?.replaceMemberIndexes ? [...delegate.replaceMemberIndexes] : [];
-		// 스킬에 선택 옵션이 있을 경우
-		let skillSelectList = delegate?.skillActSelectSelections
-			? [...delegate.skillActSelectSelections]
-			: [];
-		let tdTypeChangeList = delegate?.tdTypeChanges ? [...delegate.tdTypeChanges] : [];
-		let frontSvtList = [svtData[0], svtData[1], svtData[2]];
-		let backSvtList = [svtData[3], svtData[4], svtData[5]];
-
-		const replaceSvt = (fieldIdx, isRetreat = false) => {
-			const retreatingSvt = isRetreat ? frontSvtList[fieldIdx] : null;
-			const nextIdx = backSvtList.findIndex((b) => b !== null && b !== undefined);
-
-			if (nextIdx !== -1) {
-				frontSvtList[fieldIdx] = backSvtList[nextIdx];
-				backSvtList[nextIdx] = null;
-			} else {
-				frontSvtList[fieldIdx] = null;
-			}
-
-			let newBackList = backSvtList.filter((b) => b !== null && b !== undefined);
-			if (isRetreat) newBackList.push(retreatingSvt);
-			while (newBackList.length < 3) newBackList.push(null);
-			backSvtList = newBackList;
-		};
-
-		actions.forEach((action) => {
-			let needsEnemyTarget = false;
-
-			if (action.type === 'attack') {
-				action.attacks.forEach((atk) => {
-					if (!atk.isTD) {
-						needsEnemyTarget = true; // 평타 공격은 타겟팅 적용
-					} else {
-						const svtInfo = frontSvtList[atk.svt];
-						if (svtInfo?.activeNP?.effectFlags?.includes('attackEnemyOne')) {
-							needsEnemyTarget = true;
-						}
-					}
-				});
-			} else if (action.type === 'skill') {
-				if (action.svt === undefined && mcData) {
-					const skillData = mcData.skills[action.skill];
-					needsEnemyTarget = skillData?.functions?.some((f) => f.funcTargetType === 'enemy');
-				} else {
-					const svtInfo = frontSvtList[action.svt];
-					if (svtInfo?.details?.skills) {
-						if (svtInfo?.activeSkills) {
-							const latestSkill = svtInfo.activeSkills[action.skill];
-							needsEnemyTarget = latestSkill?.functions?.some((f) => f.funcTargetType === 'enemy');
-						}
-					}
-				}
-			}
-
-			if (
-				needsEnemyTarget &&
-				action.options?.enemyTarget !== undefined &&
-				action.options.enemyTarget !== currentEnemyTarget
-			) {
-				currentEnemyTarget = action.options.enemyTarget;
-				command += `t${3 - currentEnemyTarget}`;
-			}
-
-			if (action.type === 'skill') {
-				if (action.svt === undefined && mcData) {
-					// 마스터 스킬
-					const skillData = mcData.skills[action.skill];
-					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
-					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
-
-					if (isOrderChange && swapList.length > 0) {
-						const swap = swapList.shift();
-						const fieldIdx = swap[0];
-						const backupIdx = swap[1];
-
-						let relativeBackupIdx = 0;
-						for (let i = 0; i <= backupIdx; i++) {
-							if (backSvtList[i] !== null && backSvtList[i] !== undefined) {
-								relativeBackupIdx++;
-							}
-						}
-
-						command += `x${fieldIdx + 1}${relativeBackupIdx}`;
-
-						const temp = frontSvtList[fieldIdx];
-						frontSvtList[fieldIdx] = backSvtList[backupIdx];
-						backSvtList[backupIdx] = temp;
-					} else {
-						command += masterSkill[action.skill];
-						if (isTargeting && action.options?.playerTarget !== undefined) {
-							command += action.options.playerTarget + 1;
-						}
-					}
-				} else {
-					// 서번트 스킬
-					const svtInfo = frontSvtList[action.svt];
-					if (svtInfo?.details?.skills) {
-						const latestSkill = svtInfo.activeSkills[action.skill];
-						const isTargeting = latestSkill?.functions?.some((f) => f.funcTargetType === 'ptOne');
-
-						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
-						if (svtInfo.svtId === 404200 && action.skill === 2) {
-							delayedActions.push({ type: 'death', svtIdx: action.svt });
-						}
-						// 종토리(1102200) 3스킬 -> 턴 종료 시 자폭
-						else if (svtInfo.svtId === 1102200 && action.skill === 2) {
-							delayedActions.push({ type: 'death', svtIdx: action.svt });
-						}
-						// 만붕이(403900) 2스킬 -> 턴 종료 시 자폭
-						else if (svtInfo.svtId === 403900 && action.skill === 1) {
-							delayedActions.push({ type: 'death', svtIdx: action.svt });
-						}
-						// 수영복 클로에(1101600) 2스킬 -> 턴 종료 시 후퇴
-						else if (svtInfo.svtId === 1101600 && action.skill === 1) {
-							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
-						}
-
-						let skillCmd = svtSkillMap[action.svt][action.skill];
-						let optionCmd = '';
-						let targetCmd =
-							isTargeting && action.options?.playerTarget !== undefined
-								? (action.options.playerTarget + 1).toString()
-								: '';
-
-						if (latestSkill?.script?.SelectAddInfo) {
-							const optionCount = latestSkill.script.SelectAddInfo[0]?.btn?.length || 0;
-							if (optionCount > 0) {
-								const choiceIdx = skillSelectList.shift();
-								if (choiceIdx !== undefined) {
-									const options = [];
-									const alphabet = ['A', 'B', 'C', 'D', 'E'];
-									for (let i = 0; i < optionCount; i++) {
-										options.push(`[Ch${optionCount}${alphabet[i]}]`);
-									}
-									optionCmd = options[choiceIdx] || '';
-
-									// 수영복 시키 2스
-									if (svtInfo.svtId === 2301100 && action.skill === 1) {
-										if (choiceIdx === 0) {
-											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
-										} else {
-											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
-										}
-									}
-									// UDK 바게스트 3스
-									else if (svtInfo.svtId === 204900 && action.skill === 2) {
-										if (choiceIdx === 0) {
-											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
-										} else {
-											svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
-										}
-									}
-								}
-							}
-						}
-
-						// 어린슈 2스킬은 선택 타입에 따라 타깃지정하는방식
-						if (svtInfo.svtId === 1100900 && action.skill === 1) {
-							const changeType = tdTypeChangeList.shift();
-							if (changeType !== undefined) {
-								// 1: Arts -> 2, 2: Buster -> 3, 3: Quick -> 1
-								const typeMap = { 1: '2', 2: '3', 3: '1' };
-								targetCmd = typeMap[changeType] || '';
-							}
-						}
-						// 에미야 3스킬 보구 색상 변경
-						else if (svtInfo.svtId === 200100 && action.skill === 2) {
-							const changeType = tdTypeChangeList.shift();
-							if (changeType !== undefined) {
-								// 1: Arts -> 7, 2: Buster -> 8
-								// 타깃선택 스킬은 아니지만 옵션 붙이는 용도로 targetCmd 변수 사용
-								const typeMap = { 1: '7', 2: '8' };
-								targetCmd = typeMap[changeType] || '';
-							}
-						}
-						if (optionCmd && targetCmd) {
-							command += `${skillCmd}(${optionCmd}${targetCmd})`;
-						} else {
-							command += skillCmd + optionCmd + targetCmd;
-						}
-					}
-				}
-			} else if (action.type === 'attack') {
-				let atkCnt = 0; // 보구 전 평타 횟수
-				let npCommand = ''; // 보구 커맨드 문자열
-				let isNyoboCnt = 0;
-				action.attacks.forEach((atk) => {
-					if (!atk.isTD) {
-						// 보구를 안 썼을 때만 평타 횟수 추가
-						if (npCommand === '') atkCnt++;
-					} else {
-						npCommand += atk.svt + 4;
-						const svtInfo = frontSvtList[atk.svt];
-						const currentNP = svtInfo?.activeNP;
-
-						// 자폭
-						if (
-							currentNP?.functions?.some(
-								(func) => func.funcType === 'forceInstantDeath' && func.funcTargetType === 'self'
-							)
-						) {
-							// 뇨보는 보구 두번 사용시 사망
-							if (svtInfo.id === '605200' && isNyoboCnt < 1) {
-								isNyoboCnt++;
-							} else {
-								atk.svt;
-								replaceSvt(atk.svt, false);
-							}
-						}
-						// 진궁으로 발사
-						else if (
-							currentNP?.functions?.some(
-								(func) =>
-									func.funcType === 'forceInstantDeath' &&
-									func.funcTargetType === 'ptSelfAnotherFirst'
-							)
-						) {
-							// 자신을 제외한 가장 왼쪽(0번부터) 서번트 희생
-							for (let i = 0; i < 3; i++) {
-								if (i !== atk.svt && frontSvtList[i] !== null) {
-									replaceSvt(atk.svt, false);
-									break;
-								}
-							}
-						}
-						// 후퇴
-						else if (
-							currentNP?.functions?.some(
-								(func) => func.funcType === 'moveToLastSubmember' && func.funcTargetType === 'self'
-							)
-						) {
-							replaceSvt(atk.svt, true);
-						}
-					}
-				});
-
-				if (atkCnt > 0) {
-					command += `n${atkCnt}`;
-				}
-				command += npCommand;
-				command += ',#,';
-
-				// 예약해둔 지연스킬 발동(자폭, 후퇴) 일괄 실행
-				if (delayedActions.length > 0) {
-					delayedActions.forEach((delAct) => {
-						if (delAct.type === 'death') {
-							replaceSvt(delAct.svtIdx, false);
-						} else if (delAct.type === 'retreat') {
-							replaceSvt(delAct.svtIdx, true);
-						}
-					});
-					delayedActions = [];
-				}
-			}
-		});
-		if (command.endsWith(',#,')) {
-			command = command.slice(0, -3);
-		}
-		return command;
-	}
-
-	function fncConvert2(actions, delegate) {
 		if (actions.length <= 0) {
 			alert('URL에 등록된 전투 데이터가 없습니다.');
 			return '';
@@ -608,6 +332,35 @@
 								targetCmd = typeMap[changeType] || '';
 							}
 						}
+						// BB두바이 3스킬 보구 타입 변경
+						else if (svtInfo.svtId === 2300600 && action.skill === 2) {
+							const changeType = tdTypeChangeList.shift();
+							if (changeType !== undefined) {
+								// 1: CCC(광역보구) -> 7, 2: GGG(버프보구) -> 8
+								// 타깃선택 스킬은 아니지만 옵션 붙이는 용도로 targetCmd 변수 사용
+								const typeMap = { 1: '7', 2: '8' };
+								targetCmd = typeMap[changeType] || '';
+								if (targetCmd == 7) {
+									svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+								} else {
+									svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['support'] };
+								}
+							}
+						}
+						// 프톨레마이오스 3스킬 보구 타입 변신 
+						else if (svtInfo.svtId === 205000 && action.skill === 2) {
+							if (svtInfo.activeNP?.effectFlags?.includes('attackEnemyOne')) {
+								svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+							} else {
+								svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyOne'] };
+							}
+						}
+						// 멜루진 3스킬 보구 타입 변신 (단일 -> 광역 고정)
+						else if (svtInfo.svtId === 304800 && action.skill === 2) {
+							if (svtInfo.activeNP?.effectFlags?.includes('attackEnemyOne')) {
+								svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
+							}
+						}
 						if (optionCmd && targetCmd) {
 							skillActionCmd += `${skillCmd}(${optionCmd}${targetCmd})`;
 						} else {
@@ -720,7 +473,7 @@
 		return command;
 	}
 
-	function toggleBansi() {
+	function toggleLight() {
 		isDarkMode = !isDarkMode;
 		if (isDarkMode) {
 			document.documentElement.classList.add('dark');
@@ -749,11 +502,11 @@
 	}
 
 	onMount(() => {
-		// if (dev) {
-		// 	url =
-		// 		'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
-		// 	fncConvertBtn();
-		// }
+		if (dev) {
+			url =
+				'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
+			// fncConvertBtn();
+		}
 		const savedTheme = localStorage.getItem('theme');
 		if (
 			savedTheme === 'dark' ||
@@ -772,22 +525,22 @@
 		<div
 			class="flex flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
-			<div class="grid grid-cols-[1fr_auto] gap-x-3 gap-y-2 grid-rows-[1fr_auto]">
+			<div class="grid grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 				<h1
 					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
-					FGO Converter<br>(개발중)
+					FGO Converter<br />(개발중)
 				</h1>
 
 				<div
-					class="col-span-2 row-start-2 self-start text-1xl text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
 				>
 					칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
 				</div>
 
 				<div
-					class="col-start-2 row-start-1 max-h-30 max-w-30 min-h-20 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
-					onclick={toggleBansi}
+					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
+					onclick={toggleLight}
 				>
 					<img
 						src="{base}/images/bansi1_no_bg.png"
@@ -807,7 +560,7 @@
 				type="text"
 				bind:value={url}
 				placeholder="https://link.chaldea.center/laplace/share?data=..."
-				class="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+				class="w-full rounded-lg border border-gray-300 p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
 			/>
 			<button
 				onclick={fncConvertBtn}
@@ -817,14 +570,13 @@
 			</button>
 
 			{#if isError}
-				<div class="rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
 					⚠️ 올바른 링크인지 확인해주세요.
 				</div>
 			{/if}
-
-			<div class="custom-scrollbar mt-4 flex flex-nowrap gap-3 overflow-x-auto pb-2">
+			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto pb-2">
 				<div
-					class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+					class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 				>
 					{#if mcData}
 						<img
@@ -845,7 +597,7 @@
 				{#if svtData.length === 0}
 					{#each emptySvtList as svtName, idx (idx)}
 						<div
-							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 						>
 							<img
 								src="{base}/images/{svtName}.png"
@@ -903,15 +655,15 @@
 			</div>
 
 			<div
-				class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-5 transition-colors dark:border-gray-600 dark:bg-gray-800"
+				class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 			>
 				<div class="flex items-end justify-between">
-					<h2 class="mb-2 text-lg font-bold text-blue-800 dark:text-blue-300">변환된 커맨드</h2>
+					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">변환된 커맨드</h2>
 				</div>
 				<div
-					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 					onclick={() => {
-						navigator.clipboard.writeText(fgaCommand2);
+						navigator.clipboard.writeText(fgaCommand);
 						alert('클립보드에 저장되었습니다!');
 					}}
 				>
@@ -922,42 +674,24 @@
 				</div>
 				{#if dev}
 					<br />
-					<div
-						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
-						onclick={() => {
-							navigator.clipboard.writeText(fgaCommand);
-							alert('클립보드에 저장되었습니다!');
-						}}
-					>
-						<div class="flex-1">
-							{fgaCommand2}
-						</div>
-						<div class="ms-3">📑</div>
-					</div>
 					<input
 						type="text"
 						placeholder="비교용"
 						bind:value={testCommand}
 						class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
 					/>
-					{#if fgaCommand == fgaCommand2 && fgaCommand == testCommand}
-						<input
-							type="text"
-							value="세개 같음"
-							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-green-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-green-400"
-						/>
-					{:else if fgaCommand == fgaCommand2}
-						<input
-							type="text"
-							value="두개 같음"
+					{#if fgaCommand == testCommand}
+						<div
 							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
-						/>
-					{:else if fgaCommand != fgaCommand2}
-						<input
-							type="text"
-							value="모두 다름"
+						>
+							두개 같음
+						</div>
+					{:else}
+						<div
 							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-red-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-red-400"
-						/>
+						>
+							두개 다름
+						</div>
 					{/if}
 				{/if}
 			</div>
@@ -1013,10 +747,11 @@
 				<ul class="list-disc pl-5">
 					<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
 					<li>반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.</li>
-					<li>스킬과 보구는 무조건 강화 퀘스트가 적용된 스킬로 계산합니다.</li>
 					<li>
-						현재 앙리 마유의 3스킬의 사망 로직(사용 후 5턴 뒤 사망)과 예장이나 스킬 효과로 인한
-						거츠를 계산하지 않습니다.(추후 업데이트 예정)
+						<div>현재 계산하지 않는 로직(추후 업데이트 예정)</div>
+						<div>앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)</div>
+						<div>만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)</div>
+						<div>예장, 스킬 효과로 인한 거츠</div>
 					</li>
 					<li>
 						<div class="flex">
