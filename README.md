@@ -8,10 +8,16 @@
 <p align="center">
   <strong>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.</strong>
 </p>
+<p align="center">
+  <strong>Converts the shared URL of Chaldea to a command for FGA.</strong>
+</p>
 
+아래 문구는 AI를 사용하여 번역되었으며 어색하거나 부자연스러운 표현이 있을 수 있음을 참고해 주세요.  
+Please note that the text below was translated using AI and may contain awkward or unnatural phrasing.
 ## 관련 프로젝트 (References)
 
-본 프로젝트는 아래 사이트들의 데이터를 기반으로 제작되었습니다.
+본 프로젝트는 아래 사이트들의 데이터를 기반으로 제작되었습니다.  
+This project is based on the data from the following sites.
 
 - **Chaldea:** [Website](https://chaldea.center/) | [GitHub](https://github.com/chaldea-center/chaldea)
 - **FGA (Fate-Grand-Automata):** [Website](https://fate-grand-automata.github.io/) | [GitHub](https://github.com/Fate-Grand-Automata/FGA)
@@ -25,10 +31,18 @@
   - 앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)
   - 만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)
   - 예장, 스킬 효과로 인한 거츠
+- We are not responsible for any loss of Golden Apples caused by errors, but bug reports are highly appreciated.
+- We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.
+- Currently unsupported logic (Planned for future updates):
+  - Angra Mainyu - 3rd Skill (Death 5 turns after use)
+  - Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at the end of the attacking turn)
+  - Guts effects granted by Craft Essences (CE) or Skills
 
 ## 피드백 (Feedback)
 
-버그신고나 기능요청 등 연락 바랍니다. 버그 신고시 오류가 발생했던 URL 첨부 부탁드립니다.
+버그 신고나 기능 요청은 연락 바랍니다. 버그를 신고하실 때는 오류가 발생한 URL을 첨부해 주세요.  
+For bug reports or feature requests, please contact me. If you are reporting a bug, please attach the URL where the error occurred.
+
 
 - **Mail:** [uenic31@gmail.com](mailto:uenic31@gmail.com)
 - **X (Twitter):** [@u_nic31](https://x.com/u_nic31)

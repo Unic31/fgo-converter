@@ -14,6 +14,7 @@
 	let isError = $state(false);
 	let isDarkMode = $state(false);
 	let isModal = $state(false);
+	let language = $state('KR');
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
 	const svtSkillMap = [
 		['a', 'b', 'c'],
@@ -30,13 +31,14 @@
 			document.documentElement.style.overflow = '';
 		}
 	});
+	$effect(() => {
+		if (language) {
+			localStorage.setItem('language', language);
+		}
+	});
 
-	// 해아할거
+	// TO DO
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
-	// 사용 방법 추가
-	// 3스
-	// 멜루진(304800) cM (영기재림이 1, 2단계 모습일때 변신. 3단계일땐 무시.  변신시에는 보구 타입이 단일-광역 으로 변경이므로 타겟 선택에 신경써야함)
-	// 프톨레마이오스(205000) cM (영기재림이 1, 2단계일때는 3단계로. 영기재림이 3단계 일때는 1단계로 변신이므로 변신. 멜루진과 달리 무시하는 옵션 없음. 영기 재림이 1, 2 단계일때는 단일보구, 3단계 일때는 광역보구 이므로 변신시에는 보구 타입 변경이므로 타겟 선택에 신경써야함)
 
 	async function fetchSvtDetails(svtList) {
 		if (!svtList) return [];
@@ -146,9 +148,7 @@
 			svtData = await fetchSvtDetails(team);
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
-			// const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
-			// const cntRes = 1;
-			// console.log(`총 ${cntRes} 번 변환되었습니다.`);
+			const cntRes = await (await fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`)).json(e=>e.json);
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
 			isError = true;
@@ -347,7 +347,7 @@
 								}
 							}
 						}
-						// 프톨레마이오스 3스킬 보구 타입 변신 
+						// 프톨레마이오스 3스킬 보구 타입 변신
 						else if (svtInfo.svtId === 205000 && action.skill === 2) {
 							if (svtInfo.activeNP?.effectFlags?.includes('attackEnemyOne')) {
 								svtInfo.activeNP = { ...svtInfo.activeNP, effectFlags: ['attackEnemyAll'] };
@@ -515,6 +515,19 @@
 			isDarkMode = true;
 			document.documentElement.classList.add('dark');
 		}
+		const savedLang = localStorage.getItem('language');
+		if (savedLang) {
+			language = savedLang;
+		} else {
+			const browserLang = navigator.language.toLowerCase();
+			if (browserLang.startsWith('ko')) {
+				language = 'KR';
+			} else if (browserLang.startsWith('ja')) {
+				language = 'JP';
+			} else {
+				language = 'EN';
+			}
+		}
 	});
 </script>
 
@@ -527,15 +540,29 @@
 		>
 			<div class="grid grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 				<h1
-					class="col-start-1 row-start-1 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
-					FGO Converter
+					<span class="leading-none">FGO Converter</span>
+					<select
+						class="cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+						bind:value={language}
+					>
+						<option value="KR">KR</option>
+						<option value="JP">JP</option>
+						<option value="EN">EN</option>
+					</select>
 				</h1>
 
 				<div
 					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
 				>
-					칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
+					{#if language == 'KR'}
+						칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.
+					{:else if language == 'JP'}
+						カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。
+					{:else}
+						Converts the shared URL of Chaldea to a command for FGA.
+					{/if}
 				</div>
 
 				<div
@@ -566,12 +593,24 @@
 				onclick={fncConvertBtn}
 				class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
 			>
-				{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
+				{#if language == 'KR'}
+					{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
+				{:else if language == 'JP'}
+					{isLoading ? 'アトラス院と通信中...' : '変換する'}
+				{:else}
+					{isLoading ? 'Communicating with Atlas Academy...' : 'Convert'}
+				{/if}
 			</button>
 
 			{#if isError}
 				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-					⚠️ 올바른 링크인지 확인해주세요.
+					{#if language == 'KR'}
+						⚠️ 올바른 링크인지 확인해주세요.
+					{:else if language == 'JP'}
+						⚠️ 正しいリンクかご確認ください。
+					{:else}
+						⚠️ Please check if the link is valid.
+					{/if}
 				</div>
 			{/if}
 			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto pb-2">
@@ -658,7 +697,15 @@
 				class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 			>
 				<div class="flex items-end justify-between">
-					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">변환된 커맨드</h2>
+					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+						{#if language == 'KR'}
+							변환된 커맨드
+						{:else if language == 'JP'}
+							変換されたコマンド
+						{:else}
+							Converted Command
+						{/if}
+					</h2>
 				</div>
 				<div
 					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
@@ -743,30 +790,113 @@
 				</div>
 			{/if}
 			<div class="text-red-600 transition-colors dark:text-red-400">
-				⚠️ 주의사항 ⚠️
-				<ul class="list-disc pl-5">
-					<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
-					<li>반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.</li>
-					<li>
-						<div>현재 계산하지 않는 로직(추후 업데이트 예정)</div>
-						<div>앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)</div>
-						<div>만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)</div>
-						<div>예장, 스킬 효과로 인한 거츠</div>
-					</li>
-					<li>
-						<div class="flex">
+				{#if language === 'KR'}
+					⚠️ 주의사항 ⚠️
+					<ul class="list-disc pl-5">
+						<li>
+							영어와 일본어는 AI를 사용하여 번역되었으며 어색하거나 부자연스러운 표현이 있을 수
+							있습니다.
+						</li>
+						<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
+						<li>
+							반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.
+						</li>
+						<li>
+							<div>현재 계산하지 않는 로직(추후 업데이트 예정)</div>
+							<div>앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)</div>
 							<div>
-								오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
-								않는 서번트라도 편성하는걸 추천드립니다.<span
-									class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
-									onclick={() => (isModal = true)}
-								>
-									설명
-								</span>
+								만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)
 							</div>
-						</div>
-					</li>
-				</ul>
+							<div>예장, 스킬 효과로 인한 거츠</div>
+						</li>
+						<li>
+							<div class="flex">
+								<div>
+									오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에
+									사용하지 않는 서번트라도 편성하는걸 추천드립니다.<span
+										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
+										onclick={() => (isModal = true)}
+									>
+										설명
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				{:else if language === 'JP'}
+					⚠️ 注意事項 ⚠️
+					<ul class="list-disc pl-5">
+						<li>
+							英語および日本語の翻訳にはAIを使用しているため、不自然な表現が含まれる場合があります。
+						</li>
+						<li>
+							エラーによるリンゴの損失については責任を負いかねますが、バグ報告は歓迎いたします。
+						</li>
+						<li>
+							周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。
+						</li>
+						<li>
+							<div>現在対応していないロジック（今後のアップデートで対応予定）</div>
+							<div>アンリマユ - スキル3（使用後5ターン経過で戦闘不能）</div>
+							<div>
+								マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 /
+								強化後：攻撃ターン終了時に戦闘不能）
+							</div>
+							<div>概念礼装やスキル効果によるガッツ</div>
+						</li>
+						<li>
+							<div class="flex">
+								<div>
+									オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時には使用しないサーヴァントも編成しておくことを推奨します。<span
+										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
+										onclick={() => (isModal = true)}
+									>
+										詳細
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				{:else}
+					⚠️ Disclaimer ⚠️
+					<ul class="list-disc pl-5">
+						<li>
+							English and Japanese translations are generated using AI and may contain unnatural
+							phrasing.
+						</li>
+						<li>
+							We are not responsible for any loss of Golden Apples caused by errors, but bug reports
+							are highly appreciated.
+						</li>
+						<li>
+							We do not recommend using this for Story quests or quests with special gimmicks.
+							Please use it mainly for repeatable Free Quests.
+						</li>
+						<li>
+							<div>Currently unsupported logic (Planned for future updates):</div>
+							<div>Angra Mainyu - 3rd Skill (Death 5 turns after use)</div>
+							<div>
+								Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at
+								the end of the attacking turn)
+							</div>
+							<div>Guts effects granted by Craft Essences (CE) or Skills</div>
+						</li>
+						<li>
+							<div class="flex">
+								<div>
+									When using Order Change, self-sacrifice, or retreating Servants, we recommend
+									filling all empty slots in the battle simulator's party setup, even with unused
+									Servants.<span
+										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
+										onclick={() => (isModal = true)}
+									>
+										Details
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				{/if}
 			</div>
 		</div>
 		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
@@ -813,7 +943,15 @@
 			onclick={(e) => e.stopPropagation()}
 		>
 			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xl font-bold">오더 체인지, 자폭, 후퇴 편성 주의</h2>
+				<h2 class="text-xl font-bold">
+					{#if language === 'KR'}
+						오더 체인지, 자폭, 후퇴 편성 주의
+					{:else if language === 'JP'}
+						オーダーチェンジ、自爆、退却編成時の注意
+					{:else}
+						Caution: Order Change, Sacrifice & Retreat
+					{/if}
+				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
 					onclick={() => (isModal = false)}
@@ -826,19 +964,60 @@
 				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
 			>
 				<div class="flex flex-col gap-1">
-					<div>시뮬레이터 파티 구성시</div>
-					<img src="{base}/images/sample1.png" class="w-150" />
-					<div>위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데</div>
-					<img src="{base}/images/sample2.png" class="w-150" />
-					<div>보통 인게임 파티 편성시 코스트가 남으면 아무 서번트나 배치하게 됩니다.</div>
-					<div>이를 오더 체인지로 확인해보면</div>
-					<img src="{base}/images/sample3.png" class="w-150" />
-					<img src="{base}/images/sample4.png" class="w-150" />
-					<div>후열 서번트 배치가 아예 달라지는걸 확인할 수 있습니다.</div>
-					<div>
-						오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
-						않는 서번트도 편성하는걸 추천드립니다.
-					</div>
+					{#if language === 'KR'}
+						<div>시뮬레이터 파티 구성시</div>
+					{:else if language === 'JP'}
+						<div>シミュレーターでのパーティ編成時、</div>
+					{:else}
+						<div>When setting up your party in the simulator,</div>
+					{/if}
+					<img src="{base}/images/sample1.png" class="w-150" alt="sample1" />
+
+					{#if language === 'KR'}
+						<div>위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데</div>
+					{:else if language === 'JP'}
+						<div>このように使用するサーヴァント以外の枠を空けておくことが多いですが、</div>
+					{:else}
+						<div>you usually leave the slots for unused Servants empty like this.</div>
+					{/if}
+					<img src="{base}/images/sample2.png" class="w-150" alt="sample2" />
+
+					{#if language === 'KR'}
+						<div>보통 인게임 파티 편성시 코스트가 남으면 아무 서번트나 배치하게 됩니다.</div>
+						<div>이를 오더 체인지로 확인해보면</div>
+					{:else if language === 'JP'}
+						<div>
+							実際のゲーム内でコストが余っている場合、適当なサーヴァントを配置することがあります。
+						</div>
+						<div>これをオーダーチェンジ画面で確認すると、</div>
+					{:else}
+						<div>
+							However, in the actual game, players often fill empty slots with random Servants if
+							they have leftover Cost.
+						</div>
+						<div>If you check this on the Order Change screen,</div>
+					{/if}
+					<img src="{base}/images/sample3.png" class="w-150" alt="sample3" />
+					<img src="{base}/images/sample4.png" class="w-150" alt="sample4" />
+
+					{#if language === 'KR'}
+						<div>후열 서번트 배치가 아예 달라지는걸 확인할 수 있습니다.</div>
+						<div>
+							오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
+							않는 서번트도 편성하는걸 추천드립니다.
+						</div>
+					{:else if language === 'JP'}
+						<div>控えサーヴァントの配置が全く異なっていることがわかります。</div>
+						<div>
+							オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時にも使用しないサーヴァントを編成しておくことを推奨します。
+						</div>
+					{:else}
+						<div>you will notice that the backline placement is completely different.</div>
+						<div>
+							When using Order Change, self-sacrifice, or retreating Servants, we highly recommend
+							filling the empty slots in the simulator to match your in-game party.
+						</div>
+					{/if}
 				</div>
 			</div>
 
@@ -847,7 +1026,13 @@
 					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
 					onclick={() => (isModal = false)}
 				>
-					확인
+					{#if language === 'KR'}
+						확인
+					{:else if language === 'JP'}
+						確認
+					{:else}
+						OK
+					{/if}
 				</button>
 			</div>
 		</div>
