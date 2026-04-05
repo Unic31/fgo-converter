@@ -710,7 +710,7 @@
 									class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
 								>
 									<img
-										src={item.svtImg}
+										src={item.svtImg || `${base}/images/nunnos.png`}
 										alt={item.details.name}
 										onclick={() => console.log('svtData :', $state.snapshot(item))}
 										class="h-full w-full object-cover transition-opacity hover:opacity-80"
