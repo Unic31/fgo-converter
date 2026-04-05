@@ -83,13 +83,20 @@
 				// 	const slotSkills = data.skills?.filter((s) => s.num === num) || [];
 				// 	return slotSkills[slotSkills.length - 1];
 				// });
+				let svtImg;
+				if (svt.limitCount <= 4) {
+					svtImg = data.extraAssets?.faces?.ascension?.[Math.max(1, svt.limitCount)] || '';
+				} else {
+					svtImg = data.extraAssets?.faces?.costume?.[svt.limitCount] || '';
+				}
 
 				return {
 					...svt,
 					details: data,
 					ceDetails: ceData,
 					activeNP,
-					activeSkills
+					activeSkills,
+					svtImg
 				};
 			} catch (err) {
 				console.error(`서번트(ID: ${svt.svtId}) 로드 실패:`, err);
@@ -525,7 +532,8 @@
 			url =
 				// 'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
 				// 'https://link.chaldea.center/laplace/share?data=GH4sIABlY0mkA_72X32_aMBDH_xc_Z5JtEkp4W9mqVepeVqY9VKgyyUEsnB9NHDSE-r_vzk7Tqt3aQUsE4rA5-3v38fmAPct1cd5qk7JpPBoFTFXVw_BMBOyuhcay6Z5pmgkF52LEA1ZlqgE2RQcoIN99U03Gpkzc8vEkul0my5iPFbsPWFlZXRYNbZDrdWZ3s0zpgk1t3ULAUt2opYGvWyhQY6VMg5NVqQt73q5WuKpojQlYo_PWKAufde_kVH_g3M_Ke6GWBZWTUKFyeFia7xqrk1mZgguhH11iNlJgIga2YDARTsEWFxpMer21KH2zZ83Wkl_EoxEnV51rOytbijXEqDbamMuUXKUcTaKIB2hjb0OOdtE5XW3JCdXcc-EYQ5H6aTfrHviBTXtBQaOrrWNs0MQYgbKbi7KlaCmerHoySFxKcchHceyGVxTteQ1q80Ab57bOHfHdtboSj8farTIv1hi_AuE0bVWVtZ3vKkTJirIAFrB1rQri1Z3LfdBDi7mQr0OLPSsUD50R4-OJObWeWOTjnrxF7ABEvpo-kI-MOI_fqCouuasmLkVnZXg8I694cFmdHlJS5jli8teSgp-EnEd4es5yb8djb-NufHZGmT3ni1NLlWza6vkdlhNsXG_UI5djKkQ-8iZ8Rz16uXex7hqdh_0fqDt_0nlJelVrDPdvBek2opcFLkrBwBqbKqmoxP4CatnXOJl0Xfzmkwg-CUyzhsqoBL5DvoT6skjhN9DHNwSBdlL9ij2zPgYHEkNoSJ13YN27J18SuOsO6rmq1-C9XKN_Mqb4y5xY4sBmNTRZSV9WhPCe7tframIANTlobnLQ3MSguT2qydOoKWuxXbCge9O3DLdJompcghXPdDP_0ne_WuNvCGUebyi6-Wsmqf8MWMyHQBFHqB1-0OIj0IuToz8ehhz0gF9DLwbtjWLQ4hUf3j9OlNu_i1geVcTBya7AwUkuSHiGcnP3t8r_XPgDgqeXKS4OAAA%3D&questId=94100130&phase=1&enemyHash=1_0685_bcb906a';
-				'https://link.chaldea.center/laplace/share?data=GH4sIAElZ0mkA_9WU24rbMBCG30XXKsinrO27Ju3ShVy16VUJizaexCKyrLUkQwh5947kA8kubKEsS5uEyCP-mX_82ZozaYRaOiErUhZJQgnXegrznJJnB8aS8kxEEDD_iSjRNTdAStSDgub0jZualCR6ZAmLHmOep4ssIxdKWm1Fq4wv0IhDbU-rmgtFSts5oKQShj9J-NqDQo89lwY3dSuUXbr9HrOUk5ISIxonuYXPYhYF1--491MPKvSywBtvpHgDU2pzMlbsVm0FoYU5eqgmhYQeJCmZb1bdC5DVj96i9a8zMb31uphleNOoFI2wq9b5XhGBOQopHyovjeM8zjJGcU3GNVpkbDuK1r0XRYyGH-7aaq4b-Wjdh4oSlwKNuD3etw63gm2tr4Jd6LxIGUvSEK59U8sO-HGCinu-XIaQnp3Q0fzwpiT5KkWGBCRgnNZtZzcnjbzIvhOgKkLJoePKYxnxX-jMZsHS-CWb9IZNwTKPpGCLYbnL_ggmFP2XwahWwZtYEpbmL7GwGyx5vkiRR57fDUv-GgvF78wkVPwPmeANPPHd0enxVIVDN_9tsUwFEg54ktEaI74bBwaePztUDkywtOmvKOLxuZkuWvITdBveHWBQhQlxFfu-2sYzw8DWHZi69VPOo7r4Rze6cWuxX0LHi3kSBOg73mHKJ7wSZvNlhtgJHCtcztPJywYssQfwsW2yv2gzet82t954hXabMJKHN-E3e_X5HGoGAAA%3D&questId=93000001&phase=3&enemyHash=1_0301_2a84655';
+				// 'https://link.chaldea.center/laplace/share?data=GH4sIAElZ0mkA_9WU24rbMBCG30XXKsinrO27Ju3ShVy16VUJizaexCKyrLUkQwh5947kA8kubKEsS5uEyCP-mX_82ZozaYRaOiErUhZJQgnXegrznJJnB8aS8kxEEDD_iSjRNTdAStSDgub0jZualCR6ZAmLHmOep4ssIxdKWm1Fq4wv0IhDbU-rmgtFSts5oKQShj9J-NqDQo89lwY3dSuUXbr9HrOUk5ISIxonuYXPYhYF1--491MPKvSywBtvpHgDU2pzMlbsVm0FoYU5eqgmhYQeJCmZb1bdC5DVj96i9a8zMb31uphleNOoFI2wq9b5XhGBOQopHyovjeM8zjJGcU3GNVpkbDuK1r0XRYyGH-7aaq4b-Wjdh4oSlwKNuD3etw63gm2tr4Jd6LxIGUvSEK59U8sO-HGCinu-XIaQnp3Q0fzwpiT5KkWGBCRgnNZtZzcnjbzIvhOgKkLJoePKYxnxX-jMZsHS-CWb9IZNwTKPpGCLYbnL_ggmFP2XwahWwZtYEpbmL7GwGyx5vkiRR57fDUv-GgvF78wkVPwPmeANPPHd0enxVIVDN_9tsUwFEg54ktEaI74bBwaePztUDkywtOmvKOLxuZkuWvITdBveHWBQhQlxFfu-2sYzw8DWHZi69VPOo7r4Rze6cWuxX0LHi3kSBOg73mHKJ7wSZvNlhtgJHCtcztPJywYssQfwsW2yv2gzet82t954hXabMJKHN-E3e_X5HGoGAAA%3D&questId=93000001&phase=3&enemyHash=1_0301_2a84655';
+				'https://link.chaldea.center/laplace/share?data=GH4sIAGd30mkA_8WWUW_bIBDHvwvPTAIcN3XelmzVKvVpy56mqKIxiVEwpgZbiqp-991B4mWN2m7d5ilR8J3u-B8_OJwHUms777QpyazIMkqkc0dzmlNy3ykfyOyB6BjAMi6YoMRV0isyg3hlVb3_JH1FZoTfsiLPb9lE5GpTkkdKGhd0Yz1OUOttFfaLSmpLZqHtFCWl9vLOqI-9sqCxkcaD0zXahnm32UCW7YyhxOu6MzKo93oIiqqfwffVpSjQCkrWKGRlrY6p9d4HvV40pYolDNY1rEZcMEqM6pUhM86wWHullSm_9AGkvz0Q3weMy1meMQzVtQ6LpsNawfQ7bcx1iaFCZJd5ziiMRRonDMbVIeimxyDOaPyuImNly-QGF2X4AX8oBz2O1k0PlYEwDAUoyrC7ajosFsup3ImxVjdY3bxVcjdAAmcfS1X3nXb8uIuJjDmPRx3k4DvnmjYs9w6okU2roVhCybaVFuEc4h_pQEjkjBWvIGKCRTRM8MMoJs8gepVQ0vttRJhaTNh0cnlGLJ3HBIyzM2RDljnLMSnjDJttrHoR2pSJy6fM0Jf9DC6b5sgrm16kYXpGrQA-xcAmTiuOaPJU4MUvosmK4g1oUtYfo4El3Mn1rnOHBozndPhZwTSlMmoLTQ_aYMn14W6BVg1p5kgFpvb9yQGMTycXkTNyr9qlbLcqRcXL5MTGupoaDxQYoWqVrxq8EBHWI-7gy2p8BDU-6tr4qGsTo63tn65JhgCnmdDDw_BKiZOsZQsp70Ba--WHoclaDe8naX7c4BCWmkZge4x4iMXYUPiboNCnSNkx-Rj8fHY2ZPM3Za9G7QUxSi-wsbdd_Idt_6sbt0LlBcgt49_P9Cr7Dp8cfKNWCwAA&questId=93031202&phase=3&enemyHash=1_0955_0425efd';
 			// fncConvertBtn();
 			console.log(mcData);
 			console.log(svtData);
@@ -702,7 +710,7 @@
 									class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
 								>
 									<img
-										src={item.details.extraAssets?.faces?.ascension?.[Math.max(1, item.limitCount)]}
+										src={item.svtImg}
 										alt={item.details.name}
 										onclick={() => console.log('svtData :', $state.snapshot(item))}
 										class="h-full w-full object-cover transition-opacity hover:opacity-80"
