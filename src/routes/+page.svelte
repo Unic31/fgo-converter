@@ -158,14 +158,16 @@
 			svtData = await fetchSvtDetails(team);
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
-			const cntRes = await fetch(
-				`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`
-			)
-				.then((res) => res.json())
-				.catch((err) => {
-					console.warn('카운트 API 호출 실패(무시됨):', err);
-					return 0;
-				});
+			if (!dev) {
+				const cntRes = await fetch(
+					`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`
+				)
+					.then((res) => res.json())
+					.catch((err) => {
+						console.warn('카운트 API 호출 실패(무시됨):', err);
+						return 0;
+					});
+			}
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
 			isError = true;
@@ -521,8 +523,10 @@
 	onMount(() => {
 		if (dev) {
 			url =
-				'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
-			// fncConvertBtn();
+				// 'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
+				// 'https://link.chaldea.center/laplace/share?data=GH4sIABlY0mkA_72X32_aMBDH_xc_Z5JtEkp4W9mqVepeVqY9VKgyyUEsnB9NHDSE-r_vzk7Tqt3aQUsE4rA5-3v38fmAPct1cd5qk7JpPBoFTFXVw_BMBOyuhcay6Z5pmgkF52LEA1ZlqgE2RQcoIN99U03Gpkzc8vEkul0my5iPFbsPWFlZXRYNbZDrdWZ3s0zpgk1t3ULAUt2opYGvWyhQY6VMg5NVqQt73q5WuKpojQlYo_PWKAufde_kVH_g3M_Ke6GWBZWTUKFyeFia7xqrk1mZgguhH11iNlJgIga2YDARTsEWFxpMer21KH2zZ83Wkl_EoxEnV51rOytbijXEqDbamMuUXKUcTaKIB2hjb0OOdtE5XW3JCdXcc-EYQ5H6aTfrHviBTXtBQaOrrWNs0MQYgbKbi7KlaCmerHoySFxKcchHceyGVxTteQ1q80Ab57bOHfHdtboSj8farTIv1hi_AuE0bVWVtZ3vKkTJirIAFrB1rQri1Z3LfdBDi7mQr0OLPSsUD50R4-OJObWeWOTjnrxF7ABEvpo-kI-MOI_fqCouuasmLkVnZXg8I694cFmdHlJS5jli8teSgp-EnEd4es5yb8djb-NufHZGmT3ni1NLlWza6vkdlhNsXG_UI5djKkQ-8iZ8Rz16uXex7hqdh_0fqDt_0nlJelVrDPdvBek2opcFLkrBwBqbKqmoxP4CatnXOJl0Xfzmkwg-CUyzhsqoBL5DvoT6skjhN9DHNwSBdlL9ij2zPgYHEkNoSJ13YN27J18SuOsO6rmq1-C9XKN_Mqb4y5xY4sBmNTRZSV9WhPCe7tframIANTlobnLQ3MSguT2qydOoKWuxXbCge9O3DLdJompcghXPdDP_0ne_WuNvCGUebyi6-Wsmqf8MWMyHQBFHqB1-0OIj0IuToz8ehhz0gF9DLwbtjWLQ4hUf3j9OlNu_i1geVcTBya7AwUkuSHiGcnP3t8r_XPgDgqeXKS4OAAA%3D&questId=94100130&phase=1&enemyHash=1_0685_bcb906a';
+				'https://link.chaldea.center/laplace/share?data=GH4sIAElZ0mkA_9WU24rbMBCG30XXKsinrO27Ju3ShVy16VUJizaexCKyrLUkQwh5947kA8kubKEsS5uEyCP-mX_82ZozaYRaOiErUhZJQgnXegrznJJnB8aS8kxEEDD_iSjRNTdAStSDgub0jZualCR6ZAmLHmOep4ssIxdKWm1Fq4wv0IhDbU-rmgtFSts5oKQShj9J-NqDQo89lwY3dSuUXbr9HrOUk5ISIxonuYXPYhYF1--491MPKvSywBtvpHgDU2pzMlbsVm0FoYU5eqgmhYQeJCmZb1bdC5DVj96i9a8zMb31uphleNOoFI2wq9b5XhGBOQopHyovjeM8zjJGcU3GNVpkbDuK1r0XRYyGH-7aaq4b-Wjdh4oSlwKNuD3etw63gm2tr4Jd6LxIGUvSEK59U8sO-HGCinu-XIaQnp3Q0fzwpiT5KkWGBCRgnNZtZzcnjbzIvhOgKkLJoePKYxnxX-jMZsHS-CWb9IZNwTKPpGCLYbnL_ggmFP2XwahWwZtYEpbmL7GwGyx5vkiRR57fDUv-GgvF78wkVPwPmeANPPHd0enxVIVDN_9tsUwFEg54ktEaI74bBwaePztUDkywtOmvKOLxuZkuWvITdBveHWBQhQlxFfu-2sYzw8DWHZi69VPOo7r4Rze6cWuxX0LHi3kSBOg73mHKJ7wSZvNlhtgJHCtcztPJywYssQfwsW2yv2gzet82t954hXabMJKHN-E3e_X5HGoGAAA%3D&questId=93000001&phase=3&enemyHash=1_0301_2a84655';
+			fncConvertBtn();
 		}
 		const savedTheme = localStorage.getItem('theme');
 		if (
@@ -660,11 +664,11 @@
 							onclick={() => console.log('mcData :', $state.snapshot(mcData))}
 						/>
 					{:else}
-						<img
-							src="{base}/images/bansi_mystic_code.png"
-							alt="bansi_mystic_code"
-							class="h-full w-full rounded-lg object-cover"
-						/>
+						<div
+							class="mb-2 flex h-full w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
+						>
+							Empty
+						</div>
 					{/if}
 				</div>
 
@@ -690,8 +694,7 @@
 									class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
 								>
 									<img
-										src={item.details.extraAssets?.faces?.ascension?.[4] ||
-											item.details.extraAssets?.faces?.ascension?.[1]}
+										src={item.details.extraAssets?.faces?.ascension?.[Math.max(1, item.limitCount)]}
 										alt={item.details.name}
 										onclick={() => console.log('svtData :', $state.snapshot(item))}
 										class="h-full w-full object-cover transition-opacity hover:opacity-80"
@@ -743,7 +746,7 @@
 					</h2>
 				</div>
 				<div
-					class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+					class="mb-2 flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 					onclick={() => {
 						navigator.clipboard.writeText(fgaCommand);
 						alert('클립보드에 저장되었습니다!');
@@ -754,6 +757,24 @@
 					</div>
 					<div class="ms-3">📑</div>
 				</div>
+
+				{#if dev}
+				<!-- 개발 시작 -->
+					<div class="flex items-end justify-between">
+						<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+							{#if language == 'KR'}
+								커맨드를 기반으로 작성된 시뮬레이터 화면
+							{:else if language == 'JP'}
+								コマンドを基に作成されたシミュレーター画面
+							{:else}
+								Simulator view generated from the commands
+							{/if}
+						</h2>
+					</div>
+					<div
+						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+					></div>
+				{/if}
 				{#if dev}
 					<br />
 					<input
