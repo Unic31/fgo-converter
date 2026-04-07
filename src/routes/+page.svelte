@@ -42,6 +42,7 @@
 			orderChangeWarning:
 				'오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지 않는 서번트라도 편성하는걸 추천드립니다.',
 			detailsBtn: '설명',
+			orderChangeTitle: '오더 체인지, 자폭, 후퇴 편성 주의',
 			orderChangeGuide: {
 				step1:
 					'시뮬레이터 파티 구성시 위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데',
@@ -83,6 +84,7 @@
 			orderChangeWarning:
 				'オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時には使用しないサーヴァントも編成しておくことを推奨します。',
 			detailsBtn: '詳細',
+			orderChangeTitle: 'オーダーチェンジ、自爆、退却編成時の注意',
 			orderChangeGuide: {
 				step1:
 					'シミュレーターでのパーティ編成時、上の画面のように使用するサーヴァント以外の枠を空けておくことが多いですが、',
@@ -125,6 +127,7 @@
 			orderChangeWarning:
 				"When using Order Change, self-sacrifice, or retreating Servants, we recommend filling all empty slots in the battle simulator's party setup, even with unused Servants.",
 			detailsBtn: 'Details',
+			orderChangeTitle: 'Caution: Order Change, Sacrifice & Retreat',
 			orderChangeGuide: {
 				step1:
 					'When setting up your party in the simulator, you usually leave the slots for unused Servants empty like the screen above.',
@@ -292,10 +295,18 @@
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
 			svtData = await fetchSvtDetails(team);
-
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			if (!dev) {
-				fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`).catch((err) => {
+				const params = new URLSearchParams();
+				team.forEach((svt) => {
+					if (svt && svt.svtId) {
+						params.append('svtId', svt.svtId);
+					}
+				});
+				console.log(params.toString())
+				fetch(
+					`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f?${params.toString()}`
+				).catch((err) => {
 					console.warn('카운트 API 호출 실패(무시됨):', err);
 				});
 			}
@@ -1000,13 +1011,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{#if language === 'KR'}
-						오더 체인지, 자폭, 후퇴 편성 주의
-					{:else if language === 'JP'}
-						オーダーチェンジ、自爆、退却編成時の注意
-					{:else}
-						Caution: Order Change, Sacrifice & Retreat
-					{/if}
+					{t.orderChangeTitle}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
