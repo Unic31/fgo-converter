@@ -166,14 +166,9 @@
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			if (!dev) {
-				const cntRes = await fetch(
-					`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`
-				)
-					.then((res) => res.json())
-					.catch((err) => {
-						console.warn('카운트 API 호출 실패(무시됨):', err);
-						return 0;
-					});
+				fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`).catch((err) => {
+					console.warn('카운트 API 호출 실패(무시됨):', err);
+				});
 			}
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
