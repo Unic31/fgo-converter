@@ -17,6 +17,135 @@
 	let isManual = $state(false);
 	let language = $state('KR');
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
+	let t = $derived(i18n[language] || i18n['KR']);
+	const i18n = {
+		KR: {
+			desc: '칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.',
+			btnDesc: '사용방법',
+			loading1: '아틀라스원과 통신 중...',
+			loading2: '변환하기',
+			errorText: '⚠️ 올바른 링크인지 확인해주세요.',
+			commandText: '변환된 커맨드',
+			clipboardAlert: '클립보드에 저장되었습니다!',
+			warningTitle: '⚠️ 주의사항 ⚠️',
+			warnings: [
+				'영어와 일본어는 AI를 사용하여 번역되었으며 어색하거나 부자연스러운 표현이 있을 수 있습니다.',
+				'오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.',
+				'반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.'
+			],
+			unsupportedTitle: '현재 계산하지 않는 로직(추후 업데이트 예정)',
+			unsupportedList: [
+				'앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)',
+				'만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)',
+				'예장, 스킬 효과로 인한 거츠'
+			],
+			orderChangeWarning:
+				'오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지 않는 서번트라도 편성하는걸 추천드립니다.',
+			detailsBtn: '설명',
+			orderChangeGuide: {
+				step1:
+					'시뮬레이터 파티 구성시 위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데',
+				step2: '보통 인게임 파티 편성시 코스트가 남으면 아무 서번트나 배치하게 됩니다.',
+				step3:
+					'이를 오더 체인지로 확인해보면 후열 서번트 배치가 아예 달라지는걸 확인할 수 있습니다.',
+				step4:
+					'오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지 않는 서번트도 편성하는걸 추천드립니다.'
+			},
+			btnOk: '확인',
+			bntHow: '사용방법',
+			manualGuide: {
+				step1_title: '1. 이미 등록된 전투 시뮬레이터 가져오기',
+				step1_desc: '꼭!! 두번째 링크 클릭해서 URL 복사',
+				step2_title: '2. 직접 테스트한 전투 시뮬레이터 등록하고 가져오기',
+				step2_desc: '서버가 아닌 기기에 해당 팀에 등록하고 가져오는 방법입니다.'
+			}
+		},
+		JP: {
+			desc: 'カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。',
+			btnDesc: '使い方',
+			loading1: 'アトラス院と通信中...',
+			loading2: '変換する',
+			errorText: '⚠️ 正しいリンクかご確認ください。',
+			commandText: '変換されたコマンド',
+			clipboardAlert: 'クリップボードにコピーしました！',
+			warningTitle: '⚠️ 注意事項 ⚠️',
+			warnings: [
+				'英語および日本語の翻訳にはAIを使用しているため、不自然な表現が含まれる場合があります。',
+				'エラーによるリンゴの損失については責任を負いかねますが、バグ報告は歓迎いたします。',
+				'周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。'
+			],
+			unsupportedTitle: '現在対応していないロジック（今後のアップデートで対応予定）',
+			unsupportedList: [
+				'アンリマユ - スキル3（使用後5ターン経過で戦闘不能）',
+				'マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 / 強化後：攻撃ターン終了時に戦闘不能）',
+				'概念礼装やスキル効果によるガッツ'
+			],
+			orderChangeWarning:
+				'オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時には使用しないサーヴァントも編成しておくことを推奨します。',
+			detailsBtn: '詳細',
+			orderChangeGuide: {
+				step1:
+					'シミュレーターでのパーティ編成時、上の画面のように使用するサーヴァント以外の枠を空けておくことが多いですが、',
+				step2:
+					'実際のゲーム内でコストが余っている場合、適当なサーヴァントを配置することがあります。',
+				step3:
+					'これをオーダーチェンジ画面で確認すると、控えサーヴァントの配置が全く異なっていることがわかります。',
+				step4:
+					'オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時にも使用しないサーヴァントを編成しておくことを推奨します。'
+			},
+			btnOk: '確認',
+			bntHow: '使い方',
+			manualGuide: {
+				step1_title: '1. 登録済みの戦闘シミュレーターからURLを取得する',
+				step1_desc: '必ず！！2番目のリンクをクリックしてURLをコピーしてください',
+				step2_title: '2. 自分でテストした戦闘シミュレーターを保存して読み込む',
+				step2_desc: 'サーバー上ではなく、端末の編成スロットに保存してから読み込む方法です。'
+			}
+		},
+		EN: {
+			desc: 'Converts the shared URL of Chaldea to a command for FGA.',
+			btnDesc: 'How to use',
+			loading1: 'Communicating with Atlas Academy...',
+			loading2: 'Convert',
+			errorText: '⚠️ Please check if the link is valid.',
+			commandText: 'Converted Command',
+			clipboardAlert: 'Copied to clipboard!',
+			warningTitle: '⚠️ Disclaimer ⚠️',
+			warnings: [
+				'English and Japanese translations are generated using AI and may contain unnatural phrasing.',
+				'We are not responsible for any loss of Golden Apples caused by errors, but bug reports are highly appreciated.',
+				'We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.'
+			],
+			unsupportedTitle: 'Currently unsupported logic (Planned for future updates):',
+			unsupportedList: [
+				'Angra Mainyu - 3rd Skill (Death 5 turns after use)',
+				'Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at the end of the attacking turn)',
+				'Guts effects granted by Craft Essences (CE) or Skills'
+			],
+			orderChangeWarning:
+				"When using Order Change, self-sacrifice, or retreating Servants, we recommend filling all empty slots in the battle simulator's party setup, even with unused Servants.",
+			detailsBtn: 'Details',
+			orderChangeGuide: {
+				step1:
+					'When setting up your party in the simulator, you usually leave the slots for unused Servants empty like the screen above.',
+				step2:
+					'However, in the actual game, players often fill empty slots with random Servants if they have leftover Cost.',
+				step3:
+					'If you check this on the Order Change screen, you will notice that the backline placement is completely different.',
+				step4:
+					'When using Order Change, self-sacrifice, or retreating Servants, we highly recommend filling the empty slots in the simulator to match your in-game party.'
+			},
+			btnOk: 'OK',
+			bntHow: 'How to use',
+			manualGuide: {
+				step1_title: '1. Import an already saved battle simulator',
+				step1_desc: 'Make sure to click the SECOND link to copy the URL!',
+				step2_title: '2. Save and import a custom battle simulator',
+				step2_desc:
+					'This method saves the team setup locally on your device rather than on the server before importing.'
+			}
+		}
+	};
 	const svtSkillMap = [
 		['a', 'b', 'c'],
 		['d', 'e', 'f'],
@@ -166,14 +295,9 @@
 
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			if (!dev) {
-				const cntRes = await fetch(
-					`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`
-				)
-					.then((res) => res.json())
-					.catch((err) => {
-						console.warn('카운트 API 호출 실패(무시됨):', err);
-						return 0;
-					});
+				fetch(`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f`).catch((err) => {
+					console.warn('카운트 API 호출 실패(무시됨):', err);
+				});
 			}
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
@@ -565,7 +689,7 @@
 >
 	<div class="container mx-auto max-w-5xl">
 		<div
-			class="flex flex-col space-y-3 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
 			<div class="grid grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 				<h1
@@ -585,31 +709,13 @@
 				<div
 					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
 				>
-					{#if language == 'KR'}
-						<span>칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다.</span>
-						<button
-							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-							onclick={() => (isManual = !isManual)}
-						>
-							사용방법
-						</button>
-					{:else if language == 'JP'}
-						<span>カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。</span>
-						<button
-							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-							onclick={() => (isManual = !isManual)}
-						>
-							使い方
-						</button>
-					{:else}
-						<span>Converts the shared URL of Chaldea to a command for FGA.</span>
-						<button
-							class="text-md inline-flex items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-							onclick={() => (isManual = !isManual)}
-						>
-							How to use
-						</button>
-					{/if}
+					<span>{t.desc}</span>
+					<button
+						class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+						onclick={() => (isManual = !isManual)}
+					>
+						{t.btnDesc}
+					</button>
 				</div>
 
 				<div
@@ -640,29 +746,18 @@
 				onclick={fncConvertBtn}
 				class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
 			>
-				{#if language == 'KR'}
-					{isLoading ? '아틀라스원과 통신 중...' : '변환하기'}
-				{:else if language == 'JP'}
-					{isLoading ? 'アトラス院と通信中...' : '変換する'}
-				{:else}
-					{isLoading ? 'Communicating with Atlas Academy...' : 'Convert'}
-				{/if}
+				{isLoading ? t.loading1 : t.loading2}
 			</button>
 
 			{#if isError}
 				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-					{#if language == 'KR'}
-						⚠️ 올바른 링크인지 확인해주세요.
-					{:else if language == 'JP'}
-						⚠️ 正しいリンクかご確認ください。
-					{:else}
-						⚠️ Please check if the link is valid.
-					{/if}
+					{t.errorText}
 				</div>
 			{/if}
-			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto pb-2">
+
+			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
 				<div
-					class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+					class="mb-2 flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
 				>
 					{#if svtData.length === 0 && !mcData}
 						<img
@@ -750,20 +845,14 @@
 			>
 				<div class="flex items-end justify-between">
 					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-						{#if language == 'KR'}
-							변환된 커맨드
-						{:else if language == 'JP'}
-							変換されたコマンド
-						{:else}
-							Converted Command
-						{/if}
+						{t.commandText}
 					</h2>
 				</div>
 				<div
 					class="mb-2 flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 					onclick={() => {
 						navigator.clipboard.writeText(fgaCommand);
-						alert('클립보드에 저장되었습니다!');
+						alert(t.clipboardAlert);
 					}}
 				>
 					<div class="flex-1">
@@ -771,202 +860,99 @@
 					</div>
 					<div class="ms-3">📑</div>
 				</div>
-
-				{#if dev}
+			</div>
+			{#if dev}
+				<div
+					class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+				>
 					<!-- 개발 시작 -->
 					<div class="flex items-end justify-between">
 						<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-							{#if language == 'KR'}
-								커맨드를 기반으로 작성된 시뮬레이터 화면
-							{:else if language == 'JP'}
-								コマンドを基に作成されたシミュレーター画面
-							{:else}
-								Simulator view generated from the commands
-							{/if}
+							커맨드를 기반으로 작성된 시뮬레이터 화면
 						</h2>
 					</div>
 					<div
 						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 					></div>
-				{/if}
-				{#if dev}
-					<br />
 					<input
 						type="text"
 						placeholder="비교용"
 						bind:value={testCommand}
-						class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
+						class="w-full rounded-lg bg-gray-900 p-3 break-all {fgaCommand === testCommand
+							? 'text-green-400'
+							: 'text-red-400'}"
 					/>
-					{#if fgaCommand == testCommand}
-						<div
-							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-blue-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-blue-400"
-						>
-							두개 같음
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
 						</div>
-					{:else}
-						<div
-							class="w-full cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-red-600 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-red-400"
-						>
-							두개 다름
+
+						<div class="max-h-50 overflow-auto text-xs text-green-400">
+							<pre>{JSON.stringify(decodedData, null, 2)}</pre>
 						</div>
-					{/if}
-				{/if}
-			</div>
-			{#if dev}
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
 					</div>
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData.delegate)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
+						</div>
 
-					<div class="max-h-50 overflow-auto text-xs text-green-400">
-						<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+						<div class="max-h-50 overflow-auto text-xs text-green-400">
+							<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
+						</div>
 					</div>
-				</div>
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData.delegate)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
-					</div>
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData.actions)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
+						</div>
 
-					<div class="max-h-50 overflow-auto text-xs text-green-400">
-						<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
-					</div>
-				</div>
-				<div class="relative rounded-lg bg-gray-900 p-4">
-					<div class="mb-2 flex items-center justify-between">
-						<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
-						<button
-							onclick={copyToClipboard(decodedData.actions)}
-							class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-						>
-							복사하기 📑
-						</button>
-					</div>
-
-					<div class="max-h-50 overflow-auto text-xs text-blue-400">
-						<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+						<div class="max-h-50 overflow-auto text-xs text-blue-400">
+							<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+						</div>
 					</div>
 				</div>
 			{/if}
 			<div class="text-red-600 transition-colors dark:text-red-400">
-				{#if language === 'KR'}
-					⚠️ 주의사항 ⚠️
-					<ul class="list-disc pl-5">
-						<li>
-							영어와 일본어는 AI를 사용하여 번역되었으며 어색하거나 부자연스러운 표현이 있을 수
-							있습니다.
-						</li>
-						<li>오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.</li>
-						<li>
-							반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.
-						</li>
-						<li>
-							<div>현재 계산하지 않는 로직(추후 업데이트 예정)</div>
-							<div>앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)</div>
-							<div>
-								만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)
-							</div>
-							<div>예장, 스킬 효과로 인한 거츠</div>
-						</li>
-						<li>
-							<div class="flex">
-								<div>
-									오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에
-									사용하지 않는 서번트라도 편성하는걸 추천드립니다.<span
-										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
-										onclick={() => (isModal = true)}
-									>
-										설명
-									</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				{:else if language === 'JP'}
-					⚠️ 注意事項 ⚠️
-					<ul class="list-disc pl-5">
-						<li>
-							英語および日本語の翻訳にはAIを使用しているため、不自然な表現が含まれる場合があります。
-						</li>
-						<li>
-							エラーによるリンゴの損失については責任を負いかねますが、バグ報告は歓迎いたします。
-						</li>
-						<li>
-							周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。
-						</li>
-						<li>
-							<div>現在対応していないロジック（今後のアップデートで対応予定）</div>
-							<div>アンリマユ - スキル3（使用後5ターン経過で戦闘不能）</div>
-							<div>
-								マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 /
-								強化後：攻撃ターン終了時に戦闘不能）
-							</div>
-							<div>概念礼装やスキル効果によるガッツ</div>
-						</li>
-						<li>
-							<div class="flex">
-								<div>
-									オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時には使用しないサーヴァントも編成しておくことを推奨します。<span
-										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
-										onclick={() => (isModal = true)}
-									>
-										詳細
-									</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				{:else}
-					⚠️ Disclaimer ⚠️
-					<ul class="list-disc pl-5">
-						<li>
-							English and Japanese translations are generated using AI and may contain unnatural
-							phrasing.
-						</li>
-						<li>
-							We are not responsible for any loss of Golden Apples caused by errors, but bug reports
-							are highly appreciated.
-						</li>
-						<li>
-							We do not recommend using this for Story quests or quests with special gimmicks.
-							Please use it mainly for repeatable Free Quests.
-						</li>
-						<li>
-							<div>Currently unsupported logic (Planned for future updates):</div>
-							<div>Angra Mainyu - 3rd Skill (Death 5 turns after use)</div>
-							<div>
-								Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at
-								the end of the attacking turn)
-							</div>
-							<div>Guts effects granted by Craft Essences (CE) or Skills</div>
-						</li>
-						<li>
-							<div class="flex">
-								<div>
-									When using Order Change, self-sacrifice, or retreating Servants, we recommend
-									filling all empty slots in the battle simulator's party setup, even with unused
-									Servants.<span
-										class="ms-1 cursor-pointer text-gray-700 transition-colors dark:text-gray-300"
-										onclick={() => (isModal = true)}
-									>
-										Details
-									</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				{/if}
+				{t.warningTitle}
+				<ul class="list-disc pl-5">
+					{#each t.warnings as warning}
+						<li>{warning}</li>
+					{/each}
+
+					<li>
+						<div>{t.unsupportedTitle}</div>
+						{#each t.unsupportedList as item}
+							<div>{item}</div>
+						{/each}
+					</li>
+
+					<li>
+						<span>{t.orderChangeWarning}</span>
+						<button
+							class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+							onclick={() => (isModal = true)}
+						>
+							{t.detailsBtn}
+						</button>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
@@ -1033,61 +1019,21 @@
 			<div
 				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
 			>
-				<div class="flex flex-col gap-1">
-					{#if language === 'KR'}
-						<div>시뮬레이터 파티 구성시</div>
-					{:else if language === 'JP'}
-						<div>シミュレーターでのパーティ編成時、</div>
-					{:else}
-						<div>When setting up your party in the simulator,</div>
-					{/if}
-					<img src="{base}/images/sample1.png" class="w-150" alt="sample1" />
-
-					{#if language === 'KR'}
-						<div>위 와 같은 화면으로 사용하는 서번트 외 자리를 비워두게 되는데</div>
-					{:else if language === 'JP'}
-						<div>このように使用するサーヴァント以外の枠を空けておくことが多いですが、</div>
-					{:else}
-						<div>you usually leave the slots for unused Servants empty like this.</div>
-					{/if}
-					<img src="{base}/images/sample2.png" class="w-150" alt="sample2" />
-
-					{#if language === 'KR'}
-						<div>보통 인게임 파티 편성시 코스트가 남으면 아무 서번트나 배치하게 됩니다.</div>
-						<div>이를 오더 체인지로 확인해보면</div>
-					{:else if language === 'JP'}
-						<div>
-							実際のゲーム内でコストが余っている場合、適当なサーヴァントを配置することがあります。
-						</div>
-						<div>これをオーダーチェンジ画面で確認すると、</div>
-					{:else}
-						<div>
-							However, in the actual game, players often fill empty slots with random Servants if
-							they have leftover Cost.
-						</div>
-						<div>If you check this on the Order Change screen,</div>
-					{/if}
-					<img src="{base}/images/sample3.png" class="w-150" alt="sample3" />
-					<img src="{base}/images/sample4.png" class="w-150" alt="sample4" />
-
-					{#if language === 'KR'}
-						<div>후열 서번트 배치가 아예 달라지는걸 확인할 수 있습니다.</div>
-						<div>
-							오더 체인지, 자폭, 후퇴 서번트를 사용 할 경우 전투 시뮬레이터 파티 구성시에 사용하지
-							않는 서번트도 편성하는걸 추천드립니다.
-						</div>
-					{:else if language === 'JP'}
-						<div>控えサーヴァントの配置が全く異なっていることがわかります。</div>
-						<div>
-							オーダーチェンジ、自爆、退却するサーヴァントを使用する場合、戦闘シミュレーターのパーティ編成時にも使用しないサーヴァントを編成しておくことを推奨します。
-						</div>
-					{:else}
-						<div>you will notice that the backline placement is completely different.</div>
-						<div>
-							When using Order Change, self-sacrifice, or retreating Servants, we highly recommend
-							filling the empty slots in the simulator to match your in-game party.
-						</div>
-					{/if}
+				<div class="flex flex-col gap-2">
+					<div>
+						<img src="{base}/images/sample1.png" class="w-150" alt="sample1" />
+						<div>{t.orderChangeGuide.step1}</div>
+					</div>
+					<div>
+						<img src="{base}/images/sample2.png" class="w-150" alt="sample2" />
+						<div>{t.orderChangeGuide.step2}</div>
+					</div>
+					<div>
+						<img src="{base}/images/sample3.png" class="w-150" alt="sample3" />
+						<img src="{base}/images/sample4.png" class="w-150" alt="sample4" />
+						<div>{t.orderChangeGuide.step3}</div>
+						<div>{t.orderChangeGuide.step4}</div>
+					</div>
 				</div>
 			</div>
 
@@ -1096,13 +1042,7 @@
 					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
 					onclick={() => (isModal = false)}
 				>
-					{#if language === 'KR'}
-						확인
-					{:else if language === 'JP'}
-						確認
-					{:else}
-						OK
-					{/if}
+					{t.btnOk}
 				</button>
 			</div>
 		</div>
@@ -1119,13 +1059,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{#if language === 'KR'}
-						사용방법
-					{:else if language === 'JP'}
-						使い方
-					{:else}
-						How to use
-					{/if}
+					{t.bntHow}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
@@ -1139,46 +1073,15 @@
 				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
 			>
 				<div class="flex flex-col gap-1">
-					{#if language === 'KR'}
-						<div>1. 이미 등록된 전투 시뮬레이터 가져오기</div>
-					{:else if language === 'JP'}
-						<div>1. 登録済みの戦闘シミュレーターからURLを取得する</div>
-					{:else}
-						<div>1. Import an already saved battle simulator</div>
-					{/if}
-
+					<div>{t.manualGuide.step1_title}</div>
 					<img src="{base}/images/manual1.png" class="w-150" alt="sample1" />
-
-					{#if language === 'KR'}
-						<div>꼭!! 두번째 링크 클릭해서 URL 복사</div>
-					{:else if language === 'JP'}
-						<div>必ず！！2番目のリンクをクリックしてURLをコピーしてください</div>
-					{:else}
-						<div>Make sure to click the SECOND link to copy the URL!</div>
-					{/if}
+					<div>{t.manualGuide.step1_desc}</div>
 
 					<br />
 
-					{#if language === 'KR'}
-						<div>2. 직접 테스트한 전투 시뮬레이터 등록하고 가져오기</div>
-					{:else if language === 'JP'}
-						<div>2. 自分でテストした戦闘シミュレーターを保存して読み込む</div>
-					{:else}
-						<div>2. Save and import a custom battle simulator</div>
-					{/if}
-
+					<div>{t.manualGuide.step2_title}</div>
 					<img src="{base}/images/manual2.png" class="w-150" alt="sample2" />
-
-					{#if language === 'KR'}
-						<div>서버가 아닌 기기에 해당 팀에 등록하고 가져오는 방법입니다.</div>
-					{:else if language === 'JP'}
-						<div>サーバー上ではなく、端末の編成スロットに保存してから読み込む方法です。</div>
-					{:else}
-						<div>
-							This method saves the team setup locally on your device rather than on the server
-							before importing.
-						</div>
-					{/if}
+					<div>{t.manualGuide.step2_desc}</div>
 				</div>
 			</div>
 
@@ -1187,13 +1090,7 @@
 					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
 					onclick={() => (isManual = false)}
 				>
-					{#if language === 'KR'}
-						확인
-					{:else if language === 'JP'}
-						確認
-					{:else}
-						OK
-					{/if}
+					{t.btnOk}
 				</button>
 			</div>
 		</div>
