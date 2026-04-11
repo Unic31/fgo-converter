@@ -43,7 +43,6 @@ export const i18n = {
 		errorTitle: '확인된 에러내용(조치중)',
 		errorContent: {
 			error1: '전열 서번트 편성시 1번과 3번자리에는 서번트를 편성하고 2번자리는 비워둔 파티를 커맨드로 변환하면 스킬사용이 무시되는 이슈 발생',
-			error2: '평타 세번쳐서 라운드 넘길때 n3 으로 커맨드가 나오는데 폰닉에선 n3을 에러로 인식.'
 		}
 	},
 	JP: {
@@ -91,7 +90,6 @@ export const i18n = {
 		errorTitle: '既知の不具合（対応中）',
 		errorContent: {
 			error1: '前衛サーヴァント編成時、1番と3番の枠にサーヴァントを配置し、2番の枠を空けたパーティをコマンドに変換すると、スキルの使用が無視される（スキップされる）問題。',
-			error2: '通常攻撃3回でウェーブを突破する際、コマンドが「n3」と出力されますが、FGAでは「n3」がエラーとして認識される問題。'
 		}
 	},
 	EN: {
@@ -140,7 +138,6 @@ export const i18n = {
 		errorTitle: 'Known Issues (Work in Progress)',
 		errorContent: {
 			error1: 'When converting a party where frontline Servants are placed in slots 1 and 3 while slot 2 is left empty, an issue occurs where skill usages are ignored.',
-			error2: 'When clearing a wave using 3 normal attacks, the generated command is "n3", but FGA recognizes "n3" as an error.'
 		}
 	}
 };
