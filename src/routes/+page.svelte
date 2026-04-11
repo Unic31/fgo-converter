@@ -735,6 +735,22 @@
 					<div class="ms-3">📑</div>
 				</div>
 			</div>
+			<div
+				class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+			>
+				<div class="flex items-end justify-between">
+					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+						⚠️{t?.errorTitle || ''}⚠️
+					</h2>
+				</div>
+
+				<div
+					class="mb-2 flex flex-col gap-2 rounded border border-gray-200 bg-white p-3 font-mono text-sm break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+				>
+					<div>- {t?.errorContent?.error1}</div>
+					<div>- {t?.errorContent?.error2}</div>
+				</div>
+			</div>
 			{#if dev}
 				<div
 					class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
