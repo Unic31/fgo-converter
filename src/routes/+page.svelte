@@ -832,6 +832,16 @@
 		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
 			<li>
 				<a
+					href="https://forms.gle/MArAWURFwFe2GTwe6"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+				>
+					Feedback & Bug Report
+				</a>
+			</li>
+			<li>
+				<a
 					href="https://www.pixiv.net/users/12102224"
 					target="_blank"
 					rel="noopener noreferrer"
