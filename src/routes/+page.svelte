@@ -623,11 +623,9 @@
 				{isLoading ? t.loading1 : t.loading2}
 			</button>
 
-			{#if isError}
 				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
 					{t.errorText}
 				</div>
-			{/if}
 
 			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
 				<div
@@ -832,7 +830,7 @@
 		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
 			<li>
 				<a
-					href="https://forms.gle/MArAWURFwFe2GTwe6"
+					href="https://docs.google.com/forms/d/e/1FAIpQLSchVZotqT9RRD2tYW_sjOiu2lKgIGfv8xl0sFmyH7Aod2oQVg/viewform?usp=header"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
