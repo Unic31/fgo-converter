@@ -623,10 +623,11 @@
 				{isLoading ? t.loading1 : t.loading2}
 			</button>
 
+			{#if isError}
 				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
 					{t.errorText}
 				</div>
-
+			{/if}
 			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
 				<div
 					class="mb-2 flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
