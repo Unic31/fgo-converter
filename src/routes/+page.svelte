@@ -735,21 +735,6 @@
 					<div class="ms-3">📑</div>
 				</div>
 			</div>
-			<div
-				class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
-			>
-				<div class="flex items-end justify-between">
-					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-						⚠️{t?.errorTitle || ''}⚠️
-					</h2>
-				</div>
-
-				<div
-					class="mb-2 flex flex-col gap-2 rounded border border-gray-200 bg-white p-3 font-mono text-sm break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-				>
-					<div>- {t?.errorContent?.error1}</div>
-				</div>
-			</div>
 			{#if dev}
 				<div
 					class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
@@ -889,7 +874,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.orderChangeTitle}
+					{t.warningTitle}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
@@ -904,18 +889,7 @@
 			>
 				<div class="flex flex-col gap-2">
 					<div>
-						<img src="{base}/images/sample1.png" class="w-150" alt="sample1" />
-						<div>{t.orderChangeGuide.step1}</div>
-					</div>
-					<div>
-						<img src="{base}/images/sample2.png" class="w-150" alt="sample2" />
-						<div>{t.orderChangeGuide.step2}</div>
-					</div>
-					<div>
-						<img src="{base}/images/sample3.png" class="w-150" alt="sample3" />
-						<img src="{base}/images/sample4.png" class="w-150" alt="sample4" />
-						<div>{t.orderChangeGuide.step3}</div>
-						<div>{t.orderChangeGuide.step4}</div>
+						<img src="{base}/images/svt.png" class="w-150" alt="svt" />
 					</div>
 				</div>
 			</div>
