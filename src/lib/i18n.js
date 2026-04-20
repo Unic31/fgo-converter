@@ -30,6 +30,7 @@ export const i18n = {
 			step2_title: '2. 직접 테스트한 전투 시뮬레이터 등록하고 가져오기',
 			step2_desc: '서버가 아닌 기기에 해당 팀에 등록하고 가져오는 방법입니다.'
 		},
+		copy: '복사'
 	},
 	JP: {
 		desc: 'カルデアアプリ(Chaldea)の共有URLをFGA用コマンドに変換します。',
@@ -61,6 +62,7 @@ export const i18n = {
 			step2_title: '2. 自分でテストした戦闘シミュレーターを保存して読み込む',
 			step2_desc: 'サーバー上ではなく、端末の編成スロットに保存してから読み込む方法です。'
 		},
+		copy: 'コピー'
 	},
 	EN: {
 		desc: 'Converts the shared URL of Chaldea to a command for FGA.',
@@ -93,5 +95,6 @@ export const i18n = {
 			step2_desc:
 				'This method saves the team setup locally on your device rather than on the server before importing.'
 		},
+		copy: 'Copy'
 	}
 };

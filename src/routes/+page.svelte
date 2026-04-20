@@ -734,7 +734,7 @@
 					 <button
 						class="ms-3 text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
-						Copy
+						{t.copy}
 					</button>
 				</div>
 			</div>
