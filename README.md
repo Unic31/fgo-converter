@@ -14,6 +14,7 @@
 
 아래 문구는 AI를 사용하여 번역되었으며 어색하거나 부자연스러운 표현이 있을 수 있음을 참고해 주세요.  
 Please note that the text below was translated using AI and may contain awkward or unnatural phrasing.
+
 ## 관련 프로젝트 (References)
 
 본 프로젝트는 아래 사이트들의 데이터를 기반으로 제작되었습니다.  
@@ -43,8 +44,8 @@ This project is based on the data from the following sites.
 버그 신고나 기능 요청은 연락 바랍니다. 버그를 신고하실 때는 오류가 발생한 URL을 첨부해 주세요.  
 For bug reports or feature requests, please contact me. If you are reporting a bug, please attach the URL where the error occurred.
 
-
 - **Mail:** [uenic31@gmail.com](mailto:uenic31@gmail.com)
+- **Google Form:** [form](https://docs.google.com/forms/d/e/1FAIpQLSchVZotqT9RRD2tYW_sjOiu2lKgIGfv8xl0sFmyH7Aod2oQVg/viewform?usp=header)
 - **X (Twitter):** [@u_nic31](https://x.com/u_nic31)
 
 ## 쌀먹 (Donation)
