@@ -52,6 +52,7 @@
 
 	// TO DO
 	// 예장이나 스킬 효과로 서번트가 거츠 보유중이면 자폭 보구로 안죽게 변경
+	// 던전 입장시 타겟 지정, 타겟 변경 없을시 tn 커맨드 제거
 
 	async function fetchSvtDetails(svtList) {
 		if (!svtList) return [];
