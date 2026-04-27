@@ -567,7 +567,50 @@
 		<div
 			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
-			
+			<div class="grid grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
+				<h1
+					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+				>
+					<span class="leading-none">FGO Converter</span>
+					<select
+						class="cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+						bind:value={language}
+					>
+						<option value="KR">KR</option>
+						<option value="JP">JP</option>
+						<option value="EN">EN</option>
+					</select>
+				</h1>
+
+				<div
+					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+				>
+					<span>{t.desc}</span>
+					<button
+						class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+						onclick={() => (isManual = !isManual)}
+					>
+						{t.btnDesc}
+					</button>
+				</div>
+
+				<div
+					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
+					onclick={toggleLight}
+				>
+					<img
+						src="{base}/images/bansi1_no_bg.png"
+						alt="Bansi Light Mode"
+						class="block h-full w-full object-contain dark:hidden"
+					/>
+
+					<img
+						src="{base}/images/bansi3_no_bg.png"
+						alt="Bansi Dark Mode"
+						class="hidden h-full w-full object-contain dark:block"
+					/>
+				</div>
+			</div>
 
 			<input
 				type="text"
@@ -690,22 +733,90 @@
 					<div class="flex-1">
 						{fgaCommand}
 					</div>
-					 <button
-						class="ms-3 text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+					<button
+						class="text-md ms-3 inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
 						{t.copy}
 					</button>
 				</div>
 			</div>
+			{#if dev}
+				<div
+					class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+				>
+					<!-- 개발 시작 -->
+					<div class="flex items-end justify-between">
+						<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+							커맨드를 기반으로 작성된 시뮬레이터 화면
+						</h2>
+					</div>
+					<div
+						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+					></div>
+					<input
+						type="text"
+						placeholder="비교용"
+						bind:value={testCommand}
+						class="w-full rounded-lg bg-gray-900 p-3 break-all {fgaCommand === testCommand
+							? 'text-green-400'
+							: 'text-red-400'}"
+					/>
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
+						</div>
+
+						<div class="max-h-50 overflow-auto text-xs text-green-400">
+							<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+						</div>
+					</div>
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData.delegate)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
+						</div>
+
+						<div class="max-h-50 overflow-auto text-xs text-green-400">
+							<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
+						</div>
+					</div>
+					<div class="relative rounded-lg bg-gray-900 p-4">
+						<div class="mb-2 flex items-center justify-between">
+							<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
+							<button
+								onclick={copyToClipboard(decodedData.actions)}
+								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+							>
+								복사하기 📑
+							</button>
+						</div>
+
+						<div class="max-h-50 overflow-auto text-xs text-blue-400">
+							<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
+						</div>
+					</div>
+				</div>
+			{/if}
 			<div class="text-red-600 transition-colors dark:text-red-400">
 				{t.warningTitle}
 				<ul class="list-disc pl-5">
-					{#each t.warnings as warning, idx(idx)}
+					{#each t.warnings as warning, idx (idx)}
 						<li>{warning}</li>
 					{/each}
 					<li>
 						<div>{t.unsupportedTitle}</div>
-						{#each t.unsupportedList as item, idx(idx)}
+						{#each t.unsupportedList as item, idx (idx)}
 							<div>{item}</div>
 						{/each}
 					</li>
