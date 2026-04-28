@@ -525,7 +525,7 @@
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="container mx-auto max-w-5xl mb-20">
+	<div class="container mx-auto mb-20 max-w-5xl">
 		<div
 			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
@@ -835,7 +835,7 @@
 	<div
 		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
 		onclick={() => (isManual = false)}
-	> 
+	>
 		<div
 			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
 			onclick={(e) => e.stopPropagation()}

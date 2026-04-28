@@ -1,6 +1,6 @@
 <script>
 	import './layout.css';
-	import { base } from '$app/paths';
+	import { base, resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { globalState } from '$lib/globalState.svelte.js';
 	let { children } = $props();
@@ -49,7 +49,11 @@
 >
 	<div class="flex h-full flex-col overflow-y-auto">
 		<div class="mb-8 flex items-center justify-between">
-			<h2 class="text-xl font-bold dark:text-white">Settings</h2>
+			<div
+				class="h-15 w-15"
+			>
+				<img src="{base}/images/nunnos.png" alt="nunnos" />
+			</div>
 			<button class="text-2xl dark:text-white" onclick={() => globalState.toggleSidebar()}>✕</button
 			>
 		</div>
@@ -75,6 +79,21 @@
 				>
 					{globalState.isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
 				</button>
+			</div>
+			<hr class="dark:text-white" />
+			<div class="flex flex-col gap-5">
+				<a
+					href={resolve('/')}
+					class="text-md w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+				>
+					FGO Converter
+				</a>
+				<a
+					href={resolve('/chklist')}
+					class="text-md w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+				>
+					SVT CheckList
+				</a>
 			</div>
 		</nav>
 
