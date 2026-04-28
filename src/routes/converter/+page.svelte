@@ -2,6 +2,7 @@
 	import { dev } from '$app/environment';
 	import pako from 'pako';
 	import { onMount } from 'svelte';
+	import { globalState } from '$lib/globalState.svelte.js';
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
 
@@ -13,12 +14,10 @@
 	let svtData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
-	let isDarkMode = $state(false);
 	let isModal = $state(false);
 	let isManual = $state(false);
-	let language = $state('KR');
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
-	let t = $derived(i18n[language] || i18n['KR']);
+	let t = $derived(i18n[globalState.language] || i18n['KR']);
 
 	const svtSkillMap = [
 		['a', 'b', 'c'],
@@ -42,11 +41,6 @@
 		} else {
 			document.body.style.overflow = '';
 			document.documentElement.style.overflow = '';
-		}
-	});
-	$effect(() => {
-		if (language) {
-			localStorage.setItem('language', language);
 		}
 	});
 
@@ -499,17 +493,6 @@
 		return command;
 	}
 
-	function toggleLight() {
-		isDarkMode = !isDarkMode;
-		if (isDarkMode) {
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		}
-	}
-
 	function copyToClipboard(json) {
 		if (!decodedData) return;
 
@@ -536,27 +519,6 @@
 				'https://chaldea.center/laplace/share?data=GH4sIAAAAAAACA9WW32-bMBDH_5d7vkk2hJb4bc1WrVKftuypiioXrsGKMS42SFHE_z7ZEJqte2jXdtOSKOTI937wueOSA9TKXHRKlyCWaYogrT2aeY7w0JHzIA6gooCFR4JgK-kIRIpAhur9F-kqEMBvWcb47R0_XyzOcxgQGutVY1wIUKtt5ferSioDwrcdIZTKyTtNn3syHsS91I4QbKOMv-ju7x0I02mN4FTdaenpo5pFMetX6em7HVUDgidZh0RG1nR0rffOq2LVlBRLmK2rEkTKEDT1pEFwFmo1l4p0-a33DsTNAVzvgyxjPGFBqmrlV00XSl0guJ3S-qoM0vwszzKO-XKRMUzScNhMgus-CDjD-NpEvGTK8TTD8Rm_8OWcLAnWdQ-CI-geRM4QpN9dNl2oNNRS2ROjoOtQ2kVLcjcDKmgKQA-dsvzYwZGKfqoPefiA4Dprm9av95ZAgGkMAcK2lSZwmdQDznA4Z3z5Kx32E50kXWYBT5IuzxZZEo7n2bMJ8QnSTGjMyN8MEXsRIvZyRP_z_LwTnA3CnSx2nZ3utRh1ftsMCCVp2kof7toBQRbTFrk5gB8jRzqAAfLjwMUrPlk5Vss9tWvZbmlUxbVxYoe6mhpEHGFfteSqJqy-AGYIPfxdtuS9s0nvZbEDnD7M2ygGKWRbxgFSbv3psV2t8qqQ-vGEbMuxCck0iyfe6fO9-VPv5CXem3-G6AM_1jn-2LzjReKr2vPXESWvmqLkVVOU_FF73hTRJiRetcqv4x-GcSX9ABKO6jgICQAA&questId=93000002&phase=3&enemyHash=1_0501_b174478';
 			fncConvertBtn();
 		}
-		const savedTheme = localStorage.getItem('theme');
-		if (
-			savedTheme === 'dark' ||
-			(!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		) {
-			isDarkMode = true;
-			document.documentElement.classList.add('dark');
-		}
-		const savedLang = localStorage.getItem('language');
-		if (savedLang) {
-			language = savedLang;
-		} else {
-			const browserLang = navigator.language.toLowerCase();
-			if (browserLang.startsWith('ko')) {
-				language = 'KR';
-			} else if (browserLang.startsWith('ja')) {
-				language = 'JP';
-			} else {
-				language = 'EN';
-			}
-		}
 	});
 </script>
 
@@ -574,7 +536,8 @@
 					<span class="leading-none">FGO Converter</span>
 					<select
 						class="cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-						bind:value={language}
+						value={globalState.language}
+						onchange={(e) => globalState.setLanguage(e.target.value)}
 					>
 						<option value="KR">KR</option>
 						<option value="JP">JP</option>
@@ -596,7 +559,7 @@
 
 				<div
 					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
-					onclick={toggleLight}
+					onclick={() => globalState.toggleDarkMode()}
 				>
 					<img
 						src="{base}/images/bansi1_no_bg.png"
