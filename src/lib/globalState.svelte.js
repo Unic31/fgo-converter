@@ -1,9 +1,12 @@
 import { browser } from '$app/environment';
 
 class GlobalState {
-    language = $state('KR');
-    isDarkMode = $state(false);
+    isSideBar = $state(false);
+    toggleSidebar() {
+        this.isSideBar = !this.isSideBar;
+    }
 
+    language = $state('KR');
     setLanguage(newLang) {
         this.language = newLang;
         if (browser) {
@@ -11,6 +14,7 @@ class GlobalState {
         }
     }
 
+    isDarkMode = $state(false);
     toggleDarkMode() {
         this.isDarkMode = !this.isDarkMode;
         if (browser) {
