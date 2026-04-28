@@ -835,7 +835,7 @@
 	<div
 		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
 		onclick={() => (isManual = false)}
-	>
+	> 
 		<div
 			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
 			onclick={(e) => e.stopPropagation()}
