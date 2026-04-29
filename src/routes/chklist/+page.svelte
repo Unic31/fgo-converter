@@ -381,9 +381,9 @@
 						<option value="unowned">미보유</option>
 					</select>
 				</label>
-				<label class="flex items-center">
+				<label class="flex">
 					<span
-						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+						class="flex justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
 					>
 						크기
 					</span>
@@ -396,9 +396,9 @@
 						<option value="l">L</option>
 					</select>
 				</label>
-				<label class="flex items-center">
+				<label class="flex">
 					<span
-						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
 					>
 						좌클릭
 					</span>
@@ -411,9 +411,9 @@
 						<option value="grand">관위</option>
 					</select>
 				</label>
-				<label class="flex items-center">
+				<label class="flex">
 					<span
-						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
 					>
 						우클릭
 					</span>
@@ -426,9 +426,9 @@
 						<option value="grand">관위</option>
 					</select>
 				</label>
-				<label class="flex items-center">
+				<label class="flex">
 					<span
-						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
 					>
 						보구 상한
 					</span>
@@ -576,7 +576,9 @@
 					<div>NP5 Rate : {stats.np5Ratio}%</div>
 					<div>unic31.github.io/fgo-converter</div>
 				</div> -->
-				<div class="mt-6 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors dark:text-gray-100 md:absolute md:right-3 md:bottom-2 md:mt-0">
+				<div
+					class="mt-6 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors md:absolute md:right-3 md:bottom-2 md:mt-0 dark:text-gray-100"
+				>
 					<div>Total NP Lv : {stats.totalNpLv}</div>
 					<div>Ownership Rate : {stats.ownedRatio}%</div>
 					<div>NP5 Rate : {stats.np5Ratio}%</div>
@@ -584,7 +586,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="font-bold text-gray-900 transition-colors dark:text-gray-100">
+		<div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
 			<a
 				href="https://leaflu0315.github.io/fgo/"
 				target="_blank"
