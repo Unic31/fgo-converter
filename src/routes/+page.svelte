@@ -2,6 +2,7 @@
 	import { dev } from '$app/environment';
 	import pako from 'pako';
 	import { onMount } from 'svelte';
+	import { globalState } from '$lib/globalState.svelte.js';
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
 
@@ -13,12 +14,10 @@
 	let svtData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
-	let isDarkMode = $state(false);
 	let isModal = $state(false);
 	let isManual = $state(false);
-	let language = $state('KR');
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
-	let t = $derived(i18n[language] || i18n['KR']);
+	let t = $derived(i18n[globalState.language] || i18n['KR']);
 
 	const svtSkillMap = [
 		['a', 'b', 'c'],
@@ -42,11 +41,6 @@
 		} else {
 			document.body.style.overflow = '';
 			document.documentElement.style.overflow = '';
-		}
-	});
-	$effect(() => {
-		if (language) {
-			localStorage.setItem('language', language);
 		}
 	});
 
@@ -161,6 +155,7 @@
 			svtData = await fetchSvtDetails(team);
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			if (!dev) {
+				// eslint-disable-next-line svelte/prefer-svelte-reactivity
 				const params = new URLSearchParams();
 				team.forEach((svt) => {
 					if (svt && svt.svtId) {
@@ -498,17 +493,6 @@
 		return command;
 	}
 
-	function toggleLight() {
-		isDarkMode = !isDarkMode;
-		if (isDarkMode) {
-			document.documentElement.classList.add('dark');
-			localStorage.setItem('theme', 'dark');
-		} else {
-			document.documentElement.classList.remove('dark');
-			localStorage.setItem('theme', 'light');
-		}
-	}
-
 	function copyToClipboard(json) {
 		if (!decodedData) return;
 
@@ -535,50 +519,21 @@
 				'https://chaldea.center/laplace/share?data=GH4sIAAAAAAACA9WW32-bMBDH_5d7vkk2hJb4bc1WrVKftuypiioXrsGKMS42SFHE_z7ZEJqte2jXdtOSKOTI937wueOSA9TKXHRKlyCWaYogrT2aeY7w0JHzIA6gooCFR4JgK-kIRIpAhur9F-kqEMBvWcb47R0_XyzOcxgQGutVY1wIUKtt5ferSioDwrcdIZTKyTtNn3syHsS91I4QbKOMv-ju7x0I02mN4FTdaenpo5pFMetX6em7HVUDgidZh0RG1nR0rffOq2LVlBRLmK2rEkTKEDT1pEFwFmo1l4p0-a33DsTNAVzvgyxjPGFBqmrlV00XSl0guJ3S-qoM0vwszzKO-XKRMUzScNhMgus-CDjD-NpEvGTK8TTD8Rm_8OWcLAnWdQ-CI-geRM4QpN9dNl2oNNRS2ROjoOtQ2kVLcjcDKmgKQA-dsvzYwZGKfqoPefiA4Dprm9av95ZAgGkMAcK2lSZwmdQDznA4Z3z5Kx32E50kXWYBT5IuzxZZEo7n2bMJ8QnSTGjMyN8MEXsRIvZyRP_z_LwTnA3CnSx2nZ3utRh1ftsMCCVp2kof7toBQRbTFrk5gB8jRzqAAfLjwMUrPlk5Vss9tWvZbmlUxbVxYoe6mhpEHGFfteSqJqy-AGYIPfxdtuS9s0nvZbEDnD7M2ygGKWRbxgFSbv3psV2t8qqQ-vGEbMuxCck0iyfe6fO9-VPv5CXem3-G6AM_1jn-2LzjReKr2vPXESWvmqLkVVOU_FF73hTRJiRetcqv4x-GcSX9ABKO6jgICQAA&questId=93000002&phase=3&enemyHash=1_0501_b174478';
 			fncConvertBtn();
 		}
-		const savedTheme = localStorage.getItem('theme');
-		if (
-			savedTheme === 'dark' ||
-			(!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
-		) {
-			isDarkMode = true;
-			document.documentElement.classList.add('dark');
-		}
-		const savedLang = localStorage.getItem('language');
-		if (savedLang) {
-			language = savedLang;
-		} else {
-			const browserLang = navigator.language.toLowerCase();
-			if (browserLang.startsWith('ko')) {
-				language = 'KR';
-			} else if (browserLang.startsWith('ja')) {
-				language = 'JP';
-			} else {
-				language = 'EN';
-			}
-		}
 	});
 </script>
 
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="container mx-auto max-w-5xl">
+	<div class="mx-auto mb-20 max-w-5xl">
 		<div
 			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
-			<div class="grid grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
+			<div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 				<h1
 					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
 					<span class="leading-none">FGO Converter</span>
-					<select
-						class="cursor-pointer rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-						bind:value={language}
-					>
-						<option value="KR">KR</option>
-						<option value="JP">JP</option>
-						<option value="EN">EN</option>
-					</select>
 				</h1>
 
 				<div
@@ -595,7 +550,7 @@
 
 				<div
 					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
-					onclick={toggleLight}
+					onclick={() => globalState.toggleDarkMode()}
 				>
 					<img
 						src="{base}/images/bansi1_no_bg.png"
@@ -732,8 +687,8 @@
 					<div class="flex-1">
 						{fgaCommand}
 					</div>
-					 <button
-						class="ms-3 text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+					<button
+						class="text-md ms-3 inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
 						{t.copy}
 					</button>
@@ -810,13 +765,12 @@
 			<div class="text-red-600 transition-colors dark:text-red-400">
 				{t.warningTitle}
 				<ul class="list-disc pl-5">
-					{#each t.warnings as warning}
+					{#each t.warnings as warning, idx (idx)}
 						<li>{warning}</li>
 					{/each}
-
 					<li>
 						<div>{t.unsupportedTitle}</div>
-						{#each t.unsupportedList as item}
+						{#each t.unsupportedList as item, idx (idx)}
 							<div>{item}</div>
 						{/each}
 					</li>
@@ -833,53 +787,11 @@
 				</ul>
 			</div>
 		</div>
-		<ul class="mt-1 space-y-1 text-end text-sm text-gray-500">
-			<li>
-				<a
-					href="https://docs.google.com/forms/d/e/1FAIpQLSchVZotqT9RRD2tYW_sjOiu2lKgIGfv8xl0sFmyH7Aod2oQVg/viewform?usp=header"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-				>
-					Feedback & Bug Report
-				</a>
-			</li>
-			<li>
-				<a
-					href="https://www.pixiv.net/users/12102224"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-				>
-					Illustrated by KANYA
-				</a>
-			</li>
-			<li>
-				<a
-					href="https://github.com/Unic31/fgo-converter"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-				>
-					Developed by Unic
-				</a>
-			</li>
-			<li>
-				<a
-					href="https://ko-fi.com/unic31"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-				>
-					Buy me a Saint Quartz
-				</a>
-			</li>
-		</ul>
 	</div>
 </div>
 {#if isModal}
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
 		onclick={() => (isModal = false)}
 	>
 		<div
@@ -921,7 +833,7 @@
 {/if}
 {#if isManual}
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
 		onclick={() => (isManual = false)}
 	>
 		<div
@@ -930,7 +842,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.bntHow}
+					{t.btnHow}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
@@ -969,18 +881,4 @@
 {/if}
 
 <style>
-	.custom-scrollbar::-webkit-scrollbar {
-		height: 6px;
-	}
-	.custom-scrollbar::-webkit-scrollbar-track {
-		background: transparent;
-	}
-
-	.custom-scrollbar::-webkit-scrollbar-thumb {
-		background-color: #cbd5e1; /* 연한 회색 (라이트 모드) */
-		border-radius: 10px;
-	}
-	:global(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
-		background-color: #4b5563; /* 진한 회색 (다크 모드) */
-	}
 </style>
