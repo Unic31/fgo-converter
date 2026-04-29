@@ -14,6 +14,7 @@
 	let isCapturing = $state(false); // 로딩(스피너) 상태
 	let isExportMode = $state(false);
 	let exportLayout = $state('single');
+	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
 	let isManual = $state(false);
 	let currentServer = $state('KR');
@@ -75,83 +76,93 @@
 			fileInput.click();
 		}
 	}
-	// 🌟 2. 아이콘 개수와 크기에 비례하여 정확한 캡처 너비를 계산하는 파생 변수
-	let calculatedExportWidth = $derived.by(() => {
+
+	async function generateImage(layout) {
+		if (!captureArea) return null;
+
+		// 캡처에 필요한 픽셀 너비 계산
 		const classArrays = Object.values(filteredData);
-		if (classArrays.length === 0) return 800; // 데이터가 아예 없을 때의 기본 너비
+		const maxServantsCount =
+			classArrays.length > 0 ? Math.max(...classArrays.map((ids) => ids.length)) : 0;
 
-		// 현재 화면에서 서번트가 가장 많은 클래스의 서번트 수 찾기
-		const maxServantsCount = Math.max(...classArrays.map((ids) => ids.length));
+		let iconPx = 56;
+		if (iconSize === 's') iconPx = 44;
+		if (iconSize === 'l') iconPx = 72;
 
-		// 설정된 아이콘 크기를 실제 픽셀(px)로 환산
-		let iconPx = 56; // M 사이즈 (h-14 w-14)
-		if (iconSize === 's') iconPx = 44; // S 사이즈 (h-11 w-11)
-		if (iconSize === 'l') iconPx = 72; // L 사이즈 (h-18 w-18)
+		let servantsPerRow = maxServantsCount;
+		if (layout === 'double') servantsPerRow = Math.ceil(maxServantsCount / 2);
 
-		const gapPx = 8; // Tailwind gap-2는 8px
-		const safePadding = 40; // 컨테이너의 p-2(16px), 테두리(2px) 및 줄바꿈 방지용 안전 여백
-
-		// 배열 방식에 따라 한 줄에 들어갈 서번트 기준 개수 정하기
-		let servantsPerRow = maxServantsCount; // 1줄 모드: 가장 많은 클래스 전체
-		if (exportLayout === 'double') {
-			servantsPerRow = Math.ceil(maxServantsCount / 2); // 2줄 모드: 절반으로 나누기
-		}
-
-		// 최종 너비 계산 = (클래스 아이콘 1개 + 서번트 수) * 크기 + 아이콘 사이 간격 + 안전 여백
 		const itemsPerRow = 1 + servantsPerRow;
-		const requiredWidth = itemsPerRow * iconPx + (itemsPerRow - 1) * gapPx + safePadding;
+		const targetWidth = Math.max(itemsPerRow * iconPx + (itemsPerRow - 1) * 8 + 60, 600);
 
-		// 너무 좁아지는 것을 방지하기 위해 최소 600px은 보장
-		return Math.max(requiredWidth, 600);
-	});
+		// 로딩창 뒤에서 진짜 DOM의 너비를 강제로 늘립니다!
+		exportTargetWidth = targetWidth;
 
-	// 🌟 3. 모달 여는 함수와 미리보기 갱신 함수를 분리
-	async function openExportPreview() {
-		if (!captureArea) return;
-		isExportModalOpen = true; // 모달을 먼저 띄움
-		await updatePreviewImage(); // 이미지 캡처 실행
-	}
-
-	async function updatePreviewImage() {
-		isCapturing = true;
-		isExportMode = true;
-		previewImageUrl = '';
-
-		// DOM이 새로운 계산된 너비(calculatedExportWidth)로 재배열될 시간을 충분히 부여
-		await new Promise((resolve) => setTimeout(resolve, 400));
+		// 브라우저가 변경된 너비에 맞춰 서번트들을 재배열할 시간 부여 (0.3초)
+		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		try {
+			// 진짜 DOM을 캡처 (백지 오류가 절대 발생하지 않습니다)
 			const dataUrl = await toPng(captureArea, {
 				pixelRatio: 2,
 				backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
 			});
-			previewImageUrl = dataUrl;
+			return dataUrl;
 		} catch (error) {
 			console.error('캡처 에러:', error);
-			alert('이미지 생성 중 오류가 발생했습니다.');
+			return null;
 		} finally {
-			isCapturing = false;
+			// 캡처가 끝나면 너비를 즉시 원래 폭(w-full)으로 원상 복구
+			exportTargetWidth = 0;
+			await new Promise((resolve) => setTimeout(resolve, 50)); // DOM이 완전히 돌아올 때까지 잠깐 대기
 		}
 	}
+	// 🌟 3. "이미지로 저장" 버튼을 눌렀을 때 실행되는 함수
+	async function openExportPreview() {
+		if (isCapturing) return;
+		isCapturing = true; // 화면 전체 로딩창 ON
+		previewImageUrl = '';
 
-	// 🌟 4. 모달 닫기 함수
+		const dataUrl = await generateImage(exportLayout);
+		if (dataUrl) {
+			previewImageUrl = dataUrl;
+			isExportModalOpen = true; // 이미지 생성이 완벽히 끝나면 모달을 켭니다
+		} else {
+			alert('이미지 생성 중 오류가 발생했습니다.');
+		}
+
+		isCapturing = false; // 로딩창 OFF
+	}
+
+	// 🌟 4. 모달 안에서 '배열 방식' 셀렉트 박스를 바꿨을 때 실행되는 함수
+	async function updatePreviewImage() {
+		if (isCapturing) return;
+		isCapturing = true; // 화면 전체 로딩창 ON (모달 위를 덮음)
+
+		const dataUrl = await generateImage(exportLayout);
+		if (dataUrl) previewImageUrl = dataUrl;
+
+		isCapturing = false; // 로딩창 OFF
+	}
+
+	// 🌟 5. 모달 닫기 및 다운로드 함수
 	function closeExportModal() {
 		if (isCapturing) return;
 		isExportModalOpen = false;
-		setTimeout(() => {
-			isExportMode = false;
-		}, 400);
 	}
 
 	function downloadImage() {
 		if (!previewImageUrl) return;
+
+		const now = new Date();
+		const pad = (n) => String(n).padStart(2, '0');
+		const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
 		const link = document.createElement('a');
-		link.download = `SVT_Checklist_${currentServer}.png`;
+		link.download = `SVT_Checklist_${currentServer}_${exportLayout === 'single' ? '1줄' : '2줄'}_${timestamp}.png`;
 		link.href = previewImageUrl;
 		link.click();
 
-		// 🌟 수정됨: 단순히 모달창만 닫는 게 아니라,
-		// 화면 크기를 원래대로 되돌려주는 closeExportModal() 통합 함수를 호출합니다!
 		closeExportModal();
 	}
 
@@ -250,15 +261,15 @@
 			};
 			localStorage.setItem('svt_checklist_settings', JSON.stringify(settingsToSave));
 		}
-		$effect(() => {
-			if (browser) {
-				if (isExportModalOpen || isManual) {
-					document.body.style.overflow = 'hidden';
-				} else {
-					document.body.style.overflow = '';
-				}
+	});
+	$effect(() => {
+		if (browser) {
+			if (isExportModalOpen || isManual || isCapturing) {
+				document.body.style.overflow = 'hidden';
+			} else {
+				document.body.style.overflow = '';
 			}
-		});
+		}
 	});
 	onMount(() => {
 		if (browser) {
@@ -435,11 +446,10 @@
 
 			<div
 				bind:this={captureArea}
-				class="space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-colors dark:border-gray-600 dark:bg-gray-700/50
-    {isExportMode ? 'max-w-none' : 'w-full'}"
-				style={isExportMode
-					? `width: ${calculatedExportWidth}px; min-width: ${calculatedExportWidth}px;`
-					: ''}
+				class="mx-auto space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50"
+				style={exportTargetWidth > 0
+					? `width: ${exportTargetWidth}px; min-width: ${exportTargetWidth}px; max-width: none;`
+					: 'width: 100%;'}
 			>
 				{#each Object.entries(filteredData) as [classFolder, ids] (classFolder)}
 					{#if ids.length > 0}
@@ -607,79 +617,83 @@
 {/if}
 
 {#if isExportModalOpen}
-	<div
-		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
-		onclick={() => !isCapturing && closeExportModal()}
-		onkeydown={(e) => e.key === 'Escape' && !isCapturing && closeExportModal()}
-	>
-		<div
-			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
-			onclick={(e) => e.stopPropagation()}
-		>
-			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xl font-bold">이미지 미리보기</h2>
-				<button
-					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-					onclick={() => closeExportModal()}
-					disabled={isCapturing}
-				>
-					✕
-				</button>
-			</div>
-			<div class="flex w-full mb-2">
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-						>배열 방식</span
-					>
-					<select
-						bind:value={exportLayout}
-						onchange={updatePreviewImage}
-						disabled={isCapturing}
-						class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="single">1줄 출력 (길게 나열)</option>
-						<option value="double">2줄 출력 (절반으로 접기)</option>
-					</select>
-				</label>
-			</div>
+    <div
+        role="button"
+        tabindex="0"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+        onclick={() => !isCapturing && closeExportModal()}
+        onkeydown={(e) => e.key === 'Escape' && !isCapturing && closeExportModal()}
+    >
+        <!-- 🌟 모바일 화면 방어벽: max-h-[90vh], max-w-[95vw] -->
+        <div
+            role="presentation"
+            class="flex max-h-[90vh] w-full max-w-[95vw] flex-col overflow-hidden rounded-xl bg-white shadow-2xl md:max-w-4xl dark:bg-gray-800 dark:text-white"
+            onclick={(e) => e.stopPropagation()}
+        >
+            <div class="flex items-center justify-between border-b p-4 dark:border-gray-700">
+                <h2 class="text-xl font-bold">이미지 미리보기</h2>
+                <button
+                    class="ml-3 cursor-pointer text-lg text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+                    onclick={() => closeExportModal()}
+                    disabled={isCapturing}
+                >
+                    ✕
+                </button>
+            </div>
 
-			<div
-				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
-			>
-				{#if isCapturing}
-					<div class="flex h-64 items-center justify-center">
-						<span class="animate-pulse text-lg font-bold text-gray-500 dark:text-gray-400">
-							이미지를 생성하는 중입니다...
-						</span>
-					</div>
-				{:else if previewImageUrl}
-					<img
-						src={previewImageUrl}
-						alt="Export Preview"
-						class="mx-auto block h-auto max-w-full rounded shadow"
-					/>
-				{/if}
-			</div>
+            <div class="flex w-full border-b bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50">
+                <label class="flex">
+                    <span class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                        배열 방식
+                    </span>
+                    <select
+                        bind:value={exportLayout}
+                        onchange={updatePreviewImage}
+                        disabled={isCapturing}
+                        class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                    >
+                        <option value="single">1줄 출력 (길게 나열)</option>
+                        <option value="double">2줄 출력 (절반으로 접기)</option>
+                    </select>
+                </label>
+            </div>
 
-			<div class="mt-4 flex justify-end gap-3">
-				<button
-					class="rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-					onclick={() => closeExportModal()}
-					disabled={isCapturing}
-				>
-					닫기
-				</button>
-				<button
-					class="rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition hover:bg-blue-700 disabled:opacity-50"
-					onclick={downloadImage}
-					disabled={isCapturing}
-				>
-					저장하기
-				</button>
-			</div>
-		</div>
-	</div>
+            <!-- 🌟 이미지 스크롤 영역: flex-1과 overflow-auto가 부모 크기에 맞춰 넘치는 부분을 스크롤바 처리합니다. -->
+            <div class="flex-1 overflow-auto bg-gray-100 p-4 dark:bg-gray-900">
+                {#if previewImageUrl}
+                    <img src={previewImageUrl} alt="Export Preview" class="mx-auto block h-auto shadow-lg" />
+                {/if}
+            </div>
+
+            <div class="flex justify-end gap-3 border-t p-4 dark:border-gray-700">
+                <button
+                    class="rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                    onclick={() => closeExportModal()}
+                    disabled={isCapturing}
+                >
+                    닫기
+                </button>
+                <button
+                    class="rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition hover:bg-blue-700 disabled:opacity-50"
+                    onclick={downloadImage}
+                    disabled={isCapturing}
+                >
+                    저장하기
+                </button>
+            </div>
+        </div>
+    </div>
+{/if}
+
+<!-- 🌟 화면 전체를 덮는 절대 로딩창 (모달보다 Z-index가 높음) -->
+{#if isCapturing}
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div class="flex flex-col items-center rounded-xl bg-white p-8 shadow-2xl dark:bg-gray-800">
+            <div class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+            <h2 class="text-xl font-bold dark:text-white">이미지를 생성하고 있습니다...</h2>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">화면 크기에 따라 몇 초 정도 걸릴 수 있습니다.</p>
+        </div>
+    </div>
 {/if}
 
 <style>
