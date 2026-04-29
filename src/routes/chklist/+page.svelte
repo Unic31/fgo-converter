@@ -538,7 +538,7 @@
 				{/each}
 			</div>
 		</div>
-		<div class="font-bold text-gray-900 transition-colors dark:text-gray-100">
+		<div class="font-bold text-gray-900 transition-colors dark:text-gray-100 items-end">
 			<a
 				href="https://leaflu0315.github.io/fgo/"
 				target="_blank"
