@@ -3,7 +3,14 @@
 	import { base, resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { globalState } from '$lib/globalState.svelte.js';
+	import { afterNavigate } from '$app/navigation';
 	let { children } = $props();
+	
+	afterNavigate(() => {
+		if (globalState.isSideBar) {
+			globalState.toggleSidebar();
+		}
+	});
 
 	onMount(() => {
 		const savedTheme = localStorage.getItem('theme');
@@ -49,9 +56,7 @@
 >
 	<div class="flex h-full flex-col overflow-y-auto">
 		<div class="mb-8 flex items-center justify-between">
-			<div
-				class="h-15 w-15"
-			>
+			<div class="h-15 w-15">
 				<img src="{base}/images/nunnos.png" alt="nunnos" />
 			</div>
 			<button class="text-2xl dark:text-white" onclick={() => globalState.toggleSidebar()}>✕</button
@@ -97,7 +102,7 @@
 			</div>
 		</nav>
 
-		<ul class="mt-auto space-y-1 pt-8 text-start text-sm text-gray-500">
+		<ul class="mt-auto space-y-1 pt-8 text-start text-sm text-gray-900 dark:text-gray-100">
 			<li>
 				<a
 					href="https://docs.google.com/forms/d/e/1FAIpQLSchVZotqT9RRD2tYW_sjOiu2lKgIGfv8xl0sFmyH7Aod2oQVg/viewform?usp=header"
