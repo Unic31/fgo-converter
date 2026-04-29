@@ -189,9 +189,9 @@
 		let newState = { ...currentState };
 
 		if (action === 'npLv') {
-			newState.npLv = currentState.npLv >= 5 ? 0 : currentState.npLv + 1;
+			newState.npLv = currentState.npLv >= 6 ? 0 : currentState.npLv + 1;
 		} else if (action === 'decreaseNpLv') {
-			newState.npLv = currentState.npLv <= 0 ? 5 : currentState.npLv - 1;
+			newState.npLv = currentState.npLv <= 0 ? 6 : currentState.npLv - 1;
 		} else {
 			newState[action] = !currentState[action];
 			if (currentState.npLv === 0) {
@@ -469,7 +469,6 @@
 													/>
 												{/if}
 											</button>
-
 											<button
 												class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
 												onclick={(e) => handleLeftClick(e, id, 'isGrand')}
@@ -482,23 +481,22 @@
 													/>
 												{/if}
 											</button>
-
 											<button
 												class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
 												onclick={(e) => handleLeftClick(e, id, 'npLv')}
 											>
-												<svg viewBox="0 0 24 24" class="w-full overflow-visible drop-shadow-lg">
+												<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
 													<text
 														x="50%"
 														y="85%"
 														text-anchor="middle"
-														fill="white"
+														fill={svtStates.get(id).npLv === 6 ? '#ef4444' : 'white'}
 														stroke="black"
-														stroke-width="2"
+														stroke-width="5"
 														paint-order="stroke fill"
-														font-family="monospace"
-														font-weight="bold"
-														font-size="25"
+														font-family="sans-serif"
+														font-weight="900"
+														font-size="40"
 													>
 														{svtStates.get(id).npLv}
 													</text>
@@ -512,7 +510,7 @@
 					{/if}
 				{/each}
 				<div
-					class="absolute right-3 bottom-2 text-l font-bold text-gray-900 transition-colors dark:text-gray-100"
+					class="text-l absolute right-3 bottom-2 font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
 					unic31.github.io/fgo-converter
 				</div>
