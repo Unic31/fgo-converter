@@ -111,7 +111,7 @@
 
 			// 5️⃣ 이미지 즉시 다운로드
 			const link = document.createElement('a');
-			link.download = `SVT_Checklist_${currentServer}_${layout === 'single' ? '1줄' : '2줄'}_${timestamp}.png`;
+			link.download = `SVT_Checklist_${timestamp}.png`;
 			link.href = dataUrl;
 			link.click();
 		} catch (error) {
@@ -412,7 +412,7 @@
 
 			<div
 				bind:this={captureArea}
-				class="space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
+				class="relative space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
 				0
 					? ''
 					: 'mx-auto'}"
@@ -505,9 +505,14 @@
 						</div>
 					{/if}
 				{/each}
+				<div
+					class="absolute right-3 bottom-2 font-bold text-xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+				>
+					https://unic31.github.io/fgo-converter/chklist
+				</div>
 			</div>
 		</div>
-		<div class="items-end font-bold text-gray-900 transition-colors dark:text-gray-100">
+		<div class="font-bold text-gray-900 transition-colors dark:text-gray-100">
 			<a
 				href="https://leaflu0315.github.io/fgo/"
 				target="_blank"
