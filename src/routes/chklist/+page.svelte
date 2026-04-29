@@ -41,6 +41,41 @@
 		if (iconSize === 'l') return 'h-18 w-18';
 		return 'h-14 w-14';
 	});
+	let stats = $derived.by(() => {
+		let totalNpLv = 0;
+		let ownedCount = 0;
+		let np5PlusCount = 0;
+		let totalAvailable = 0;
+
+		for (const ids of Object.values(currentData)) {
+			totalAvailable += ids.length;
+			for (const id of ids) {
+				const state = svtStates.get(id);
+				if (state && state.npLv >= 1) {
+					ownedCount++;
+					totalNpLv += state.npLv; // 총 보구 레벨 합
+
+					if (state.npLv >= 5) {
+						np5PlusCount++; // NP5 이상
+					}
+				}
+			}
+		}
+
+		const ownedRatio =
+			totalAvailable > 0 ? ((ownedCount / totalAvailable) * 100).toFixed(1) : '0.0';
+		const np5Ratio =
+			totalAvailable > 0 ? ((np5PlusCount / totalAvailable) * 100).toFixed(1) : '0.0';
+
+		return {
+			totalNpLv,
+			ownedCount,
+			np5PlusCount,
+			totalAvailable,
+			ownedRatio,
+			np5Ratio
+		};
+	});
 
 	let leftClickMode = $state('click');
 	function handleLeftClick(e, id, zoneAction) {
@@ -510,9 +545,12 @@
 					{/if}
 				{/each}
 				<div
-					class="text-l absolute right-3 bottom-2 font-bold text-gray-900 transition-colors dark:text-gray-100"
+					class="absolute right-3 bottom-2 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
-					unic31.github.io/fgo-converter
+					<div>Total NP Lv : {stats.totalNpLv}</div>
+					<div>Ownership Rate : {stats.ownedRatio}%</div>
+					<div>NP5 Rate : {stats.np5Ratio}%</div>
+					<div>unic31.github.io/fgo-converter</div>
 				</div>
 			</div>
 		</div>
