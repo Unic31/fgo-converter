@@ -514,7 +514,7 @@
 				<div
 					class="absolute right-3 bottom-2 text-xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
-					https://unic31.github.io/fgo-converter/chklist
+					unic31.github.io/fgo-converter
 				</div>
 			</div>
 		</div>
