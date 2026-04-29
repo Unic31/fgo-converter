@@ -842,7 +842,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.bntHow}
+					{t.btnHow}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"

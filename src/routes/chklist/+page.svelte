@@ -6,8 +6,14 @@
 	import { serverServantIds } from '$lib/svtList.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
+	import { toPng } from 'html-to-image';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
-
+	let captureArea; // 캡처할 HTML 영역을 연결할 변수
+	let isExportModalOpen = $state(true);
+	let previewImageUrl = $state('');
+	let isCapturing = $state(false); // 로딩(스피너) 상태
+	let isExportMode = $state(false);
+	let exportLayout = $state('single');
 	let isSettingsLoaded = $state(false);
 	let isManual = $state(false);
 	let currentServer = $state('KR');
@@ -30,13 +36,6 @@
 			}
 		}
 		return result;
-	});
-	let screenSize = $state('m');
-	let screenClass = $derived.by(() => {
-		if (screenSize === 's') return 'max-w-2xl';
-		if (screenSize === 'm') return 'max-w-5xl';
-		if (screenSize === 'l') return 'w-full';
-		return 'h-14 w-14';
 	});
 	let iconSize = $state('m');
 	let iconClass = $derived.by(() => {
@@ -75,6 +74,85 @@
 		if (fileInput) {
 			fileInput.click();
 		}
+	}
+	// 🌟 2. 아이콘 개수와 크기에 비례하여 정확한 캡처 너비를 계산하는 파생 변수
+	let calculatedExportWidth = $derived.by(() => {
+		const classArrays = Object.values(filteredData);
+		if (classArrays.length === 0) return 800; // 데이터가 아예 없을 때의 기본 너비
+
+		// 현재 화면에서 서번트가 가장 많은 클래스의 서번트 수 찾기
+		const maxServantsCount = Math.max(...classArrays.map((ids) => ids.length));
+
+		// 설정된 아이콘 크기를 실제 픽셀(px)로 환산
+		let iconPx = 56; // M 사이즈 (h-14 w-14)
+		if (iconSize === 's') iconPx = 44; // S 사이즈 (h-11 w-11)
+		if (iconSize === 'l') iconPx = 72; // L 사이즈 (h-18 w-18)
+
+		const gapPx = 8; // Tailwind gap-2는 8px
+		const safePadding = 40; // 컨테이너의 p-2(16px), 테두리(2px) 및 줄바꿈 방지용 안전 여백
+
+		// 배열 방식에 따라 한 줄에 들어갈 서번트 기준 개수 정하기
+		let servantsPerRow = maxServantsCount; // 1줄 모드: 가장 많은 클래스 전체
+		if (exportLayout === 'double') {
+			servantsPerRow = Math.ceil(maxServantsCount / 2); // 2줄 모드: 절반으로 나누기
+		}
+
+		// 최종 너비 계산 = (클래스 아이콘 1개 + 서번트 수) * 크기 + 아이콘 사이 간격 + 안전 여백
+		const itemsPerRow = 1 + servantsPerRow;
+		const requiredWidth = itemsPerRow * iconPx + (itemsPerRow - 1) * gapPx + safePadding;
+
+		// 너무 좁아지는 것을 방지하기 위해 최소 600px은 보장
+		return Math.max(requiredWidth, 600);
+	});
+
+	// 🌟 3. 모달 여는 함수와 미리보기 갱신 함수를 분리
+	async function openExportPreview() {
+		if (!captureArea) return;
+		isExportModalOpen = true; // 모달을 먼저 띄움
+		await updatePreviewImage(); // 이미지 캡처 실행
+	}
+
+	async function updatePreviewImage() {
+		isCapturing = true;
+		isExportMode = true;
+		previewImageUrl = '';
+
+		// DOM이 새로운 계산된 너비(calculatedExportWidth)로 재배열될 시간을 충분히 부여
+		await new Promise((resolve) => setTimeout(resolve, 400));
+
+		try {
+			const dataUrl = await toPng(captureArea, {
+				pixelRatio: 2,
+				backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
+			});
+			previewImageUrl = dataUrl;
+		} catch (error) {
+			console.error('캡처 에러:', error);
+			alert('이미지 생성 중 오류가 발생했습니다.');
+		} finally {
+			isCapturing = false;
+		}
+	}
+
+	// 🌟 4. 모달 닫기 함수
+	function closeExportModal() {
+		if (isCapturing) return;
+		isExportModalOpen = false;
+		setTimeout(() => {
+			isExportMode = false;
+		}, 400);
+	}
+
+	function downloadImage() {
+		if (!previewImageUrl) return;
+		const link = document.createElement('a');
+		link.download = `SVT_Checklist_${currentServer}.png`;
+		link.href = previewImageUrl;
+		link.click();
+
+		// 🌟 수정됨: 단순히 모달창만 닫는 게 아니라,
+		// 화면 크기를 원래대로 되돌려주는 closeExportModal() 통합 함수를 호출합니다!
+		closeExportModal();
 	}
 
 	function resetData() {
@@ -166,13 +244,21 @@
 			const settingsToSave = {
 				currentServer,
 				filterMode,
-				screenSize,
 				iconSize,
 				leftClickMode,
 				rightClickMode
 			};
 			localStorage.setItem('svt_checklist_settings', JSON.stringify(settingsToSave));
 		}
+		$effect(() => {
+			if (browser) {
+				if (isExportModalOpen || isManual) {
+					document.body.style.overflow = 'hidden';
+				} else {
+					document.body.style.overflow = '';
+				}
+			}
+		});
 	});
 	onMount(() => {
 		if (browser) {
@@ -188,7 +274,6 @@
 				const parsedSettings = JSON.parse(savedSettings);
 				if (parsedSettings.currentServer) currentServer = parsedSettings.currentServer;
 				if (parsedSettings.filterMode) filterMode = parsedSettings.filterMode;
-				if (parsedSettings.screenSize) screenSize = parsedSettings.screenSize;
 				if (parsedSettings.iconSize) iconSize = parsedSettings.iconSize;
 				if (parsedSettings.leftClickMode) leftClickMode = parsedSettings.leftClickMode;
 				if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
@@ -201,7 +286,7 @@
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="mx-auto mb-20 {screenClass}">
+	<div class="mx-auto mb-20">
 		<div
 			class="flex flex-col items-center space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
@@ -278,21 +363,6 @@
 					<span
 						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
 					>
-						화면 폭
-					</span>
-					<select
-						bind:value={screenSize}
-						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="s">S</option>
-						<option value="m">M</option>
-						<option value="l">L</option>
-					</select>
-				</label>
-				<label class="flex items-center">
-					<span
-						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
 						아이콘 크기
 					</span>
 					<select
@@ -355,10 +425,21 @@
 				>
 					데이터 초기화
 				</button>
+				<button
+					class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700"
+					onclick={openExportPreview}
+				>
+					이미지로 저장
+				</button>
 			</div>
 
 			<div
-				class="w-full space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+				bind:this={captureArea}
+				class="space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-colors dark:border-gray-600 dark:bg-gray-700/50
+    {isExportMode ? 'max-w-none' : 'w-full'}"
+				style={isExportMode
+					? `width: ${calculatedExportWidth}px; min-width: ${calculatedExportWidth}px;`
+					: ''}
 			>
 				{#each Object.entries(filteredData) as [classFolder, ids] (classFolder)}
 					{#if ids.length > 0}
@@ -447,6 +528,35 @@
 				{/each}
 			</div>
 		</div>
+		<div class="font-bold text-gray-900 transition-colors dark:text-gray-100">
+			<a
+				href="https://leaflu0315.github.io/fgo/"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+			>
+				Servant Checklist
+			</a>
+			를 제작하신
+			<a
+				href="https://github.com/mgneko/mgneko.github.io"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+			>
+				mgneko
+			</a>
+			와
+			<a
+				href="https://github.com/LeafLu0315/fgo"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+			>
+				LeafLu
+			</a>
+			의 아이디어를 빌려 제작되었습니다.
+		</div>
 	</div>
 </div>
 {#if isManual}
@@ -460,7 +570,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.bntHow}
+					{t.btnHow}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
@@ -490,6 +600,82 @@
 					onclick={() => (isManual = false)}
 				>
 					{t.btnOk}
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+{#if isExportModalOpen}
+	<div
+		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+		onclick={() => !isCapturing && closeExportModal()}
+		onkeydown={(e) => e.key === 'Escape' && !isCapturing && closeExportModal()}
+	>
+		<div
+			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
+			onclick={(e) => e.stopPropagation()}
+		>
+			<div class="mb-4 flex items-center justify-between">
+				<h2 class="text-xl font-bold">이미지 미리보기</h2>
+				<button
+					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+					onclick={() => closeExportModal()}
+					disabled={isCapturing}
+				>
+					✕
+				</button>
+			</div>
+			<div class="flex w-full mb-2">
+				<label class="flex">
+					<span
+						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+						>배열 방식</span
+					>
+					<select
+						bind:value={exportLayout}
+						onchange={updatePreviewImage}
+						disabled={isCapturing}
+						class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+					>
+						<option value="single">1줄 출력 (길게 나열)</option>
+						<option value="double">2줄 출력 (절반으로 접기)</option>
+					</select>
+				</label>
+			</div>
+
+			<div
+				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
+			>
+				{#if isCapturing}
+					<div class="flex h-64 items-center justify-center">
+						<span class="animate-pulse text-lg font-bold text-gray-500 dark:text-gray-400">
+							이미지를 생성하는 중입니다...
+						</span>
+					</div>
+				{:else if previewImageUrl}
+					<img
+						src={previewImageUrl}
+						alt="Export Preview"
+						class="mx-auto block h-auto max-w-full rounded shadow"
+					/>
+				{/if}
+			</div>
+
+			<div class="mt-4 flex justify-end gap-3">
+				<button
+					class="rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-700 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+					onclick={() => closeExportModal()}
+					disabled={isCapturing}
+				>
+					닫기
+				</button>
+				<button
+					class="rounded-lg bg-blue-600 px-5 py-2 font-bold text-white transition hover:bg-blue-700 disabled:opacity-50"
+					onclick={downloadImage}
+					disabled={isCapturing}
+				>
+					저장하기
 				</button>
 			</div>
 		</div>

@@ -23,7 +23,7 @@ export const i18n = {
 			'시뮬레이터 파티 편성시 서번트와 서번트 사이에 빈자리가 있는 전투 데이터를 커맨드로 변환할 경우 에러가 발생할 수 있습니다. ',
 		detailsBtn: '설명',
 		btnOk: '확인',
-		bntHow: '사용방법',
+		btnHow: '사용방법',
 		manualGuide: {
 			step1_title: '1. 이미 등록된 전투 시뮬레이터 가져오기',
 			step1_desc: '꼭!! 두번째 링크 클릭해서 URL 복사',
@@ -61,7 +61,7 @@ export const i18n = {
 		orderChangeWarning: 'シミュレーターでのパーティ編成時、サーヴァントとサーヴァントの間に空き枠がある状態の戦闘データをコマンドに変換すると、エラーが発生する可能性があります。',
 		detailsBtn: '詳細',
 		btnOk: '確認',
-		bntHow: '使い方',
+		btnHow: '使い方',
 		manualGuide: {
 			step1_title: '1. 登録済みの戦闘シミュレーターからURLを取得する',
 			step1_desc: '必ず！！2番目のリンクをクリックしてURLをコピーしてください',
@@ -93,7 +93,7 @@ export const i18n = {
 		orderChangeWarning: 'When setting up your party in the simulator, converting battle data with an empty slot between Servants into a command may cause an error.',
 		detailsBtn: 'Details',
 		btnOk: 'OK',
-		bntHow: 'How to use',
+		btnHow: 'How to use',
 		manualGuide: {
 			step1_title: '1. Import an already saved battle simulator',
 			step1_desc: 'Make sure to click the SECOND link to copy the URL!',
