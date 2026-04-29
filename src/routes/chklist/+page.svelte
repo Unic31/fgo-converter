@@ -10,6 +10,7 @@
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	let captureArea;
 	let isLoading = $state(false);
+	let isLimitNp = $state(false);
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
 	let isManual = $state(false);
@@ -224,9 +225,17 @@
 		let newState = { ...currentState };
 
 		if (action === 'npLv') {
-			newState.npLv = currentState.npLv >= 6 ? 0 : currentState.npLv + 1;
+			if (isLimitNp) {
+				newState.npLv = currentState.npLv + 1;
+			} else {
+				newState.npLv = currentState.npLv >= 5 ? 0 : currentState.npLv + 1;
+			}
 		} else if (action === 'decreaseNpLv') {
-			newState.npLv = currentState.npLv <= 0 ? 6 : currentState.npLv - 1;
+			if (isLimitNp) {
+				newState.npLv = currentState.npLv <= 0 ? 0 : currentState.npLv - 1;
+			} else {
+				newState.npLv = currentState.npLv <= 0 ? 5 : currentState.npLv - 1;
+			}
 		} else {
 			newState[action] = !currentState[action];
 			if (currentState.npLv === 0) {
@@ -251,7 +260,8 @@
 				filterMode,
 				iconSize,
 				leftClickMode,
-				rightClickMode
+				rightClickMode,
+				isLimitNp
 			};
 			localStorage.setItem('svt_checklist_settings', JSON.stringify(settingsToSave));
 		}
@@ -282,6 +292,7 @@
 				if (parsedSettings.iconSize) iconSize = parsedSettings.iconSize;
 				if (parsedSettings.leftClickMode) leftClickMode = parsedSettings.leftClickMode;
 				if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
+				if (parsedSettings.isLimitNp !== undefined) isLimitNp = parsedSettings.isLimitNp;
 			}
 			isSettingsLoaded = true;
 		}
@@ -291,7 +302,7 @@
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="mx-auto mb-20 max-w-5xl">
+	<div class="mx-auto max-w-5xl">
 		<div
 			class="flex flex-col items-center space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
@@ -415,7 +426,20 @@
 						<option value="grand">관위</option>
 					</select>
 				</label>
-
+				<label class="flex items-center">
+					<span
+						class="flex items-center justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+					>
+						보구 상한
+					</span>
+					<select
+						bind:value={isLimitNp}
+						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+					>
+						<option value={false}>5레벨</option>
+						<option value={true}>무제한</option>
+					</select>
+				</label>
 				<button
 					type="button"
 					class="cursor-pointer rounded-lg bg-green-600 px-4 py-2 font-bold text-white transition-colors hover:bg-green-700"
@@ -525,7 +549,7 @@
 														x="50%"
 														y="85%"
 														text-anchor="middle"
-														fill={svtStates.get(id).npLv === 6 ? '#ef4444' : 'white'}
+														fill={svtStates.get(id).npLv >= 6 ? '#ef4444' : 'white'}
 														stroke="black"
 														stroke-width="5"
 														paint-order="stroke fill"
@@ -544,9 +568,15 @@
 						</div>
 					{/if}
 				{/each}
-				<div
+				<!-- <div
 					class="absolute right-3 bottom-2 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
+					<div>Total NP Lv : {stats.totalNpLv}</div>
+					<div>Ownership Rate : {stats.ownedRatio}%</div>
+					<div>NP5 Rate : {stats.np5Ratio}%</div>
+					<div>unic31.github.io/fgo-converter</div>
+				</div> -->
+				<div class="mt-6 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors dark:text-gray-100 md:absolute md:right-3 md:bottom-2 md:mt-0">
 					<div>Total NP Lv : {stats.totalNpLv}</div>
 					<div>Ownership Rate : {stats.ownedRatio}%</div>
 					<div>NP5 Rate : {stats.np5Ratio}%</div>

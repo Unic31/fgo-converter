@@ -525,7 +525,7 @@
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="mx-auto mb-20 max-w-5xl">
+	<div class="mx-auto max-w-5xl">
 		<div
 			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
