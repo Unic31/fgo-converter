@@ -147,9 +147,4 @@
 	</div>
 </aside>
 {@render children()}
-<div
-	class="fixed bottom-4 left-4 z-50 h-20 w-20 transition-transform hover:scale-125 active:scale-95"
-	onclick={() => globalState.toggleSidebar()}
->
-	<img src="{base}/images/nunnos.png" alt="nunnos" />
-</div>
+

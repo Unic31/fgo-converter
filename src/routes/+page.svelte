@@ -533,6 +533,12 @@
 				<h1
 					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
+					<div
+						class="h-20 w-20 transition-transform hover:scale-105 active:scale-95"
+						onclick={() => globalState.toggleSidebar()}
+					>
+						<img src="{base}/images/nunnos.png" alt="nunnos" />
+					</div>
 					<span class="leading-none">FGO Converter</span>
 				</h1>
 

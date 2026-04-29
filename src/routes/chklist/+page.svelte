@@ -256,7 +256,7 @@
 <div
 	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
 >
-	<div class="mx-auto mb-20">
+	<div class="mx-auto mb-20 max-w-5xl">
 		<div
 			class="flex flex-col items-center space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 		>
@@ -264,6 +264,12 @@
 				<h1
 					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
+					<div
+						class="h-20 w-20 transition-transform hover:scale-105 active:scale-95"
+						onclick={() => globalState.toggleSidebar()}
+					>
+						<img src="{base}/images/nunnos.png" alt="nunnos" />
+					</div>
 					<span class="leading-none">SVT CheckList</span>
 				</h1>
 
@@ -506,7 +512,7 @@
 					{/if}
 				{/each}
 				<div
-					class="absolute right-3 bottom-2 font-bold text-xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+					class="absolute right-3 bottom-2 text-xl font-bold text-gray-900 transition-colors dark:text-gray-100"
 				>
 					https://unic31.github.io/fgo-converter/chklist
 				</div>
