@@ -9,7 +9,7 @@
 	import { toPng } from 'html-to-image';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	let captureArea; // 캡처할 HTML 영역을 연결할 변수
-	let isExportModalOpen = $state(true);
+	let isExportModalOpen = $state(false);
 	let previewImageUrl = $state('');
 	let isCapturing = $state(false); // 로딩(스피너) 상태
 	let isExportMode = $state(false);
