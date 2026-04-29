@@ -399,14 +399,14 @@
 					class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
 					onclick={() => saveAsImage('single')}
 				>
-					1줄로 저장
+					한줄로 저장
 				</button>
 
 				<button
 					class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
 					onclick={() => saveAsImage('double')}
 				>
-					2줄로 저장
+					두줄로 저장
 				</button>
 			</div>
 
