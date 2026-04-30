@@ -299,316 +299,293 @@
 	});
 </script>
 
-<div
-	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
->
-	<div class="mx-auto max-w-5xl">
-		<div
-			class="flex flex-col items-center space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+<div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
+	<h1
+		class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+	>
+		<span class="leading-none">SVT CheckList</span>
+	</h1>
+
+	<div
+		class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+	>
+		<span>{t.desc2}</span>
+		<button
+			class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+			onclick={() => (isManual = !isManual)}
 		>
-			<div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
-				<h1
-					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
-				>
-					<div
-						class="h-20 w-20 transition-transform hover:scale-105 active:scale-95"
-						onclick={() => globalState.toggleSidebar()}
-					>
-						<img src="{base}/images/nunnos.png" alt="nunnos" />
-					</div>
-					<span class="leading-none">SVT CheckList</span>
-				</h1>
-
-				<div
-					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
-				>
-					<span>{t.desc2}</span>
-					<button
-						class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-						onclick={() => (isManual = !isManual)}
-					>
-						{t.btnDesc}
-					</button>
-				</div>
-
-				<div
-					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
-					onclick={() => globalState.toggleDarkMode()}
-				>
-					<img
-						src="{base}/images/bansi1_no_bg.png"
-						alt="Bansi Light Mode"
-						class="block h-full w-full object-contain dark:hidden"
-					/>
-
-					<img
-						src="{base}/images/bansi3_no_bg.png"
-						alt="Bansi Dark Mode"
-						class="hidden h-full w-full object-contain dark:block"
-					/>
-				</div>
-			</div>
-			<div
-				class="flex w-full flex-wrap items-center gap-5 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
-			>
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						선택
-					</span>
-					<select
-						bind:value={currentServer}
-						class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="KR">KR</option>
-						<option value="JP">JP</option>
-						<option value="svt5">5성 선택권</option>
-					</select>
-				</label>
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						출력
-					</span>
-					<select
-						bind:value={filterMode}
-						class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="all">전체</option>
-						<option value="owned">보유</option>
-						<option value="unowned">미보유</option>
-					</select>
-				</label>
-				<label class="flex">
-					<span
-						class="flex justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						크기
-					</span>
-					<select
-						bind:value={iconSize}
-						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="s">S</option>
-						<option value="m">M</option>
-						<option value="l">L</option>
-					</select>
-				</label>
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						좌클릭
-					</span>
-					<select
-						bind:value={leftClickMode}
-						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="click">구역</option>
-						<option value="grail">성배</option>
-						<option value="grand">관위</option>
-					</select>
-				</label>
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						우클릭
-					</span>
-					<select
-						bind:value={rightClickMode}
-						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value="decrease">감소</option>
-						<option value="grail">성배</option>
-						<option value="grand">관위</option>
-					</select>
-				</label>
-				<label class="flex">
-					<span
-						class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-					>
-						보구 상한
-					</span>
-					<select
-						bind:value={isLimitNp}
-						class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-					>
-						<option value={false}>5레벨</option>
-						<option value={true}>무제한</option>
-					</select>
-				</label>
-				<button
-					type="button"
-					class="cursor-pointer rounded-lg bg-green-600 px-4 py-2 font-bold text-white transition-colors hover:bg-green-700"
-					onclick={importCSVBtn}
-				>
-					데이터 불러오기
-				</button>
-				<input
-					bind:this={fileInput}
-					type="file"
-					class="hidden"
-					accept=".csv"
-					onchange={importCSV}
-				/>
-				<button
-					class="cursor-pointer rounded-lg bg-gray-200 px-4 py-2 font-bold text-gray-700 transition-transform hover:bg-gray-300 active:scale-95 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-					onclick={resetData}
-				>
-					데이터 초기화
-				</button>
-				<button
-					class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-					onclick={() => saveAsImage('single')}
-				>
-					한줄로 저장
-				</button>
-
-				<button
-					class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-					onclick={() => saveAsImage('double')}
-				>
-					두줄로 저장
-				</button>
-			</div>
-
-			<div
-				bind:this={captureArea}
-				class="relative space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
-				0
-					? ''
-					: 'mx-auto'}"
-				style={exportTargetWidth > 0
-					? `width: ${exportTargetWidth}px; min-width: ${exportTargetWidth}px; max-width: none; margin: 0 !important;`
-					: 'width: 100%;'}
-			>
-				{#each Object.entries(filteredData) as [classFolder, ids] (classFolder)}
-					{#if ids.length > 0}
-						<div class="flex flex-wrap gap-2">
-							<img
-								src="{base}/images/class/{classFolder}.png"
-								alt={formatClassName(classFolder)}
-								class="{iconClass} object-contain transition-all duration-300"
-							/>
-
-							{#each ids as id (id)}
-								<div
-									class="relative {iconClass} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
-									oncontextmenu={(e) => handleRightClick(e, id)}
-								>
-									<img
-										src="{base}/images/svt/{classFolder}/{id}.png"
-										alt="{formatClassName(classFolder)} {id}"
-										onclick={(e) => handleLeftClick(e, id, 'npLv')}
-										class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(
-											id
-										)?.npLv >= 1
-											? 'brightness-100'
-											: 'brightness-[0.9] grayscale'}"
-									/>
-
-									{#if svtStates.get(id)?.npLv >= 1}
-										<div
-											class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"
-										></div>
-
-										<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
-											<button
-												class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
-												onclick={(e) => handleLeftClick(e, id, 'isGrail')}
-											>
-												{#if svtStates.get(id)?.isGrail}
-													<img
-														src="{base}/images/grail12.png"
-														alt="grail"
-														class="w-full object-contain drop-shadow-md"
-													/>
-												{/if}
-											</button>
-											<button
-												class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
-												onclick={(e) => handleLeftClick(e, id, 'isGrand')}
-											>
-												{#if svtStates.get(id)?.isGrand}
-													<img
-														src="{base}/images/grand5.png"
-														alt="grand"
-														class="w-full object-contain drop-shadow-md"
-													/>
-												{/if}
-											</button>
-											<button
-												class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
-												onclick={(e) => handleLeftClick(e, id, 'npLv')}
-											>
-												<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
-													<text
-														x="50%"
-														y="85%"
-														text-anchor="middle"
-														fill={svtStates.get(id).npLv >= 6 ? '#ef4444' : 'white'}
-														stroke="black"
-														stroke-width="5"
-														paint-order="stroke fill"
-														font-family="sans-serif"
-														font-weight="900"
-														font-size="40"
-													>
-														{svtStates.get(id).npLv}
-													</text>
-												</svg>
-											</button>
-										</div>
-									{/if}
-								</div>
-							{/each}
-						</div>
-					{/if}
-				{/each}
-				<div
-					class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
-    				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
-				>
-					<div>Total NP Lv : {stats.totalNpLv}</div>
-					<div>Ownership Rate : {stats.ownedRatio}%</div>
-					<div>NP5 Rate : {stats.np5Ratio}%</div>
-					<div>unic31.github.io/fgo-converter</div>
-				</div>
-			</div>
-		</div>
-		<div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
-			<a
-				href="https://leaflu0315.github.io/fgo/"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-			>
-				Servant Checklist
-			</a>
-			를 제작하신
-			<a
-				href="https://github.com/mgneko/mgneko.github.io"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-			>
-				mgneko
-			</a>
-			와
-			<a
-				href="https://github.com/LeafLu0315/fgo"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-			>
-				LeafLu
-			</a>
-			의 아이디어를 빌려 제작되었습니다.
-		</div>
+			{t.btnDesc}
+		</button>
 	</div>
+
+	<div
+		class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
+		onclick={() => globalState.toggleDarkMode()}
+	>
+		<img
+			src="{base}/images/bansi1_no_bg.png"
+			alt="Bansi Light Mode"
+			class="block h-full w-full object-contain dark:hidden"
+		/>
+
+		<img
+			src="{base}/images/bansi3_no_bg.png"
+			alt="Bansi Dark Mode"
+			class="hidden h-full w-full object-contain dark:block"
+		/>
+	</div>
+</div>
+<div
+	class="flex w-full flex-wrap items-center gap-5 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+>
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			선택
+		</span>
+		<select
+			bind:value={currentServer}
+			class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value="KR">KR</option>
+			<option value="JP">JP</option>
+			<option value="svt5">5성 선택권</option>
+		</select>
+	</label>
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			출력
+		</span>
+		<select
+			bind:value={filterMode}
+			class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value="all">전체</option>
+			<option value="owned">보유</option>
+			<option value="unowned">미보유</option>
+		</select>
+	</label>
+	<label class="flex">
+		<span
+			class="flex justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			크기
+		</span>
+		<select
+			bind:value={iconSize}
+			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value="s">S</option>
+			<option value="m">M</option>
+			<option value="l">L</option>
+		</select>
+	</label>
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			좌클릭
+		</span>
+		<select
+			bind:value={leftClickMode}
+			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value="click">구역</option>
+			<option value="grail">성배</option>
+			<option value="grand">관위</option>
+		</select>
+	</label>
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			우클릭
+		</span>
+		<select
+			bind:value={rightClickMode}
+			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value="decrease">감소</option>
+			<option value="grail">성배</option>
+			<option value="grand">관위</option>
+		</select>
+	</label>
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			보구 상한
+		</span>
+		<select
+			bind:value={isLimitNp}
+			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			<option value={false}>5레벨</option>
+			<option value={true}>무제한</option>
+		</select>
+	</label>
+	<button
+		type="button"
+		class="cursor-pointer rounded-lg bg-green-600 px-4 py-2 font-bold text-white transition-colors hover:bg-green-700"
+		onclick={importCSVBtn}
+	>
+		데이터 불러오기
+	</button>
+	<input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
+	<button
+		class="cursor-pointer rounded-lg bg-gray-200 px-4 py-2 font-bold text-gray-700 transition-transform hover:bg-gray-300 active:scale-95 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+		onclick={resetData}
+	>
+		데이터 초기화
+	</button>
+	<button
+		class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+		onclick={() => saveAsImage('single')}
+	>
+		한줄로 저장
+	</button>
+
+	<button
+		class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
+		onclick={() => saveAsImage('double')}
+	>
+		두줄로 저장
+	</button>
+</div>
+
+<div
+	bind:this={captureArea}
+	class="relative space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
+	0
+		? ''
+		: 'mx-auto'}"
+	style={exportTargetWidth > 0
+		? `width: ${exportTargetWidth}px; min-width: ${exportTargetWidth}px; max-width: none; margin: 0 !important;`
+		: 'width: 100%;'}
+>
+	{#each Object.entries(filteredData) as [classFolder, ids] (classFolder)}
+		{#if ids.length > 0}
+			<div class="flex flex-wrap gap-2">
+				<img
+					src="{base}/images/class/{classFolder}.png"
+					alt={formatClassName(classFolder)}
+					class="{iconClass} object-contain transition-all duration-300"
+				/>
+
+				{#each ids as id (id)}
+					<div
+						class="relative {iconClass} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
+						oncontextmenu={(e) => handleRightClick(e, id)}
+					>
+						<img
+							src="{base}/images/svt/{classFolder}/{id}.png"
+							alt="{formatClassName(classFolder)} {id}"
+							onclick={(e) => handleLeftClick(e, id, 'npLv')}
+							class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(id)
+								?.npLv >= 1
+								? 'brightness-100'
+								: 'brightness-[0.9] grayscale'}"
+						/>
+
+						{#if svtStates.get(id)?.npLv >= 1}
+							<div
+								class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"
+							></div>
+
+							<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
+								<button
+									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+									onclick={(e) => handleLeftClick(e, id, 'isGrail')}
+								>
+									{#if svtStates.get(id)?.isGrail}
+										<img
+											src="{base}/images/grail12.png"
+											alt="grail"
+											class="w-full object-contain drop-shadow-md"
+										/>
+									{/if}
+								</button>
+								<button
+									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+									onclick={(e) => handleLeftClick(e, id, 'isGrand')}
+								>
+									{#if svtStates.get(id)?.isGrand}
+										<img
+											src="{base}/images/grand5.png"
+											alt="grand"
+											class="w-full object-contain drop-shadow-md"
+										/>
+									{/if}
+								</button>
+								<button
+									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+									onclick={(e) => handleLeftClick(e, id, 'npLv')}
+								>
+									<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
+										<text
+											x="50%"
+											y="85%"
+											text-anchor="middle"
+											fill={svtStates.get(id).npLv >= 6 ? '#ef4444' : 'white'}
+											stroke="black"
+											stroke-width="5"
+											paint-order="stroke fill"
+											font-family="sans-serif"
+											font-weight="900"
+											font-size="40"
+										>
+											{svtStates.get(id).npLv}
+										</text>
+									</svg>
+								</button>
+							</div>
+						{/if}
+					</div>
+				{/each}
+			</div>
+		{/if}
+	{/each}
+	<div
+		class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
+    				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
+	>
+		<div>Total NP Lv : {stats.totalNpLv}</div>
+		<div>Ownership Rate : {stats.ownedRatio}%</div>
+		<div>NP5 Rate : {stats.np5Ratio}%</div>
+		<div>unic31.github.io/fgo-converter</div>
+	</div>
+</div>
+<div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
+	<a
+		href="https://leaflu0315.github.io/fgo/"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+	>
+		Servant Checklist
+	</a>
+	를 제작하신
+	<a
+		href="https://github.com/mgneko/mgneko.github.io"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+	>
+		mgneko
+	</a>
+	와
+	<a
+		href="https://github.com/LeafLu0315/fgo"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+	>
+		LeafLu
+	</a>
+	의 아이디어를 빌려 제작되었습니다.
 </div>
 {#if isManual}
 	<div

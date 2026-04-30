@@ -515,278 +515,262 @@
 	});
 </script>
 
-<div
-	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
->
-	<div class="mx-auto max-w-5xl">
-		<div
-			class="flex flex-col space-y-4 rounded-2xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+<div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
+	<h1
+		class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
+	>
+		<span class="leading-none">FGO Converter</span>
+	</h1>
+
+	<div
+		class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
+	>
+		<span>{t.desc}</span>
+		<button
+			class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+			onclick={() => (isManual = !isManual)}
 		>
-			<div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
-				<h1
-					class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
-				>
-					<div
-						class="h-20 w-20 transition-transform hover:scale-105 active:scale-95"
-						onclick={() => globalState.toggleSidebar()}
-					>
-						<img src="{base}/images/nunnos.png" alt="nunnos" />
-					</div>
-					<span class="leading-none">FGO Converter</span>
-				</h1>
+			{t.btnDesc}
+		</button>
+	</div>
 
-				<div
-					class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
-				>
-					<span>{t.desc}</span>
-					<button
-						class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-						onclick={() => (isManual = !isManual)}
-					>
-						{t.btnDesc}
-					</button>
-				</div>
+	<div
+		class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
+		onclick={() => globalState.toggleDarkMode()}
+	>
+		<img
+			src="{base}/images/bansi1_no_bg.png"
+			alt="Bansi Light Mode"
+			class="block h-full w-full object-contain dark:hidden"
+		/>
 
-				<div
-					class="col-start-2 row-start-1 max-h-30 min-h-20 max-w-30 min-w-20 cursor-pointer self-end transition-transform hover:scale-105 active:scale-90 md:row-span-2 md:self-end"
-					onclick={() => globalState.toggleDarkMode()}
-				>
-					<img
-						src="{base}/images/bansi1_no_bg.png"
-						alt="Bansi Light Mode"
-						class="block h-full w-full object-contain dark:hidden"
-					/>
+		<img
+			src="{base}/images/bansi3_no_bg.png"
+			alt="Bansi Dark Mode"
+			class="hidden h-full w-full object-contain dark:block"
+		/>
+	</div>
+</div>
 
-					<img
-						src="{base}/images/bansi3_no_bg.png"
-						alt="Bansi Dark Mode"
-						class="hidden h-full w-full object-contain dark:block"
-					/>
-				</div>
-			</div>
+<input
+	type="text"
+	bind:value={url}
+	placeholder="https://link.chaldea.center/laplace/share?data=..."
+	class="w-full rounded-lg border border-gray-300 p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+/>
+<button
+	onclick={fncConvertBtn}
+	class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
+>
+	{isLoading ? t.loading1 : t.loading2}
+</button>
 
-			<input
-				type="text"
-				bind:value={url}
-				placeholder="https://link.chaldea.center/laplace/share?data=..."
-				class="w-full rounded-lg border border-gray-300 p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+{#if isError}
+	<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+		{t.errorText}
+	</div>
+{/if}
+<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
+	<div
+		class="mb-2 flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+	>
+		{#if svtData.length === 0 && !mcData}
+			<img
+				src="{base}/images/bansi_mystic_code.png"
+				alt="bansi_mystic_code"
+				class="h-full w-full rounded-lg object-cover"
 			/>
-			<button
-				onclick={fncConvertBtn}
-				class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"
+		{:else if svtData.length > 0 && !mcData}
+			<div
+				class="mb-2 flex h-full w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
 			>
-				{isLoading ? t.loading1 : t.loading2}
-			</button>
+				Empty
+			</div>
+		{:else if svtData.length > 0 && mcData}
+			<img
+				src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
+				alt={mcData?.name || ''}
+				class="h-full w-full rounded-lg object-cover"
+				onclick={() => console.log('mcData :', $state.snapshot(mcData))}
+			/>
+		{/if}
+	</div>
 
-			{#if isError}
-				<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-					{t.errorText}
-				</div>
-			{/if}
-			<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
-				<div
-					class="mb-2 flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-				>
-					{#if svtData.length === 0 && !mcData}
+	{#if svtData.length === 0}
+		{#each emptySvtList as svtName, idx (idx)}
+			<div
+				class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+			>
+				<img
+					src="{base}/images/{svtName}.png"
+					alt={svtName}
+					class="h-full w-full rounded-lg object-cover"
+				/>
+			</div>
+		{/each}
+	{:else}
+		{#each svtData as item, idx (idx)}
+			<div
+				class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
+			>
+				{#if item && item.details}
+					<div
+						class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
+					>
 						<img
-							src="{base}/images/bansi_mystic_code.png"
-							alt="bansi_mystic_code"
-							class="h-full w-full rounded-lg object-cover"
+							src={item.svtImg || `${base}/images/nunnos.png`}
+							alt={item.details.name}
+							onclick={() => console.log('svtData :', $state.snapshot(item))}
+							class="h-full w-full object-cover transition-opacity hover:opacity-80"
 						/>
-					{:else if svtData.length > 0 && !mcData}
-						<div
-							class="mb-2 flex h-full w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
-						>
-							Empty
-						</div>
-					{:else if svtData.length > 0 && mcData}
-						<img
-							src={mcData?.extraAssets?.item?.female || mcData?.extraAssets?.item?.male}
-							alt={mcData?.name || ''}
-							class="h-full w-full rounded-lg object-cover"
-							onclick={() => console.log('mcData :', $state.snapshot(mcData))}
-						/>
-					{/if}
-				</div>
-
-				{#if svtData.length === 0}
-					{#each emptySvtList as svtName, idx (idx)}
-						<div
-							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-						>
+					</div>
+					<div class="relative h-10 w-full shrink-0">
+						{#if item.ceDetails}
 							<img
-								src="{base}/images/{svtName}.png"
-								alt={svtName}
-								class="h-full w-full rounded-lg object-cover"
+								src={item.ceDetails.extraAssets?.equipFace?.equip?.[item.ceDetails.id]}
+								alt={item.ceDetails.name}
+								class="h-full w-full rounded object-cover"
 							/>
-						</div>
-					{/each}
-				{:else}
-					{#each svtData as item, idx (idx)}
-						<div
-							class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-						>
-							{#if item && item.details}
+							{#if item.equip1?.limitBreak}
 								<div
-									class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
+									class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white dark:border-gray-700"
 								>
-									<img
-										src={item.svtImg || `${base}/images/nunnos.png`}
-										alt={item.details.name}
-										onclick={() => console.log('svtData :', $state.snapshot(item))}
-										class="h-full w-full object-cover transition-opacity hover:opacity-80"
-									/>
+									★
 								</div>
-								<div class="relative h-10 w-full shrink-0">
-									{#if item.ceDetails}
-										<img
-											src={item.ceDetails.extraAssets?.equipFace?.equip?.[item.ceDetails.id]}
-											alt={item.ceDetails.name}
-											class="h-full w-full rounded object-cover"
-										/>
-										{#if item.equip1?.limitBreak}
-											<div
-												class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white dark:border-gray-700"
-											>
-												★
-											</div>
-										{/if}
-									{:else}
-										<div class="h-full w-full rounded bg-gray-100 dark:bg-gray-600"></div>
-									{/if}
-								</div>
-							{:else}
-								<div
-									class="mb-2 flex h-26 w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
-								>
-									Empty
-								</div>
-								<div class="h-10 w-full shrink-0 rounded bg-gray-100 dark:bg-gray-600"></div>
 							{/if}
-						</div>
-					{/each}
+						{:else}
+							<div class="h-full w-full rounded bg-gray-100 dark:bg-gray-600"></div>
+						{/if}
+					</div>
+				{:else}
+					<div
+						class="mb-2 flex h-26 w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
+					>
+						Empty
+					</div>
+					<div class="h-10 w-full shrink-0 rounded bg-gray-100 dark:bg-gray-600"></div>
 				{/if}
 			</div>
+		{/each}
+	{/if}
+</div>
 
-			<div
-				class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
-			>
-				<div class="flex items-end justify-between">
-					<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-						{t.commandText}
-					</h2>
-				</div>
-				<div
-					class="mb-2 flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-					onclick={() => {
-						navigator.clipboard.writeText(fgaCommand);
-						alert(t.clipboardAlert);
-					}}
+<div
+	class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+>
+	<div class="flex items-end justify-between">
+		<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+			{t.commandText}
+		</h2>
+	</div>
+	<div
+		class="mb-2 flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+		onclick={() => {
+			navigator.clipboard.writeText(fgaCommand);
+			alert(t.clipboardAlert);
+		}}
+	>
+		<div class="flex-1">
+			{fgaCommand}
+		</div>
+		<button
+			class="text-md ms-3 inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+		>
+			{t.copy}
+		</button>
+	</div>
+</div>
+{#if dev}
+	<div
+		class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+	>
+		<!-- 개발 시작 -->
+		<div class="flex items-end justify-between">
+			<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+				커맨드를 기반으로 작성된 시뮬레이터 화면
+			</h2>
+		</div>
+		<div
+			class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+		></div>
+		<input
+			type="text"
+			placeholder="비교용"
+			bind:value={testCommand}
+			class="w-full rounded-lg bg-gray-900 p-3 break-all {fgaCommand === testCommand
+				? 'text-green-400'
+				: 'text-red-400'}"
+		/>
+		<div class="relative rounded-lg bg-gray-900 p-4">
+			<div class="mb-2 flex items-center justify-between">
+				<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
+				<button
+					onclick={copyToClipboard(decodedData)}
+					class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
 				>
-					<div class="flex-1">
-						{fgaCommand}
-					</div>
-					<button
-						class="text-md ms-3 inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-					>
-						{t.copy}
-					</button>
-				</div>
+					복사하기 📑
+				</button>
 			</div>
-			{#if dev}
-				<div
-					class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
+
+			<div class="max-h-50 overflow-auto text-xs text-green-400">
+				<pre>{JSON.stringify(decodedData, null, 2)}</pre>
+			</div>
+		</div>
+		<div class="relative rounded-lg bg-gray-900 p-4">
+			<div class="mb-2 flex items-center justify-between">
+				<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
+				<button
+					onclick={copyToClipboard(decodedData.delegate)}
+					class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
 				>
-					<!-- 개발 시작 -->
-					<div class="flex items-end justify-between">
-						<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-							커맨드를 기반으로 작성된 시뮬레이터 화면
-						</h2>
-					</div>
-					<div
-						class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-					></div>
-					<input
-						type="text"
-						placeholder="비교용"
-						bind:value={testCommand}
-						class="w-full rounded-lg bg-gray-900 p-3 break-all {fgaCommand === testCommand
-							? 'text-green-400'
-							: 'text-red-400'}"
-					/>
-					<div class="relative rounded-lg bg-gray-900 p-4">
-						<div class="mb-2 flex items-center justify-between">
-							<h3 class="text-sm font-bold text-gray-400">압축 해제된 전체 JSON 데이터</h3>
-							<button
-								onclick={copyToClipboard(decodedData)}
-								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-							>
-								복사하기 📑
-							</button>
-						</div>
+					복사하기 📑
+				</button>
+			</div>
 
-						<div class="max-h-50 overflow-auto text-xs text-green-400">
-							<pre>{JSON.stringify(decodedData, null, 2)}</pre>
-						</div>
-					</div>
-					<div class="relative rounded-lg bg-gray-900 p-4">
-						<div class="mb-2 flex items-center justify-between">
-							<h3 class="text-sm font-bold text-gray-400">압축 해제된 DELEGATE JSON 데이터</h3>
-							<button
-								onclick={copyToClipboard(decodedData.delegate)}
-								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-							>
-								복사하기 📑
-							</button>
-						</div>
+			<div class="max-h-50 overflow-auto text-xs text-green-400">
+				<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
+			</div>
+		</div>
+		<div class="relative rounded-lg bg-gray-900 p-4">
+			<div class="mb-2 flex items-center justify-between">
+				<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
+				<button
+					onclick={copyToClipboard(decodedData.actions)}
+					class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
+				>
+					복사하기 📑
+				</button>
+			</div>
 
-						<div class="max-h-50 overflow-auto text-xs text-green-400">
-							<pre>{JSON.stringify(decodedData?.delegate, null, 2)}</pre>
-						</div>
-					</div>
-					<div class="relative rounded-lg bg-gray-900 p-4">
-						<div class="mb-2 flex items-center justify-between">
-							<h3 class="text-sm font-bold text-gray-400">압축 해제된 ACTIONS JSON 데이터</h3>
-							<button
-								onclick={copyToClipboard(decodedData.actions)}
-								class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-200 transition-colors hover:bg-gray-600"
-							>
-								복사하기 📑
-							</button>
-						</div>
-
-						<div class="max-h-50 overflow-auto text-xs text-blue-400">
-							<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
-						</div>
-					</div>
-				</div>
-			{/if}
-			<div class="text-red-600 transition-colors dark:text-red-400">
-				{t.warningTitle}
-				<ul class="list-disc pl-5">
-					{#each t.warnings as warning, idx (idx)}
-						<li>{warning}</li>
-					{/each}
-					<li>
-						<div>{t.unsupportedTitle}</div>
-						{#each t.unsupportedList as item, idx (idx)}
-							<div>{item}</div>
-						{/each}
-					</li>
-
-					<li>
-						<span>{t.orderChangeWarning}</span>
-						<button
-							class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-							onclick={() => (isModal = true)}
-						>
-							{t.detailsBtn}
-						</button>
-					</li>
-				</ul>
+			<div class="max-h-50 overflow-auto text-xs text-blue-400">
+				<pre>{JSON.stringify(decodedData?.actions, null, 2)}</pre>
 			</div>
 		</div>
 	</div>
+{/if}
+<div class="text-red-600 transition-colors dark:text-red-400">
+	{t.warningTitle}
+	<ul class="list-disc pl-5">
+		{#each t.warnings as warning, idx (idx)}
+			<li>{warning}</li>
+		{/each}
+		<li>
+			<div>{t.unsupportedTitle}</div>
+			{#each t.unsupportedList as item, idx (idx)}
+				<div>{item}</div>
+			{/each}
+		</li>
+
+		<li>
+			<span>{t.orderChangeWarning}</span>
+			<button
+				class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+				onclick={() => (isModal = true)}
+			>
+				{t.detailsBtn}
+			</button>
+		</li>
+	</ul>
 </div>
 {#if isModal}
 	<div

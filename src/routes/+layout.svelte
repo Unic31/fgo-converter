@@ -1,14 +1,28 @@
 <script>
 	import './layout.css';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 	import { base, resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { globalState } from '$lib/globalState.svelte.js';
 	import { afterNavigate } from '$app/navigation';
 	let { children } = $props();
-	
+
 	afterNavigate(() => {
 		if (globalState.isSideBar) {
 			globalState.toggleSidebar();
+		}
+	});
+
+	$effect(() => {
+		if (browser) {
+			if (globalState.isSideBar) {
+				document.body.style.overflow = 'hidden';
+				document.documentElement.style.overflow = 'hidden';
+			} else {
+				document.body.style.overflow = '';
+				document.documentElement.style.overflow = '';
+			}
 		}
 	});
 
@@ -146,5 +160,47 @@
 		</ul>
 	</div>
 </aside>
-{@render children()}
 
+<!-- 본문 -->
+<div
+	class="min-h-screen bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
+>
+	<div class="mx-auto max-w-5xl">
+		<nav class="flex w-fit">
+			<a
+				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
+        			{globalState.isSideBar
+					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
+					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
+				onclick={() => globalState.toggleSidebar()}
+			>
+				<img src="{base}/images/nunnos.png" class="h-10 w-10" alt="nunnos" />
+			</a>
+			<a
+				href={resolve('/')}
+				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
+        			{$page.url.pathname === resolve('/')
+					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
+					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
+			>
+				Converter
+			</a>
+			<a
+				href={resolve('/chklist')}
+				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
+        			{$page.url.pathname === resolve('/chklist')
+					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
+					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
+			>
+				CheckList
+			</a>
+		</nav>
+		<main>
+			<div
+				class="flex flex-col space-y-4 rounded-tr-xl rounded-b-xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+			>
+				{@render children()}
+			</div>
+		</main>
+	</div>
+</div>
