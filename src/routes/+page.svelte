@@ -1,5 +1,5 @@
 <script>
-	import { dev } from '$app/environment';
+	import { browser, dev } from '$app/environment';
 	import pako from 'pako';
 	import { onMount } from 'svelte';
 	import { globalState } from '$lib/globalState.svelte.js';
@@ -26,21 +26,14 @@
 	];
 	const masterSkill = ['j', 'k', 'l'];
 	$effect(() => {
-		if (isModal) {
-			document.body.style.overflow = 'hidden';
-			document.documentElement.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
-			document.documentElement.style.overflow = '';
-		}
-	});
-	$effect(() => {
-		if (isManual) {
-			document.body.style.overflow = 'hidden';
-			document.documentElement.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = '';
-			document.documentElement.style.overflow = '';
+		if (browser) {
+			if (isManual || isModal) {
+				document.body.style.overflow = 'hidden';
+				document.documentElement.style.overflow = 'hidden';
+			} else {
+				document.body.style.overflow = '';
+				document.documentElement.style.overflow = '';
+			}
 		}
 	});
 
