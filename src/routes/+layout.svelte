@@ -168,18 +168,21 @@
 	<div class="mx-auto max-w-5xl">
 		<nav class="flex w-fit">
 			<a
-				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
-        			{globalState.isSideBar
+				href={resolve('/')}
+				class="rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+        			{$page.url.pathname === resolve('/')
 					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
-				onclick={() => globalState.toggleSidebar()}
 			>
-				<img src="{base}/images/nunnos.png" class="h-10 w-10" alt="nunnos" />
+				<div class="flex gap-3">
+					<img src="{base}/images/nunnos.png" class="h-10 w-10" alt="nunnos" />
+					<div>Home</div>
+				</div>
 			</a>
 			<a
-				href={resolve('/')}
-				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
-        			{$page.url.pathname === resolve('/')
+				href={resolve('/converter')}
+				class="rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+        			{$page.url.pathname === resolve('/converter')
 					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
 			>
@@ -187,7 +190,7 @@
 			</a>
 			<a
 				href={resolve('/chklist')}
-				class="rounded-t-xl px-4 py-2 text-lg font-bold transition-all duration-300
+				class="rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
         			{$page.url.pathname === resolve('/chklist')
 					? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 					: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
