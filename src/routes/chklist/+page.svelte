@@ -62,12 +62,10 @@
 				}
 			}
 		}
-
 		const ownedRatio =
 			totalAvailable > 0 ? ((ownedCount / totalAvailable) * 100).toFixed(1) : '0.0';
 		const np5Ratio =
 			totalAvailable > 0 ? ((np5PlusCount / totalAvailable) * 100).toFixed(1) : '0.0';
-
 		return {
 			totalNpLv,
 			ownedCount,
@@ -568,16 +566,9 @@
 						</div>
 					{/if}
 				{/each}
-				<!-- <div
-					class="absolute right-3 bottom-2 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
-				>
-					<div>Total NP Lv : {stats.totalNpLv}</div>
-					<div>Ownership Rate : {stats.ownedRatio}%</div>
-					<div>NP5 Rate : {stats.np5Ratio}%</div>
-					<div>unic31.github.io/fgo-converter</div>
-				</div> -->
 				<div
-					class="mt-6 flex flex-col items-end text-lg font-bold text-gray-900 transition-colors md:absolute md:right-3 md:bottom-2 md:mt-0 dark:text-gray-100"
+					class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
+    				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
 				>
 					<div>Total NP Lv : {stats.totalNpLv}</div>
 					<div>Ownership Rate : {stats.ownedRatio}%</div>
