@@ -311,10 +311,10 @@
 	>
 		<span>{t.desc2}</span>
 		<button
-			class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+			class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 			onclick={() => (isManual = !isManual)}
 		>
-			{t.btnDesc}
+			{t.howtouse}
 		</button>
 	</div>
 
@@ -598,7 +598,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.btnHow}
+					{t.howtouse}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"

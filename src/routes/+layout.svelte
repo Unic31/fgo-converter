@@ -91,7 +91,7 @@
 				<div class="flex items-center justify-between">
 					<span class="dark:text-white">Display</span>
 					<button
-						class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+						class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 						onclick={() => globalState.toggleDarkMode()}
 					>
 						{globalState.isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
@@ -101,13 +101,13 @@
 				<div class="flex flex-col gap-5">
 					<a
 						href={resolve('/')}
-						class="text-md w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+						class="w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
 						FGO Converter
 					</a>
 					<a
 						href={resolve('/chklist')}
-						class="text-md w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+						class="w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
 						SVT CheckList
 					</a>
@@ -161,15 +161,13 @@
 {/if}
 
 <!-- 본문 -->
-<div
-	class="min-h-dvh bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900"
->
+<div class="min-h-dvh bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900">
 	<div class="mx-auto max-w-5xl">
 		<header>
 			<nav aria-label="main nav" class="flex w-fit max-w-full overflow-x-auto">
 				<a
 					href={resolve('/')}
-					class="shrink-0 whitespace-nowrap rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+					class="shrink-0 rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
         			{$page.url.pathname === resolve('/')
 						? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 						: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
@@ -181,7 +179,7 @@
 				</a>
 				<a
 					href={resolve('/converter')}
-					class="shrink-0 whitespace-nowrap flex items-center rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+					class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
         			{$page.url.pathname === resolve('/converter')
 						? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 						: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
@@ -190,7 +188,7 @@
 				</a>
 				<a
 					href={resolve('/chklist')}
-					class="shrink-0 whitespace-nowrap flex items-center rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+					class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
         			{$page.url.pathname === resolve('/chklist')
 						? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 						: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
@@ -200,7 +198,7 @@
 				{#if dev}
 					<button
 						onclick={() => globalState.toggleSidebar()}
-						class="shrink-0 whitespace-nowrap flex items-center rounded-t-xl px-4 py-1 text-lg font-bold transition-all duration-300
+						class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
         			{globalState.isSideBar
 							? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 							: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"

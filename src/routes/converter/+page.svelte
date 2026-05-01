@@ -506,31 +506,22 @@
 	onMount(() => {
 		if (dev) {
 			url =
-				// 'https://link.chaldea.center/laplace/share?data=GH4sIAHQQz2kA_91XUW-bMBD-L35mkk0Chby12apV6l7W7KmKKgcuwYoxFAxaFPW_784Q2q5a2q5Luk2JuNxx5-_u8_kgW5Yrc9YonbJJPBp5TJblTj3hHrttoLZssmWKLGMeR5FAc5nJGthEeAwM5JvPss7YhIkbHo7GN6EQo3CxYHceK0qrClPTArlaZXYzzaQybGKrBjyWqlouNHxqwSDGUuoajWWhjD1rlkuMMo3WHqtV3mhp4VQNTg71K9q-lZ0XYlmQOQEZmcMuNN_UViXTIgWXwqBdYDU-FaKhBY2FcErWnCvQ6VVrEfp6y-rWOr-AC8HJV-XKTouGkh1jWmul9UVKvr6I4iAQni9iHgacpEA5750uW3JCOPedO5LBpJ3ZWd0Hb9j0HlGQetmySYDQKISPOUi7Pi8adOGUUVY6RTglcVXhHp1EsVMvKd-zCuR64A2NLQUjg7eNKsWDne2i9NMY7SKQn7opy6Kys02JbLJlpbAG5rFVJQ2R1gfceQNzIR_7-4mLeRAgX8SaEyfB77Pm0AbSRJd4_IAz8e6cmcLAXsZo55-hzPeDiMhCGXcy5MHbes3n_k-9Fv0LtGENC5msm_LJiY04F881nh-6jht1YrzvuPZMuVUP1mDitUSJF7eXm4V0mWNIChpWODkJxpV7mtgrtO2u3bymVvEE1l5BqWUCXyBfQHVhUvgOdPvaxx6i5eQQsWW2S8OtinnUlILoSUX-Hj0OcNUNVDNZrQC9eD_SdzpGURFFTgTjTZtVUGcFPZaI1zs6MvvRxFHR-BHQ-Itq8_842nFrO0aX-IfuEmktDibm9T-G4eSgE1lhyAdcTtWzj7t3oaRS-G4i9f1UQLfuXIv-AeFSenW0T3PyiJS-ZgP5m9H4gdH-o5p-3ZTi4G3Fj3pS-V_fxO-00fz9N3pOwFOEm7m_a90byg8vbpLGhg4AAA%3D%3D&questId=94098810&phase=1&enemyHash=1_0634_61136bb';
-				// 'https://link.chaldea.center/laplace/share?data=GH4sIABlY0mkA_72X32_aMBDH_xc_Z5JtEkp4W9mqVepeVqY9VKgyyUEsnB9NHDSE-r_vzk7Tqt3aQUsE4rA5-3v38fmAPct1cd5qk7JpPBoFTFXVw_BMBOyuhcay6Z5pmgkF52LEA1ZlqgE2RQcoIN99U03Gpkzc8vEkul0my5iPFbsPWFlZXRYNbZDrdWZ3s0zpgk1t3ULAUt2opYGvWyhQY6VMg5NVqQt73q5WuKpojQlYo_PWKAufde_kVH_g3M_Ke6GWBZWTUKFyeFia7xqrk1mZgguhH11iNlJgIga2YDARTsEWFxpMer21KH2zZ83Wkl_EoxEnV51rOytbijXEqDbamMuUXKUcTaKIB2hjb0OOdtE5XW3JCdXcc-EYQ5H6aTfrHviBTXtBQaOrrWNs0MQYgbKbi7KlaCmerHoySFxKcchHceyGVxTteQ1q80Ab57bOHfHdtboSj8farTIv1hi_AuE0bVWVtZ3vKkTJirIAFrB1rQri1Z3LfdBDi7mQr0OLPSsUD50R4-OJObWeWOTjnrxF7ABEvpo-kI-MOI_fqCouuasmLkVnZXg8I694cFmdHlJS5jli8teSgp-EnEd4es5yb8djb-NufHZGmT3ni1NLlWza6vkdlhNsXG_UI5djKkQ-8iZ8Rz16uXex7hqdh_0fqDt_0nlJelVrDPdvBek2opcFLkrBwBqbKqmoxP4CatnXOJl0Xfzmkwg-CUyzhsqoBL5DvoT6skjhN9DHNwSBdlL9ij2zPgYHEkNoSJ13YN27J18SuOsO6rmq1-C9XKN_Mqb4y5xY4sBmNTRZSV9WhPCe7tframIANTlobnLQ3MSguT2qydOoKWuxXbCge9O3DLdJompcghXPdDP_0ne_WuNvCGUebyi6-Wsmqf8MWMyHQBFHqB1-0OIj0IuToz8ehhz0gF9DLwbtjWLQ4hUf3j9OlNu_i1geVcTBya7AwUkuSHiGcnP3t8r_XPgDgqeXKS4OAAA%3D&questId=94100130&phase=1&enemyHash=1_0685_bcb906a';
-				// 'https://link.chaldea.center/laplace/share?data=GH4sIAElZ0mkA_9WU24rbMBCG30XXKsinrO27Ju3ShVy16VUJizaexCKyrLUkQwh5947kA8kubKEsS5uEyCP-mX_82ZozaYRaOiErUhZJQgnXegrznJJnB8aS8kxEEDD_iSjRNTdAStSDgub0jZualCR6ZAmLHmOep4ssIxdKWm1Fq4wv0IhDbU-rmgtFSts5oKQShj9J-NqDQo89lwY3dSuUXbr9HrOUk5ISIxonuYXPYhYF1--491MPKvSywBtvpHgDU2pzMlbsVm0FoYU5eqgmhYQeJCmZb1bdC5DVj96i9a8zMb31uphleNOoFI2wq9b5XhGBOQopHyovjeM8zjJGcU3GNVpkbDuK1r0XRYyGH-7aaq4b-Wjdh4oSlwKNuD3etw63gm2tr4Jd6LxIGUvSEK59U8sO-HGCinu-XIaQnp3Q0fzwpiT5KkWGBCRgnNZtZzcnjbzIvhOgKkLJoePKYxnxX-jMZsHS-CWb9IZNwTKPpGCLYbnL_ggmFP2XwahWwZtYEpbmL7GwGyx5vkiRR57fDUv-GgvF78wkVPwPmeANPPHd0enxVIVDN_9tsUwFEg54ktEaI74bBwaePztUDkywtOmvKOLxuZkuWvITdBveHWBQhQlxFfu-2sYzw8DWHZi69VPOo7r4Rze6cWuxX0LHi3kSBOg73mHKJ7wSZvNlhtgJHCtcztPJywYssQfwsW2yv2gzet82t954hXabMJKHN-E3e_X5HGoGAAA%3D&questId=93000001&phase=3&enemyHash=1_0301_2a84655';
-				'https://chaldea.center/laplace/share?data=GH4sIAAAAAAACA9WW32-bMBDH_5d7vkk2hJb4bc1WrVKftuypiioXrsGKMS42SFHE_z7ZEJqte2jXdtOSKOTI937wueOSA9TKXHRKlyCWaYogrT2aeY7w0JHzIA6gooCFR4JgK-kIRIpAhur9F-kqEMBvWcb47R0_XyzOcxgQGutVY1wIUKtt5ferSioDwrcdIZTKyTtNn3syHsS91I4QbKOMv-ju7x0I02mN4FTdaenpo5pFMetX6em7HVUDgidZh0RG1nR0rffOq2LVlBRLmK2rEkTKEDT1pEFwFmo1l4p0-a33DsTNAVzvgyxjPGFBqmrlV00XSl0guJ3S-qoM0vwszzKO-XKRMUzScNhMgus-CDjD-NpEvGTK8TTD8Rm_8OWcLAnWdQ-CI-geRM4QpN9dNl2oNNRS2ROjoOtQ2kVLcjcDKmgKQA-dsvzYwZGKfqoPefiA4Dprm9av95ZAgGkMAcK2lSZwmdQDznA4Z3z5Kx32E50kXWYBT5IuzxZZEo7n2bMJ8QnSTGjMyN8MEXsRIvZyRP_z_LwTnA3CnSx2nZ3utRh1ftsMCCVp2kof7toBQRbTFrk5gB8jRzqAAfLjwMUrPlk5Vss9tWvZbmlUxbVxYoe6mhpEHGFfteSqJqy-AGYIPfxdtuS9s0nvZbEDnD7M2ygGKWRbxgFSbv3psV2t8qqQ-vGEbMuxCck0iyfe6fO9-VPv5CXem3-G6AM_1jn-2LzjReKr2vPXESWvmqLkVVOU_FF73hTRJiRetcqv4x-GcSX9ABKO6jgICQAA&questId=93000002&phase=3&enemyHash=1_0501_b174478';
-			fncConvertBtn();
+				'https://link.chaldea.center/laplace/share?data=GH4sIABGF9GkA_8WXW2_bIBTHvwvPTAJsJ3He1mzVKvVpzZ6mqKIxiVEwpgZbiqp89x3wJcm2RuvNUy72wefwhx-HE_KECqmvaqkyNE-jCCNuTG_OZhg91sI6NH9C0rfENJoywjAyObcCzSlGQoti_43bHM0RvScxSe7jTZZN4yk6YFQaJ0ttfQeF3OZuv8i51GjuqlpglEnLH5T42ggNGhuuLDSaUmp3VW82EKVrpTCysqgVd-KzHJyC6ndo-2FaL9ByghdeSPNC9KHF3jq5XpSZCEMYrBuYTUwwUqIRCuZB_Fj1tRQqu2scKP98QrZx3o1FhKTE-8pCukVZ-7GCaXdSqZvM-7JoNksSguGaxgmFa0rihKw6p9vGO1GCw3sVGAudtc0Et6_wwGVHRerN2wZMkG78GEGUu911WUMb8VZuTox1mFQakyhNg3nrx3tVCb7reUNb35F4rKWhx4XtotQfMZ008LG1MWXllnsDMJEutUDQJa-yO1cJvXW50McJJSR8YE7rsii4zlrq3iGszPFrFhMygbXw14SR1QEP6CckZr-Tj8_IpyTx4FMyaS_T5J-x0478gD2oDdRpO_X0BDo9hU7PodN0-grobdQLoZ8AAsKzy4AiRj2ZiLEEEjNi0eT1gILaawFFsLYXASV_S8oQ9Ayf5Bk8MN4Hvt7VptvJ5_kG-YUyocQWigcogcXXXY2CPe_ajgIeyG7AfNzr4e6koBnF96Ja8morWq9QlHobdm0FaV8WHhE8dHklbF76wurJHPwqXlajo6qxEdToqCTpqCTpqCTZqCTZqCTZaCQ_VIU7B1UI4e5mOFOETv3PJprDcUva5ZfhVLOuJJxPuBoqI3i1pY11Rf8k-BPtozvnIbjv7VJ0_ALp1aiF6CUJTUctsnTUIkvfNdXeli1vStSPSrX_COhdh7nywguQW4Y_MEHu8AspsJSLmA0AAA%3D%3D&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
+			// 'https://link.chaldea.center/laplace/share?data=GH4sIAHid9GkA_91VUW_aMBD-L37OJDshlORtsFWrxNPGniZUueQgFo7jxnYkhPjvO9shTVt13dNUTSCcu5zv--47nzmTRqilE7IiZZFlCeFaX83FIiGPDowl5ZkI75nROZtTlhBdcwOkxCdQ0Jy-cVOTkrB7WqQ39_sMbmYA5JKQVlvRKuMTNOJQ29Oq5kKR0nYOElIJwx8kfO1BIcaeS4NO3Qpll26_x13KSZkQIxonuYXPYgwKqN_R91PHKMSywBsPpHgD163NyVixW7UVBAqjdYfVMEYTIqEHSUrquapbAbL60VtE_nUmprc-LM0ozakPFY2wq9Z5rmiao5DyrvKxKS1YntME1zSLazbP6XYIWvc-CNHCdxs0BlVFd_CGD76w1RMi8-a6RxOhcWGeA7fH29ahj3qr1hNjF4rCFtFsFsy157vsgB-veqPPJ8pRv0cnNJv0NW6Sr7YE5BzVMU7rtrObk0YpiWqV7-__JdJwtgaV_kqkYUuAfl-kBaXspUizZyIVNEVNkoJmcZn9SaFBiJB1FIJFNsVEBzbVgQ06vFk4fVl4nKQ3qqavqt53AvtGLkjwge-OTg8DFdKMP1vcV4GEA84wAqHFd8NVgaNnYypuLWYgyfAwjmUgueMdkvuE9Qqz-TIe8U7giHP5VBSGRWappzS5kLTkJ-g2vDtAzBgulYndcVW1jdcSDVt3YOrWX4xewovv67s02UeiGQ4RsrwKGG3P8d-K8gF6t_XAK4TbhP-MAHf5DWJIC18LBwAA&questId=94061601&phase=1&enemyHash=1_0927_f3e74ee';
+			// fncConvertBtn();
 		}
 	});
 </script>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
-	<h1
-		class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
-	>
-		<span class="leading-none">FGO Converter</span>
+	<h1 class="col-start-1 row-start-1 flex">
+		<span class="my-font self-end text-3xl leading-none">FGO Converter</span>
 	</h1>
 
-	<div
-		class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
-	>
-		<span>{t.desc}</span>
-		<button
-			class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-			onclick={() => (isManual = !isManual)}
-		>
-			{t.btnDesc}
+	<div class="col-span-2 row-start-2 self-start md:col-span-1 md:col-start-1">
+		<span class="my-desc-font">{t.desc}</span>
+		<button class="my-btn" onclick={() => (isManual = !isManual)}>
+			{t.howtouse}
 		</button>
 	</div>
 
@@ -567,13 +558,11 @@
 
 {#if isError}
 	<div class="rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
-		{t.errorText}
+		{t.error1}
 	</div>
 {/if}
-<div class="custom-scrollbar flex flex-nowrap gap-2 overflow-x-auto">
-	<div
-		class="mb-2 flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-	>
+<div class="custom-scrollbar flex w-full gap-2 overflow-x-auto pb-2">
+	<div class="my-svt-div">
 		{#if svtData.length === 0 && !mcData}
 			<img
 				src="{base}/images/bansi_mystic_code.png"
@@ -582,7 +571,7 @@
 			/>
 		{:else if svtData.length > 0 && !mcData}
 			<div
-				class="mb-2 flex h-full w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
+				class="flex h-full w-full items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-lg text-gray-300 dark:border-gray-600 dark:text-gray-500"
 			>
 				Empty
 			</div>
@@ -598,9 +587,7 @@
 
 	{#if svtData.length === 0}
 		{#each emptySvtList as svtName, idx (idx)}
-			<div
-				class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-			>
+			<div class="my-svt-div">
 				<img
 					src="{base}/images/{svtName}.png"
 					alt={svtName}
@@ -610,13 +597,10 @@
 		{/each}
 	{:else}
 		{#each svtData as item, idx (idx)}
-			<div
-				class="flex h-[168px] min-w-[110px] flex-1 flex-col items-center rounded-xl border border-blue-100 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50"
-			>
+			<div class="my-svt-div">
 				{#if item && item.details}
-					<div
-						class="relative mb-2 h-26 w-full shrink-0 overflow-hidden rounded-lg bg-white dark:bg-gray-800"
-					>
+					<!-- 서번트 -->
+					<div class="mb-2 flex-1 overflow-hidden rounded-lg bg-white dark:bg-gray-800">
 						<img
 							src={item.svtImg || `${base}/images/nunnos.png`}
 							alt={item.details.name}
@@ -624,8 +608,9 @@
 							class="h-full w-full object-cover transition-opacity hover:opacity-80"
 						/>
 					</div>
-					<div class="relative h-10 w-full shrink-0">
-						{#if item.ceDetails}
+					<!-- 예장 -->
+					{#if item.ceDetails}
+						<div class="relative h-[28%] w-full shrink-0">
 							<img
 								src={item.ceDetails.extraAssets?.equipFace?.equip?.[item.ceDetails.id]}
 								alt={item.ceDetails.name}
@@ -638,17 +623,25 @@
 									★
 								</div>
 							{/if}
-						{:else}
-							<div class="h-full w-full rounded bg-gray-100 dark:bg-gray-600"></div>
-						{/if}
-					</div>
+						</div>
+					{:else}
+						<div
+							class="flex h-[28%] w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-lg text-gray-300 dark:border-gray-600 dark:text-gray-500"
+						>
+							Empty
+						</div>
+					{/if}
 				{:else}
 					<div
-						class="mb-2 flex h-26 w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-xs text-gray-300 dark:border-gray-600 dark:text-gray-500"
+						class="mb-2 flex w-full flex-1 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-lg text-gray-300 dark:border-gray-600 dark:text-gray-500"
 					>
 						Empty
 					</div>
-					<div class="h-10 w-full shrink-0 rounded bg-gray-100 dark:bg-gray-600"></div>
+					<div
+						class="flex h-[28%] w-full shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 text-lg text-gray-300 dark:border-gray-600 dark:text-gray-500"
+					>
+						Empty
+					</div>
 				{/if}
 			</div>
 		{/each}
@@ -658,13 +651,11 @@
 <div
 	class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 >
-	<div class="flex items-end justify-between">
-		<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
-			{t.commandText}
-		</h2>
-	</div>
+	<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
+		{t.commandText}
+	</h2>
 	<div
-		class="mb-2 flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+		class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 		onclick={() => {
 			navigator.clipboard.writeText(fgaCommand);
 			alert(t.clipboardAlert);
@@ -673,18 +664,15 @@
 		<div class="flex-1">
 			{fgaCommand}
 		</div>
-		<button
-			class="text-md ms-3 inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-		>
+		<button class="my-btn ms-3">
 			{t.copy}
 		</button>
 	</div>
 </div>
-{#if dev}
+<!-- {#if dev}
 	<div
 		class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 	>
-		<!-- 개발 시작 -->
 		<div class="flex items-end justify-between">
 			<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
 				커맨드를 기반으로 작성된 시뮬레이터 화면
@@ -747,13 +735,11 @@
 			</div>
 		</div>
 	</div>
-{/if}
+{/if} -->
 <div class="text-red-600 transition-colors dark:text-red-400">
 	{t.warningTitle}
 	<ul class="list-disc pl-5">
-		{#each t.warnings as warning, idx (idx)}
-			<li>{warning}</li>
-		{/each}
+		<li>{t.warnings1}</li>
 		<li>
 			<div>{t.unsupportedTitle}</div>
 			{#each t.unsupportedList as item, idx (idx)}
@@ -764,7 +750,7 @@
 		<li>
 			<span>{t.orderChangeWarning}</span>
 			<button
-				class="text-md inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+				class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 				onclick={() => (isModal = true)}
 			>
 				{t.detailsBtn}
@@ -825,7 +811,7 @@
 		>
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-bold">
-					{t.btnHow}
+					{t.howtouse}
 				</h2>
 				<button
 					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
@@ -862,6 +848,3 @@
 		</div>
 	</div>
 {/if}
-
-<style>
-</style>
