@@ -6,11 +6,25 @@
 .custom-scrollbar::-webkit-scrollbar-track {
 	background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
 	background-color: #cbd5e1; /* 연한 회색 (라이트 모드) */
 	border-radius: 10px;
 }
 :global(.dark) .custom-scrollbar::-webkit-scrollbar-thumb {
 	background-color: #4b5563; /* 진한 회색 (다크 모드) */
+}
+.a-tag {
+	@apply w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60;
+}
+.my-btn {
+	@apply inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60;
+}
+.my-font {
+	@apply font-bold text-gray-900 transition-colors dark:text-gray-100;
+}
+.my-desc-font {
+	@apply text-gray-600 transition-colors dark:text-gray-400;
+}
+.my-svt-div {
+	@apply flex aspect-[4/5] min-w-[110px] flex-1 flex-col rounded-xl border border-blue-200 bg-blue-50/30 p-2 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-700/50;
 }
