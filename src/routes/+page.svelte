@@ -27,23 +27,23 @@
 				<option value="EN">EN</option>
 			</select>
 		</div>
-		<div class="my-font text-end mt-2">{t.translation}</div>
+		<div class="my-font mt-2 text-end">{t.translation}</div>
 	</div>
 	<div class="flex items-center justify-between">
 		<span class="dark:text-white">Display</span>
 		<button
-			class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
+			class="my-btn"
 			onclick={() => globalState.toggleDarkMode()}
 		>
 			{globalState.isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
 		</button>
 	</div>
-	<hr class="dark:text-white" />
+	<hr class="border border-gray-500" />
 	<div class="flex flex-col gap-5">
 		<a href={resolve('/')} class="a-tag"> FGO Converter </a>
 		<a href={resolve('/chklist')} class="a-tag"> SVT CheckList </a>
 	</div>
-	<hr class="dark:text-white" />
+	<hr class="border border-gray-500" />
 	<div class="flex flex-col gap-5 text-right">
 		<a
 			href="https://docs.google.com/forms/d/e/1FAIpQLSchVZotqT9RRD2tYW_sjOiu2lKgIGfv8xl0sFmyH7Aod2oQVg/viewform?usp=header"
