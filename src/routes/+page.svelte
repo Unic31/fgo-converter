@@ -31,10 +31,7 @@
 	</div>
 	<div class="flex items-center justify-between">
 		<span class="dark:text-white">Display</span>
-		<button
-			class="my-btn"
-			onclick={() => globalState.toggleDarkMode()}
-		>
+		<button class="my-btn" onclick={() => globalState.toggleDarkMode()}>
 			{globalState.isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
 		</button>
 	</div>

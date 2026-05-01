@@ -618,7 +618,7 @@
 							/>
 							{#if item.equip1?.limitBreak}
 								<div
-									class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-[15px] text-white dark:border-gray-700"
+									class="absolute -right-1 -bottom-1 h-5 w-5 rounded-full border-2 border-white bg-yellow-400 text-center text-[15px] leading-3.75 text-white dark:border-gray-700"
 								>
 									★
 								</div>
@@ -751,7 +751,7 @@
 	</ul>
 </div>
 <Modal bind:isModal={isWarningsModal} header={t.warningTitle}>
-	<img src="{base}/images/svt.png" alt="svt" />
+	<img src="{base}/images/manual0.png" alt="svt" />
 </Modal>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
 	<div class="flex flex-col gap-1">

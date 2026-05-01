@@ -3,17 +3,18 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
+	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	import { serverServantIds } from '$lib/svtList.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
 	import { toPng } from 'html-to-image';
-	let t = $derived(i18n[globalState.language] || i18n['KR']);
+	import Modal from '$lib/components/modal.svelte';
 	let captureArea;
 	let isLoading = $state(false);
 	let isLimitNp = $state(false);
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
-	let isManual = $state(false);
+	let isManualModal = $state(false);
 	let currentServer = $state('KR');
 	let currentData = $derived(serverServantIds[currentServer]);
 	let svtStates = new SvelteMap();
@@ -266,7 +267,7 @@
 	});
 	$effect(() => {
 		if (browser) {
-			if (isManual || isLoading) {
+			if (isManualModal || isLoading) {
 				document.body.style.overflow = 'hidden';
 				document.documentElement.style.overflow = 'hidden';
 			} else {
@@ -312,7 +313,7 @@
 		<span>{t.desc2}</span>
 		<button
 			class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-			onclick={() => (isManual = !isManual)}
+			onclick={() => (isManualModal = !isManualModal)}
 		>
 			{t.howtouse}
 		</button>
@@ -346,7 +347,7 @@
 		</span>
 		<select
 			bind:value={currentServer}
-			class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value="KR">KR</option>
 			<option value="JP">JP</option>
@@ -361,7 +362,7 @@
 		</span>
 		<select
 			bind:value={filterMode}
-			class="block min-w-[120px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value="all">전체</option>
 			<option value="owned">보유</option>
@@ -376,7 +377,7 @@
 		</span>
 		<select
 			bind:value={iconSize}
-			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value="s">S</option>
 			<option value="m">M</option>
@@ -391,7 +392,7 @@
 		</span>
 		<select
 			bind:value={leftClickMode}
-			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value="click">구역</option>
 			<option value="grail">성배</option>
@@ -406,7 +407,7 @@
 		</span>
 		<select
 			bind:value={rightClickMode}
-			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value="decrease">감소</option>
 			<option value="grail">성배</option>
@@ -421,7 +422,7 @@
 		</span>
 		<select
 			bind:value={isLimitNp}
-			class="block min-w-[80px] rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
 			<option value={false}>5레벨</option>
 			<option value={true}>무제한</option>
@@ -492,7 +493,7 @@
 
 						{#if svtStates.get(id)?.npLv >= 1}
 							<div
-								class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"
+								class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-black/80 to-transparent"
 							></div>
 
 							<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
@@ -587,58 +588,20 @@
 	</a>
 	의 아이디어를 빌려 제작되었습니다.
 </div>
-{#if isManual}
-	<div
-		class="fixed inset-0 z-60 flex items-center justify-center bg-black/30 backdrop-blur-sm"
-		onclick={() => (isManual = false)}
-	>
-		<div
-			class="w-11/12 max-w-lg rounded-xl bg-white p-6 shadow-2xl dark:bg-gray-800 dark:text-white"
-			onclick={(e) => e.stopPropagation()}
-		>
-			<div class="mb-4 flex items-center justify-between">
-				<h2 class="text-xl font-bold">
-					{t.howtouse}
-				</h2>
-				<button
-					class="ml-3 cursor-pointer text-lg text-black text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-					onclick={() => (isManual = false)}
-				>
-					✕
-				</button>
-			</div>
-
-			<div
-				class="max-h-[70vh] overflow-y-auto pr-2 text-sm leading-relaxed text-black dark:text-gray-300"
-			>
-				<div class="flex flex-col gap-1">
-					<div>{t.manualGuide2.step1}</div>
-					<img src="{base}/images/manual3.png" class="w-150" alt="manual3" />
-					<br />
-					<div>{t.manualGuide2.step2}</div>
-					<img src="{base}/images/manual4.png" class="w-150" alt="manual4" />
-				</div>
-			</div>
-
-			<div class="mt-4 flex justify-end">
-				<button
-					class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-					onclick={() => (isManual = false)}
-				>
-					{t.btnOk}
-				</button>
-			</div>
-		</div>
+<Modal bind:isModal={isManualModal} header={t.howtouse}>
+	<div class="flex flex-col gap-1">
+		<div>{t.manualGuide2.step1}</div>
+		<img src="{base}/images/manual3.png" class="w-full" alt="manual3" />
+		<br />
+		<div>{t.manualGuide2.step2}</div>
+		<img src="{base}/images/manual4.png" class="w-full" alt="manual4" />
 	</div>
-{/if}
-
+</Modal>
 {#if isLoading}
-	<div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+	<div class="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 		<div class="flex flex-col items-center rounded-xl bg-white p-8 shadow-2xl dark:bg-gray-800">
-			<div
-				class="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"
-			></div>
-			<h2 class="text-xl font-bold dark:text-white">다빈치가 이미지를 그리는중...</h2>
+			<img src="{base}/images/davinci.webp" class="w-100" alt="davinci" />
+			<div class="text-xl font-bold dark:text-white">다빈치가 이미지를 그리는중...</div>
 		</div>
 	</div>
 {/if}
