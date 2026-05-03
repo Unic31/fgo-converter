@@ -14,9 +14,20 @@
 	let isLimitNp = $state(false);
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
+	let leftClickMode = $state('click');
+	let rightClickMode = $state('decrease');
 	let isManualModal = $state(false);
 	let currentServer = $state('KR');
+	let fileInput; // csv file input
 	let currentData = $derived(serverServantIds[currentServer]);
+	const defaultAccounts = {
+		accountA: { name: 'A', svt_data: {} },
+		accountB: { name: 'B', svt_data: {} },
+		accountC: { name: 'C', svt_data: {} },
+		accountD: { name: 'D', svt_data: {} }
+	};
+	let accounts = $state(defaultAccounts);
+	let currentId = $state('accountA');
 	let svtStates = new SvelteMap();
 	let filterMode = $state('all');
 	let filteredData = $derived.by(() => {
@@ -77,7 +88,6 @@
 		};
 	});
 
-	let leftClickMode = $state('click');
 	function handleLeftClick(e, id, zoneAction) {
 		e.stopPropagation();
 		if (leftClickMode === 'grail') {
@@ -88,7 +98,7 @@
 			updateServant(id, zoneAction);
 		}
 	}
-	let rightClickMode = $state('decrease');
+
 	function handleRightClick(e, id) {
 		e.preventDefault();
 		e.stopPropagation();
@@ -101,12 +111,6 @@
 		}
 	}
 
-	let fileInput;
-	function importCSVBtn() {
-		if (fileInput) {
-			fileInput.click();
-		}
-	}
 	async function saveAsImage(layout) {
 		if (!captureArea || isLoading) return;
 		isLoading = true;
@@ -160,16 +164,11 @@
 		}
 	}
 
-	function resetData() {
-		if (confirm('모든 체크리스트 데이터가 삭제됩니다. 정말 초기화하시겠습니까?')) {
-			svtStates.clear();
-			if (browser) {
-				localStorage.removeItem('svt_checklist_data');
-			}
-			alert('데이터가 초기화되었습니다.');
+	function importCSVBtn() {
+		if (fileInput) {
+			fileInput.click();
 		}
 	}
-
 	function importCSV(event) {
 		const file = event.target.files[0];
 		if (!file) return;
@@ -211,18 +210,44 @@
 			});
 			alert(`${importCount}개의 서번트 데이터를 불러왔습니다.`);
 			if (browser) {
-				const dataToSave = Object.fromEntries(svtStates.entries());
-				localStorage.setItem('svt_checklist_data', JSON.stringify(dataToSave));
+				saveAccountsData();
 			}
 			event.target.value = '';
 		};
 		reader.readAsText(file, 'UTF-8');
 	}
 
+	// 여기서부터 위로 다시 공부
+
+	function handleAccountChange(e) {
+		const selectedId = e.target.value;
+		changeAccount(selectedId);
+	}
+	function changeAccount(targetAccountId) {
+		// 저장
+		saveAccountsData();
+		// 계정 변경
+		currentId = targetAccountId;
+		localStorage.setItem('current_id', currentId);
+		// 변경된 계정의 화면 불러오기
+		loadServantsToMap(currentId);
+	}
+	function resetData() {
+		if (confirm('모든 체크리스트 데이터가 삭제됩니다. 정말 초기화하시겠습니까?')) {
+			svtStates.clear();
+			saveAccountsData();
+			alert('데이터가 초기화되었습니다.');
+		}
+	}
+
+	function saveAccountsData() {
+		accounts[currentId].svt_data = Object.fromEntries(svtStates.entries());
+		localStorage.setItem('multi_accounts', JSON.stringify(accounts));
+	}
+
 	function updateServant(id, action) {
 		const currentState = svtStates.get(id) || { npLv: 0, isGrail: false, isGrand: false };
 		let newState = { ...currentState };
-
 		if (action === 'npLv') {
 			if (isLimitNp) {
 				newState.npLv = currentState.npLv + 1;
@@ -242,15 +267,16 @@
 			}
 		}
 		svtStates.set(id, newState);
-		if (browser) {
-			const dataToSave = Object.fromEntries(svtStates.entries());
-			localStorage.setItem('svt_checklist_data', JSON.stringify(dataToSave));
-		}
+		saveAccountsData();
 	}
-	function formatClassName(folderName) {
-		const namePart = folderName.split('_')[1];
-		if (!namePart) return folderName;
-		return namePart.charAt(0).toUpperCase() + namePart.slice(1);
+
+	// 서번트 데이터 화면에 그리기
+	function loadServantsToMap(accountId) {
+		svtStates.clear();
+		const currentData = accounts[accountId].svt_data || {};
+		for (const [id, data] of Object.entries(currentData)) {
+			svtStates.set(Number(id), data);
+		}
 	}
 	$effect(() => {
 		if (browser && isSettingsLoaded) {
@@ -266,37 +292,45 @@
 		}
 	});
 	$effect(() => {
-		if (browser) {
-			if (isManualModal || isLoading) {
-				document.body.style.overflow = 'hidden';
-				document.documentElement.style.overflow = 'hidden';
-			} else {
+		if (browser && isLoading) {
+			document.body.style.overflow = 'hidden';
+			document.documentElement.style.overflow = 'hidden';
+			return () => {
 				document.body.style.overflow = '';
 				document.documentElement.style.overflow = '';
-			}
+			};
 		}
 	});
 	onMount(() => {
-		if (browser) {
-			const savedData = localStorage.getItem('svt_checklist_data');
-			if (savedData) {
-				const parsed = JSON.parse(savedData);
-				for (const [id, data] of Object.entries(parsed)) {
-					svtStates.set(Number(id), data);
-				}
-			}
-			const savedSettings = localStorage.getItem('svt_checklist_settings');
-			if (savedSettings) {
-				const parsedSettings = JSON.parse(savedSettings);
-				if (parsedSettings.currentServer) currentServer = parsedSettings.currentServer;
-				if (parsedSettings.filterMode) filterMode = parsedSettings.filterMode;
-				if (parsedSettings.iconSize) iconSize = parsedSettings.iconSize;
-				if (parsedSettings.leftClickMode) leftClickMode = parsedSettings.leftClickMode;
-				if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
-				if (parsedSettings.isLimitNp !== undefined) isLimitNp = parsedSettings.isLimitNp;
-			}
-			isSettingsLoaded = true;
+		const savedSettings = localStorage.getItem('svt_checklist_settings');
+		if (savedSettings) {
+			const parsedSettings = JSON.parse(savedSettings);
+			if (parsedSettings.currentServer) currentServer = parsedSettings.currentServer;
+			if (parsedSettings.filterMode) filterMode = parsedSettings.filterMode;
+			if (parsedSettings.iconSize) iconSize = parsedSettings.iconSize;
+			if (parsedSettings.leftClickMode) leftClickMode = parsedSettings.leftClickMode;
+			if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
+			if (parsedSettings.isLimitNp !== undefined) isLimitNp = parsedSettings.isLimitNp;
 		}
+		const savedCurrentId = localStorage.getItem('current_id');
+		if (savedCurrentId) {
+			currentId = savedCurrentId;
+		}
+		const savedAccounts = localStorage.getItem('multi_accounts');
+		if (savedAccounts) {
+			accounts = JSON.parse(savedAccounts);
+		} else {
+			const oldData = localStorage.getItem('svt_checklist_data');
+			if (oldData) {
+				accounts.accountA.svt_data = JSON.parse(oldData);
+				localStorage.removeItem('svt_checklist_data');
+			}
+			localStorage.setItem('multi_accounts', JSON.stringify(accounts));
+		}
+
+		loadServantsToMap(currentId);
+		isSettingsLoaded = true;
+		console.log(localStorage);
 	});
 </script>
 
@@ -339,6 +373,22 @@
 <div
 	class="flex w-full flex-wrap items-center gap-5 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 >
+	<label class="flex">
+		<span
+			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
+		>
+			계정
+		</span>
+		<select
+			value={currentId}
+			onchange={handleAccountChange}
+			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+		>
+			{#each Object.keys(accounts) as id}
+				<option value={id}>{accounts[id].name}</option>
+			{/each}
+		</select>
+	</label>
 	<label class="flex">
 		<span
 			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
@@ -472,7 +522,7 @@
 			<div class="flex flex-wrap gap-2">
 				<img
 					src="{base}/images/class/{classFolder}.png"
-					alt={formatClassName(classFolder)}
+					alt={classFolder}
 					class="{iconClass} object-contain transition-all duration-300"
 				/>
 
@@ -483,7 +533,7 @@
 					>
 						<img
 							src="{base}/images/svt/{classFolder}/{id}.png"
-							alt="{formatClassName(classFolder)} {id}"
+							alt={id}
 							onclick={(e) => handleLeftClick(e, id, 'npLv')}
 							class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(id)
 								?.npLv >= 1

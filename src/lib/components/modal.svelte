@@ -1,11 +1,22 @@
 <script>
 	import { globalState } from '$lib/globalState.svelte.js';
+	import { browser } from '$app/environment';
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	let { isModal = $bindable(false), header = '제목', children, footer } = $props();
 	const closeModal = () => {
 		isModal = false;
 	};
+	$effect(() => {
+		if (browser && isModal) {
+			document.body.style.overflow = 'hidden';
+			document.documentElement.style.overflow = 'hidden';
+			return () => {
+				document.body.style.overflow = '';
+				document.documentElement.style.overflow = '';
+			};
+		}
+	});
 </script>
 
 {#if isModal}
@@ -22,7 +33,7 @@
 				<button class="my-font cursor-pointer text-3xl" onclick={closeModal}>✕</button>
 			</div>
 			<hr class="-mx-4 my-4 border border-gray-500" />
-			<div class="max-h-[70vh] overflow-y-auto my-font">
+			<div class="my-font max-h-[70vh] overflow-y-auto">
 				{@render children()}
 			</div>
 			<hr class="-mx-4 my-4 border border-gray-500" />
