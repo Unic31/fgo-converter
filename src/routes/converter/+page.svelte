@@ -547,7 +547,7 @@
 	type="text"
 	bind:value={url}
 	placeholder="https://link.chaldea.center/laplace/share?data=..."
-	class="w-full rounded-lg border border-gray-300 p-3 text-gray-900 transition-colors outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+	class="my-div my-desc-font outline-none focus:ring-2 focus:ring-blue-500 dark:placeholder-gray-400"
 />
 <button
 	onclick={fncConvertBtn}
@@ -648,9 +648,7 @@
 	{/if}
 </div>
 
-<div
-	class="rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
->
+<div class="my-div">
 	<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
 		{t.commandText}
 	</h2>
@@ -741,10 +739,7 @@
 
 		<li>
 			<span>{t.orderChangeWarning}</span>
-			<button
-				class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-				onclick={() => (isWarningsModal = true)}
-			>
+			<button class="my-btn" onclick={() => (isWarningsModal = true)}>
 				{t.detailsBtn}
 			</button>
 		</li>

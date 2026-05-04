@@ -370,142 +370,72 @@
 		/>
 	</div>
 </div>
-<div
-	class="flex w-full flex-wrap items-center gap-5 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
->
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			계정
-		</span>
-		<select
-			value={currentId}
-			onchange={handleAccountChange}
-			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			{#each Object.keys(accounts) as id (id)}
-				<option value={id}>{accounts[id].name}</option>
-			{/each}
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			선택
-		</span>
-		<select
-			bind:value={currentServer}
-			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value="KR">KR</option>
-			<option value="JP">JP</option>
-			<option value="svt5">5성 선택권</option>
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			출력
-		</span>
-		<select
-			bind:value={filterMode}
-			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value="all">전체</option>
-			<option value="owned">보유</option>
-			<option value="unowned">미보유</option>
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="flex justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			크기
-		</span>
-		<select
-			bind:value={iconSize}
-			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value="s">S</option>
-			<option value="m">M</option>
-			<option value="l">L</option>
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			좌클릭
-		</span>
-		<select
-			bind:value={leftClickMode}
-			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value="click">구역</option>
-			<option value="grail">성배</option>
-			<option value="grand">관위</option>
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			우클릭
-		</span>
-		<select
-			bind:value={rightClickMode}
-			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value="decrease">감소</option>
-			<option value="grail">성배</option>
-			<option value="grand">관위</option>
-		</select>
-	</label>
-	<label class="flex">
-		<span
-			class="justify-center rounded-l-lg border border-r-0 border-gray-300 bg-gray-100 px-3 py-2 text-sm font-bold text-gray-700 transition-colors dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
-		>
-			보구 상한
-		</span>
-		<select
-			bind:value={isLimitNp}
-			class="block min-w-20 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-		>
-			<option value={false}>5레벨</option>
-			<option value={true}>무제한</option>
-		</select>
-	</label>
-	<button
-		type="button"
-		class="cursor-pointer rounded-lg bg-green-600 px-4 py-2 font-bold text-white transition-colors hover:bg-green-700"
-		onclick={importCSVBtn}
-	>
-		데이터 불러오기
-	</button>
-	<input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
-	<button
-		class="cursor-pointer rounded-lg bg-gray-200 px-4 py-2 font-bold text-gray-700 transition-transform hover:bg-gray-300 active:scale-95 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-		onclick={resetData}
-	>
-		데이터 초기화
-	</button>
-	<button
-		class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-		onclick={() => saveAsImage('single')}
-	>
-		한줄로 저장
-	</button>
-
-	<button
-		class="cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-700 disabled:opacity-50"
-		onclick={() => saveAsImage('double')}
-	>
-		두줄로 저장
-	</button>
+<div class="my-div grid grid-cols-10 gap-2 md:flex md:flex-wrap">
+	<div class="grid col-span-5 gap-2 md:flex md:flex-wrap">
+		<label class="option-label">
+			<span class="option-title"> 계정 </span>
+			<select value={currentId} onchange={handleAccountChange} class="option-select">
+				{#each Object.keys(accounts) as id (id)}
+					<option value={id}>{accounts[id].name}</option>
+				{/each}
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 선택 </span>
+			<select bind:value={currentServer} class="option-select">
+				<option value="KR">KR</option>
+				<option value="JP">JP</option>
+				<option value="svt5">5성 선택권</option>
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 출력 </span>
+			<select bind:value={filterMode} class="option-select">
+				<option value="all">전체</option>
+				<option value="owned">보유</option>
+				<option value="unowned">미보유</option>
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 크기 </span>
+			<select bind:value={iconSize} class="option-select">
+				<option value="s">S</option>
+				<option value="m">M</option>
+				<option value="l">L</option>
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 좌클릭 </span>
+			<select bind:value={leftClickMode} class="option-select">
+				<option value="click">구역</option>
+				<option value="grail">성배</option>
+				<option value="grand">관위</option>
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 우클릭 </span>
+			<select bind:value={rightClickMode} class="option-select">
+				<option value="decrease">감소</option>
+				<option value="grail">성배</option>
+				<option value="grand">관위</option>
+			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> 보구 상한 </span>
+			<select bind:value={isLimitNp} class="option-select">
+				<option value={false}>5레벨</option>
+				<option value={true}>무제한</option>
+			</select>
+		</label>
+	</div>
+	<div class="col-span-5 grid gap-2 md:flex md:flex-wrap">
+		<button type="button" class="my-btn" onclick={importCSVBtn}> 데이터 불러오기 </button>
+		<button class="my-btn" onclick={resetData}> 데이터 초기화 </button>
+		<button class="my-btn" onclick={() => saveAsImage('single')}> 한줄로 저장 </button>
+		<button class="my-btn" onclick={() => saveAsImage('double')}> 두줄로 저장 </button>
+	</div>
 </div>
+<input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
 
 <div
 	bind:this={captureArea}
