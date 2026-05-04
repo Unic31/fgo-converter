@@ -335,20 +335,13 @@
 </script>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
-	<h1
-		class="col-start-1 row-start-1 flex flex-wrap items-end gap-2 self-end text-3xl font-bold text-gray-900 transition-colors dark:text-gray-100"
-	>
-		<span class="leading-none">SVT CheckList</span>
+	<h1 class="col-start-1 row-start-1 flex">
+		<span class="my-font self-end text-3xl leading-none">SVT CheckList</span>
 	</h1>
 
-	<div
-		class="text-1xl col-span-2 row-start-2 self-start text-gray-600 transition-colors md:col-span-1 md:col-start-1 dark:text-gray-400"
-	>
-		<span>{t.desc2}</span>
-		<button
-			class="inline-flex cursor-pointer items-center justify-center rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
-			onclick={() => (isManualModal = !isManualModal)}
-		>
+	<div class="col-span-2 row-start-2 self-start md:col-span-1 md:col-start-1">
+		<span class="my-desc-font">{t.desc2}</span>
+		<button class="my-btn" onclick={() => (isManualModal = !isManualModal)}>
 			{t.howtouse}
 		</button>
 	</div>
@@ -428,11 +421,15 @@
 			</select>
 		</label>
 	</div>
-	<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
 		<button class="option-btn color-green" onclick={importCSVBtn}> 데이터 불러오기 </button>
 		<button class="option-btn color-orange" onclick={resetData}> 데이터 초기화 </button>
-		<button class="option-btn color-blue" onclick={() => saveAsImage('single')}> 한줄로 저장 </button>
-		<button class="option-btn color-blue" onclick={() => saveAsImage('double')}> 두줄로 저장 </button>
+		<button class="option-btn color-blue" onclick={() => saveAsImage('single')}>
+			한줄로 저장
+		</button>
+		<button class="option-btn color-blue" onclick={() => saveAsImage('double')}>
+			두줄로 저장
+		</button>
 	</div>
 </div>
 <input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
