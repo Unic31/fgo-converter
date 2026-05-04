@@ -161,7 +161,7 @@
 {/if}
 
 <!-- 본문 -->
-<div class="min-h-dvh bg-gray-100 p-2 pt-5 transition-colors duration-300 md:p-5 dark:bg-gray-900">
+<div class="min-h-dvh bg-gray-100 transition-colors duration-300 pt-2 md:p-5 dark:bg-gray-900">
 	<div class="mx-auto max-w-5xl">
 		<header>
 			<nav aria-label="main nav" class="flex w-fit max-w-full overflow-x-auto">
@@ -210,7 +210,7 @@
 		</header>
 		<main>
 			<div
-				class="flex flex-col space-y-4 rounded-b-xl bg-white p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+				class="flex flex-col space-y-4 rounded-b-xl bg-white p-2 md:p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
 			>
 				<!-- 여기서 출력 -->
 				{@render children()}

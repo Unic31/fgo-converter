@@ -233,7 +233,7 @@
 		loadServantsToMap(currentId);
 	}
 	function resetData() {
-		if (confirm('모든 체크리스트 데이터가 삭제됩니다. 정말 초기화하시겠습니까?')) {
+		if (confirm('체크리스트 데이터가 삭제됩니다. 정말 초기화하시겠습니까?')) {
 			svtStates.clear();
 			saveAccountsData();
 			alert('데이터가 초기화되었습니다.');
@@ -370,12 +370,12 @@
 		/>
 	</div>
 </div>
-<div class="my-div grid grid-cols-10 gap-2 md:flex md:flex-wrap">
-	<div class="grid col-span-5 gap-2 md:flex md:flex-wrap">
+<div class="my-div flex flex-col gap-2">
+	<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2">
 		<label class="option-label">
 			<span class="option-title"> 계정 </span>
 			<select value={currentId} onchange={handleAccountChange} class="option-select">
-				{#each Object.keys(accounts) as id (id)}
+				{#each Object.keys(accounts) as id}
 					<option value={id}>{accounts[id].name}</option>
 				{/each}
 			</select>
@@ -428,11 +428,11 @@
 			</select>
 		</label>
 	</div>
-	<div class="col-span-5 grid gap-2 md:flex md:flex-wrap">
-		<button type="button" class="my-btn" onclick={importCSVBtn}> 데이터 불러오기 </button>
-		<button class="my-btn" onclick={resetData}> 데이터 초기화 </button>
-		<button class="my-btn" onclick={() => saveAsImage('single')}> 한줄로 저장 </button>
-		<button class="my-btn" onclick={() => saveAsImage('double')}> 두줄로 저장 </button>
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+		<button class="option-btn color-green" onclick={importCSVBtn}> 데이터 불러오기 </button>
+		<button class="option-btn color-orange" onclick={resetData}> 데이터 초기화 </button>
+		<button class="option-btn color-blue" onclick={() => saveAsImage('single')}> 한줄로 저장 </button>
+		<button class="option-btn color-blue" onclick={() => saveAsImage('double')}> 두줄로 저장 </button>
 	</div>
 </div>
 <input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
