@@ -20,7 +20,18 @@ export default defineConfig(
 
 		{
 			files: ['**/*.svelte', '**/*.svelte.js'],
-			languageOptions: { parserOptions: { svelteConfig } }
+			languageOptions: { parserOptions: { svelteConfig } },
+			rules: {
+				'svelte/require-each-key': 'error',
+				'no-unused-vars': 'error'
+			},
+
+		},
+		{
+			files: ['**/*.js'],
+			rules: {
+				'no-unused-vars': 'error'
+			}
 		}
 	],
 	prettier,

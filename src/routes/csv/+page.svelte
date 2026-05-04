@@ -1,6 +1,4 @@
 <script>
-	import { base } from '$app/paths';
-
 	let headers = $state([]); // 한글 헤더
 	let englishHeaders = $state([]); // 영문 헤더 (저장용)
 	let csvData = $state([]); // 실제 데이터 (2차원 배열)
@@ -109,7 +107,7 @@
 							<tr>
 								<th class="px-4 py-3 text-center">삭제</th>
 
-								{#each headers as header, i}
+								{#each headers as header, i (i)}
 									<th class="px-4 py-3 font-bold whitespace-nowrap">
 										{header}
 										<span class="font-normal text-gray-500 dark:text-gray-400"
@@ -120,19 +118,19 @@
 							</tr>
 						</thead>
 						<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-							{#each csvData as row, rowIndex}
+							{#each csvData as row, rowIdx (rowIdx)}
 								<tr class="bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700/50">
 									<td class="px-4 py-2 text-center">
 										<button
-											onclick={() => removeRow(rowIndex)}
+											onclick={() => removeRow(rowIdx)}
 											class="text-red-500 hover:text-red-700">✕</button
 										>
 									</td>
-									{#each row as cell, cellIndex}
+									{#each row as cellIdx (cellIdx)}
 										<td class="px-2 py-1">
 											<input
 												type="text"
-												bind:value={csvData[rowIndex][cellIndex]}
+												bind:value={csvData[rowIdx][cellIdx]}
 												class="w-full border-none bg-transparent p-1 focus:ring-2 focus:ring-blue-500 dark:text-white"
 											/>
 										</td>

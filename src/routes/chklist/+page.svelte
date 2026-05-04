@@ -384,7 +384,7 @@
 			onchange={handleAccountChange}
 			class="block min-w-30 rounded-r-lg border border-gray-300 bg-white p-2 text-sm text-gray-900 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-white"
 		>
-			{#each Object.keys(accounts) as id}
+			{#each Object.keys(accounts) as id (id)}
 				<option value={id}>{accounts[id].name}</option>
 			{/each}
 		</select>

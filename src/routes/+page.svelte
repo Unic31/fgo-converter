@@ -1,6 +1,4 @@
 <script>
-	import { browser, dev } from '$app/environment';
-	import pako from 'pako';
 	import { onMount } from 'svelte';
 	import { globalState } from '$lib/globalState.svelte.js';
 	import { base, resolve } from '$app/paths';
