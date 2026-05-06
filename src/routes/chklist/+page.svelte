@@ -368,7 +368,7 @@
 		<label class="option-label">
 			<span class="option-title"> 계정 </span>
 			<select value={currentId} onchange={handleAccountChange} class="option-select">
-				{#each Object.keys(accounts) as id}
+				{#each Object.keys(accounts) as id(id)}
 					<option value={id}>{accounts[id].name}</option>
 				{/each}
 			</select>
