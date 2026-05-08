@@ -21,7 +21,7 @@
 				class="rounded-lg border p-2 text-sm transition-colors outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
 			>
 				<option value="KR">KR</option>
-				<option value="JP">JP</option>d 
+				<option value="JP">JP</option>
 				<option value="EN">EN</option>
 			</select>
 		</div>
@@ -35,7 +35,7 @@
 	</div>
 	<hr class="border border-gray-500" />
 	<div class="flex flex-col gap-5">
-		<a href={resolve('/')} class="a-tag"> FGO Converter </a>
+		<a href={resolve('/converter')} class="a-tag"> FGO Converter </a>
 		<a href={resolve('/chklist')} class="a-tag"> SVT CheckList </a>
 	</div>
 	<hr class="border border-gray-500" />
