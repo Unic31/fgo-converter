@@ -14,7 +14,8 @@ export const i18n = {
 		unsupportedList: [
 			'앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)',
 			'만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)',
-			'예장, 스킬 효과로 인한 거츠'
+			'예장, 스킬 효과로 인한 거츠',
+			'턴 종료시 다음 스테이지로 넘어가지 않는 경우(현재 로직은 무조건 다음턴으로 넘어감)'
 		],
 		orderChangeWarning:
 			'시뮬레이터 파티 편성시 서번트와 서번트 사이에 빈자리가 있는 전투 데이터를 커맨드로 변환할 경우 에러가 발생할 수 있습니다. ',
@@ -49,7 +50,8 @@ export const i18n = {
 		unsupportedList: [
 			'アンリマユ - スキル3（使用後5ターン経過で戦闘不能）',
 			'マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 / 強化後：攻撃ターン終了時に戦闘不能）',
-			'概念礼装やスキル効果によるガッツ'
+			'概念礼装やスキル効果によるガッツ',
+			'ターン終了時に次ステージへ移行しない場合（現状のロジックは無条件で次ターンへ移行）'
 		],
 		orderChangeWarning: 'シミュレーターでのパーティ編成時、サーヴァントとサーヴァントの間に空き枠がある状態の戦闘データをコマンドに変換すると、エラーが発生する可能性があります。',
 		detailsBtn: '詳細',
@@ -77,7 +79,8 @@ export const i18n = {
 		unsupportedList: [
 			'Angra Mainyu - 3rd Skill (Death 5 turns after use)',
 			'Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at the end of the attacking turn)',
-			'Guts effects granted by Craft Essences (CE) or Skills'
+			'Guts effects granted by Craft Essences (CE) or Skills',
+			'When it does not proceed to the next stage at the end of the turn (the current logic unconditionally proceeds to the next turn)'
 		],
 		orderChangeWarning: 'When setting up your party in the simulator, converting battle data with an empty slot between Servants into a command may cause an error.',
 		detailsBtn: 'Details',
