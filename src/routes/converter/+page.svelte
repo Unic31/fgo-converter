@@ -506,12 +506,30 @@
 	onMount(() => {
 		if (dev) {
 			url =
-				'https://link.chaldea.center/laplace/share?data=GH4sIABGF9GkA_8WXW2_bIBTHvwvPTAJsJ3He1mzVKvVpzZ6mqKIxiVEwpgZbiqp89x3wJcm2RuvNUy72wefwhx-HE_KECqmvaqkyNE-jCCNuTG_OZhg91sI6NH9C0rfENJoywjAyObcCzSlGQoti_43bHM0RvScxSe7jTZZN4yk6YFQaJ0ttfQeF3OZuv8i51GjuqlpglEnLH5T42ggNGhuuLDSaUmp3VW82EKVrpTCysqgVd-KzHJyC6ndo-2FaL9ByghdeSPNC9KHF3jq5XpSZCEMYrBuYTUwwUqIRCuZB_Fj1tRQqu2scKP98QrZx3o1FhKTE-8pCukVZ-7GCaXdSqZvM-7JoNksSguGaxgmFa0rihKw6p9vGO1GCw3sVGAudtc0Et6_wwGVHRerN2wZMkG78GEGUu911WUMb8VZuTox1mFQakyhNg3nrx3tVCb7reUNb35F4rKWhx4XtotQfMZ008LG1MWXllnsDMJEutUDQJa-yO1cJvXW50McJJSR8YE7rsii4zlrq3iGszPFrFhMygbXw14SR1QEP6CckZr-Tj8_IpyTx4FMyaS_T5J-x0478gD2oDdRpO_X0BDo9hU7PodN0-grobdQLoZ8AAsKzy4AiRj2ZiLEEEjNi0eT1gILaawFFsLYXASV_S8oQ9Ayf5Bk8MN4Hvt7VptvJ5_kG-YUyocQWigcogcXXXY2CPe_ajgIeyG7AfNzr4e6koBnF96Ja8morWq9QlHobdm0FaV8WHhE8dHklbF76wurJHPwqXlajo6qxEdToqCTpqCTpqCTZqCTZqCTZaCQ_VIU7B1UI4e5mOFOETv3PJprDcUva5ZfhVLOuJJxPuBoqI3i1pY11Rf8k-BPtozvnIbjv7VJ0_ALp1aiF6CUJTUctsnTUIkvfNdXeli1vStSPSrX_COhdh7nywguQW4Y_MEHu8AspsJSLmA0AAA%3D%3D&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
-			// 'https://link.chaldea.center/laplace/share?data=GH4sIAHid9GkA_91VUW_aMBD-L37OJDshlORtsFWrxNPGniZUueQgFo7jxnYkhPjvO9shTVt13dNUTSCcu5zv--47nzmTRqilE7IiZZFlCeFaX83FIiGPDowl5ZkI75nROZtTlhBdcwOkxCdQ0Jy-cVOTkrB7WqQ39_sMbmYA5JKQVlvRKuMTNOJQ29Oq5kKR0nYOElIJwx8kfO1BIcaeS4NO3Qpll26_x13KSZkQIxonuYXPYgwKqN_R91PHKMSywBsPpHgD163NyVixW7UVBAqjdYfVMEYTIqEHSUrquapbAbL60VtE_nUmprc-LM0ozakPFY2wq9Z5rmiao5DyrvKxKS1YntME1zSLazbP6XYIWvc-CNHCdxs0BlVFd_CGD76w1RMi8-a6RxOhcWGeA7fH29ahj3qr1hNjF4rCFtFsFsy157vsgB-veqPPJ8pRv0cnNJv0NW6Sr7YE5BzVMU7rtrObk0YpiWqV7-__JdJwtgaV_kqkYUuAfl-kBaXspUizZyIVNEVNkoJmcZn9SaFBiJB1FIJFNsVEBzbVgQ06vFk4fVl4nKQ3qqavqt53AvtGLkjwge-OTg8DFdKMP1vcV4GEA84wAqHFd8NVgaNnYypuLWYgyfAwjmUgueMdkvuE9Qqz-TIe8U7giHP5VBSGRWappzS5kLTkJ-g2vDtAzBgulYndcVW1jdcSDVt3YOrWX4xewovv67s02UeiGQ4RsrwKGG3P8d-K8gF6t_XAK4TbhP-MAHf5DWJIC18LBwAA&questId=94061601&phase=1&enemyHash=1_0927_f3e74ee';
+				'https://link.chaldea.center/laplace/share?data=GH4sIADQdE2oA_91XzWojRxB-lz5XoH_nR7dIu8safIqcUzBLr6YtNZ4_z_QIhBEkh1yWvEIgh0BeIIe8U7zvkOqe0Uhe_8Cy60kIsjXuorqqvu-rKsm3pLDlvLN5RmapEEB0XR-OSQrkpjOtI7NbYr1FMhFzyoHUG90aMmNATGmK3VvdbsiMsHdUUvVOXmVZLGOyB1LVzlZl6wMUdr1xu8VG25LMXNMZIJlt9fvcvN6aEnNc6bxFY13Z0s27qyu8VXZ5DqS1RZdrZ761o1PI-h3avq97L8zljC58olIXWBq5--PHv3_76e7XPz_-_Mvdh98_fviLACl2rbOrRZWZUNJ4OkN0kgLJzdbkZBb50ss31uTZcuuwkB9uSbt13iuiklPvaQvrFlXnK8dje23z_CzzrilVSlFIadQ_YnxcDh7nW-_BKIQftLpsDMr86XwbWM3xkWJY7a7fVB2aqM-5qU8OK3PuS5g3Rl-PvKBxG-oxN52t2UG4nsf8ob_PQxFs29V11biLXe2pK6vSoHojZk5F-ilmeQ9zlCqhGERpwBylcfQAM-BrBBwijoBVX0jy3wEsKE2fV5mLJPFY8ZlKhM4RkHxGaJwrU2a9mUL_OumAPuPICO8rZfSEEn5KCR8oOQtjiWymDxjqZ6wnKAS6T9F4K39wZ0j9OE0YUjfZ0jWmXLuNKY-AFA2_iGlVFYUus36yvEPQ4_iWSEojnDf_VDzcyHXbziuM_Eo77WtcNxhhXpXZa1_20pOKy6Ncm6P2453lTacb07cZBwESFEQQQwJpEABbjwMTwCQwBSwCFgNLgKXAUUG8w1E_4BK4Ah4Bj4EnwFMQFAQDgSEFCAlCgYhAxCASECkgAMlAcpCYUYJUICOQMcgEZIpMALaF4qAEKCxIgYpAxaASUClEOCU4LxyhB6CLR7AcaFk67azfVMG436P9vV5dd_Wwm-6Te4myZSY3a9yOyCOe9GpYwrjFXK9k6FGUEvs9NFt_9i1-srHrXO9Mc6Gbtem9wtY9nNHXF14VflPhwW2w6k3lPzn8vO79OD2fjb1wthfFpJ1DDQgMf4yfESGIn5CAz7YXr4792lgUUedHA7r1oyW8qBNSzyfIRidtKzpZW93PNgWTbFIm2aRMssmYnE6v_9lCfXrV8cOqE0-uuuFbyLjp-PA16-TyN-OiHJyf3pOP3JafkfpzliyfdMmyryrHlzH6RWK-lBz_IkFftcxLn3iB6S7Cv6sh3f4fEaSFoYYPAAA%3D&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
 			// fncConvertBtn();
 		}
 	});
 </script>
+
+<svelte:head>
+	<title>페그오 컨버터 (FGO Converter)</title>
+	<meta
+		name="description"
+		content="칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다."
+	/>
+	<meta name="keywords" content="페그오 컨버터, FGO Converter, 칼데아, FGA, 폰닉, 변환기" />
+
+	<meta property="og:title" content="페그오 컨버터 (FGO Converter)" />
+	<meta
+		property="og:description"
+		content="칼데아앱(Chaldea)의 공유 URL을 폰닉(FGA)용 커맨드로 변환합니다."
+	/>
+	<meta property="og:url" content="https://unic31.github.io/fgo-converter/" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+</svelte:head>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 	<h1 class="col-start-1 row-start-1 flex">
