@@ -29,15 +29,11 @@ This project is based on the data from the following sites.
 - 오류로 인한 사과 손실은 책임지지 않지만 제보는 감사합니다.
 - 반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.
 - 현재 계산하지 않는 로직
-  - 앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)
-  - 만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)
   - 예장, 스킬 효과로 인한 거츠
   - 턴 종료시 다음 라운드로 넘어가지 않는 경우
 - We are not responsible for any loss of Golden Apples caused by errors, but bug reports are highly appreciated.
 - We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.
 - Unsupported Logic
-  - Angra Mainyu - Skill 3 (Death 5 turns after use)
-  - Mandricardo - Skill 2 (Pre-upgrade: Death after attack / Post-upgrade: Death at the end of the attacking turn)
   - Guts granted by Craft Essences or Skills
   - If not transitioning to the next stage upon turn end
 

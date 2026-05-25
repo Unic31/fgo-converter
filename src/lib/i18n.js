@@ -12,7 +12,6 @@ export const i18n = {
 		warnings1: '반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.',
 		unsupportedTitle: '계산하지 않는 로직',
 		unsupportedList: [
-			'앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)',
 			'예장, 스킬 효과로 인한 거츠',
 			'턴 종료시 다음 라운드로 넘어가지 않는 경우'
 		],
@@ -47,7 +46,6 @@ export const i18n = {
 		warnings1: '周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。',
 		unsupportedTitle: '計算対象外のロジック',
 		unsupportedList: [
-			'アンリマユ - スキル3（使用から5ターン後に戦闘不能）',
 			'概念礼装、またはスキル効果によるガッツ',
 			'ターン終了時に次ステージへ移行しない場合'
 		],
@@ -75,7 +73,6 @@ export const i18n = {
 		warnings1: 'We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.',
 		unsupportedTitle: 'Unsupported Logic',
 		unsupportedList: [
-			'Angra Mainyu - Skill 3 (Death 5 turns after use)',
 			'Guts granted by Craft Essences or Skills',
 			'If not transitioning to the next stage upon turn end'
 		],

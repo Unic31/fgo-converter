@@ -284,6 +284,10 @@
 						else if (svtInfo.svtId === 1101600 && action.skill === 1) {
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
+						// 앙리마유(1100100) 3스킬 -> 5턴 타이머 부여
+						else if (svtInfo.svtId === 1100100 && action.skill === 2) {
+							svtInfo.deathTimer = 5;
+						}
 
 						let skillCmd = svtSkillMap[action.svt][action.skill];
 						let optionCmd = '';
@@ -464,6 +468,17 @@
 				attackActionCmd += npCommand;
 				attackActionCmd += ',#,';
 				command += enemyTargetCmd + attackActionCmd;
+
+				// 턴 종료시(attack 후) 전열 서번트들의 deathTimer -1
+				frontSvtList.forEach((svt, idx) => {
+					if (svt && svt.deathTimer !== undefined) {
+						svt.deathTimer -= 1;
+						if (svt.deathTimer <= 0) {
+							delayedActions.push({ type: 'death', svtIdx: idx });
+							delete svt.deathTimer;
+						}
+					}
+				});
 
 				// 예약해둔 지연스킬 발동(자폭, 후퇴) 일괄 실행
 				if (delayedActions.length > 0) {
