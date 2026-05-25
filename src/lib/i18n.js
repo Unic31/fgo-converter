@@ -13,7 +13,6 @@ export const i18n = {
 		unsupportedTitle: '계산하지 않는 로직',
 		unsupportedList: [
 			'앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)',
-			'만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)',
 			'예장, 스킬 효과로 인한 거츠',
 			'턴 종료시 다음 라운드로 넘어가지 않는 경우'
 		],
@@ -49,7 +48,6 @@ export const i18n = {
 		unsupportedTitle: '計算対象外のロジック',
 		unsupportedList: [
 			'アンリマユ - スキル3（使用から5ターン後に戦闘不能）',
-			'マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 / 強化後：攻撃ターン終了時に戦闘不能）',
 			'概念礼装、またはスキル効果によるガッツ',
 			'ターン終了時に次ステージへ移行しない場合'
 		],
@@ -78,7 +76,6 @@ export const i18n = {
 		unsupportedTitle: 'Unsupported Logic',
 		unsupportedList: [
 			'Angra Mainyu - Skill 3 (Death 5 turns after use)',
-			'Mandricardo - Skill 2 (Pre-upgrade: Death after attack / Post-upgrade: Death at the end of the attacking turn)',
 			'Guts granted by Craft Essences or Skills',
 			'If not transitioning to the next stage upon turn end'
 		],
