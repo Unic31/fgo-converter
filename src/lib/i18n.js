@@ -10,12 +10,10 @@ export const i18n = {
 		clipboardAlert: '클립보드에 저장되었습니다!',
 		warningTitle: '⚠️ 주의사항 ⚠️',
 		warnings1: '반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.',
-		unsupportedTitle: '현재 계산하지 않는 로직(추후 업데이트 예정)',
+		unsupportedTitle: '계산하지 않는 로직',
 		unsupportedList: [
-			'앙리 마유 - 3스킬(사용 후 5턴 뒤 사망)',
-			'만드리카르도 - 2스킬(강화 전 - 공격 후 사망 / 강화 후 - 공격 턴 종료 후 사망)',
 			'예장, 스킬 효과로 인한 거츠',
-			'턴 종료시 다음 스테이지로 넘어가지 않는 경우(현재 로직은 무조건 다음턴으로 넘어감)'
+			'턴 종료시 다음 라운드로 넘어가지 않는 경우'
 		],
 		orderChangeWarning:
 			'시뮬레이터 파티 편성시 서번트와 서번트 사이에 빈자리가 있는 전투 데이터를 커맨드로 변환할 경우 에러가 발생할 수 있습니다. ',
@@ -46,12 +44,10 @@ export const i18n = {
 		clipboardAlert: 'クリップボードにコピーしました！',
 		warningTitle: '⚠️ 注意事項 ⚠️',
 		warnings1: '周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。',
-		unsupportedTitle: '現在対応していないロジック（今後のアップデートで対応予定）',
+		unsupportedTitle: '計算対象外のロジック',
 		unsupportedList: [
-			'アンリマユ - スキル3（使用後5ターン経過で戦闘不能）',
-			'マンドリカルド - スキル2（強化前：攻撃後に戦闘不能 / 強化後：攻撃ターン終了時に戦闘不能）',
-			'概念礼装やスキル効果によるガッツ',
-			'ターン終了時に次ステージへ移行しない場合（現状のロジックは無条件で次ターンへ移行）'
+			'概念礼装、またはスキル効果によるガッツ',
+			'ターン終了時に次ステージへ移行しない場合'
 		],
 		orderChangeWarning: 'シミュレーターでのパーティ編成時、サーヴァントとサーヴァントの間に空き枠がある状態の戦闘データをコマンドに変換すると、エラーが発生する可能性があります。',
 		detailsBtn: '詳細',
@@ -75,12 +71,10 @@ export const i18n = {
 		clipboardAlert: 'Copied to clipboard!',
 		warningTitle: '⚠️ Disclaimer ⚠️',
 		warnings1: 'We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.',
-		unsupportedTitle: 'Currently unsupported logic (Planned for future updates):',
+		unsupportedTitle: 'Unsupported Logic',
 		unsupportedList: [
-			'Angra Mainyu - 3rd Skill (Death 5 turns after use)',
-			'Mandricardo - 2nd Skill (Pre-upgrade: Death after attacking / Post-upgrade: Death at the end of the attacking turn)',
-			'Guts effects granted by Craft Essences (CE) or Skills',
-			'When it does not proceed to the next stage at the end of the turn (the current logic unconditionally proceeds to the next turn)'
+			'Guts granted by Craft Essences or Skills',
+			'If not transitioning to the next stage upon turn end'
 		],
 		orderChangeWarning: 'When setting up your party in the simulator, converting battle data with an empty slot between Servants into a command may cause an error.',
 		detailsBtn: 'Details',

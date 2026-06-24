@@ -334,6 +334,28 @@
 	});
 </script>
 
+<svelte:head>
+	<title>페그오 서번트 체크리스트 (SVT CheckList)</title>
+	<meta
+		name="description"
+		content="페그오(FGO) 서번트 소지율, 보구 레벨 상태를 한눈에 확인하고 이미지로 저장할 수 있는 서번트 체크리스트입니다."
+	/>
+	<meta
+		name="keywords"
+		content="페그오 체크리스트, 서번트 체크리스트, FGO 서번트, 페그오 소지율, SVT CheckList, CheckList"
+	/>
+
+	<meta property="og:title" content="페그오 서번트 체크리스트 (SVT CheckList)" />
+	<meta
+		property="og:description"
+		content="페그오(FGO) 서번트 소지율, 보구 레벨 상태를 한눈에 확인하고 이미지로 저장할 수 있는 서번트 체크리스트입니다."
+	/>
+	<meta property="og:url" content="https://unic31.github.io/fgo-converter/chklist" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+</svelte:head>
+
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 	<h1 class="col-start-1 row-start-1 flex">
 		<span class="my-font self-end text-3xl leading-none">SVT CheckList</span>
@@ -368,7 +390,7 @@
 		<label class="option-label">
 			<span class="option-title"> 계정 </span>
 			<select value={currentId} onchange={handleAccountChange} class="option-select">
-				{#each Object.keys(accounts) as id(id)}
+				{#each Object.keys(accounts) as id (id)}
 					<option value={id}>{accounts[id].name}</option>
 				{/each}
 			</select>

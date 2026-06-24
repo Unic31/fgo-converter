@@ -7,6 +7,30 @@
 	onMount(() => {});
 </script>
 
+<svelte:head>
+	<title>페그오 툴 (FGO Tool)</title>
+
+	<meta
+		name="description"
+		content="페그오(FGO) 유저를 위한 종합 툴 입니다. 커맨드 변환, 서번트 체크리스트 등 각종 편의성 기능을 제공합니다."
+	/>
+
+	<meta
+		name="keywords"
+		content="페그오, FGO, 페이트 그랜드 오더, 페그오 컨버터, 서번트 체크리스트, 페그오 체크리스트, 칼데아, FGA, 폰닉, 페그오 툴"
+	/>
+
+	<meta property="og:title" content="페그오 툴 (FGO Tool)" />
+	<meta
+		property="og:description"
+		content="페그오(FGO) 유저를 위한 종합 툴 입니다. 커맨드 변환, 서번트 체크리스트 등 각종 편의성 기능을 제공합니다."
+	/>
+	<meta property="og:url" content="https://unic31.github.io/fgo-converter/" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+</svelte:head>
+
 <div class="flex justify-center">
 	<img src="{base}/images/nunnos.png" alt="nunnos" class="h-50 w-50" />
 </div>
