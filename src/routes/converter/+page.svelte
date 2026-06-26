@@ -18,6 +18,8 @@
 	let isWarningsModal = $state(false);
 	let isManualModal = $state(false);
 	let emptySvtList = ['Jeanne', 'Tomoe', 'Meltryllis', 'Mari', 'Tenochtitlan', 'Ereshkigal'];
+	let showGuide1 = $state(false);
+	let showGuide2 = $state(false);
 
 	const svtSkillMap = [
 		['a', 'b', 'c'],
@@ -541,7 +543,10 @@
 	<meta property="og:url" content="https://unic31.github.io/fgo-converter/" />
 
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" />
+	<meta
+		property="og:image"
+		content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png"
+	/>
 </svelte:head>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
@@ -780,13 +785,40 @@
 	<img src="{base}/images/manual0.png" alt="svt" />
 </Modal>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
-	<div class="flex flex-col gap-1">
-		<div>{t.manualGuide.step1_title}</div>
-		<img src="{base}/images/manual1.png" class="w-full" alt="sample1" />
-		<div>{t.manualGuide.step1_desc}</div>
-		<br />
-		<div>{t.manualGuide.step2_title}</div>
-		<img src="{base}/images/manual2.png" class="w-full" alt="sample2" />
-		<div>{t.manualGuide.step2_desc}</div>
+	<div class="flex flex-col gap-2">
+		<button
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-800"
+			onclick={() => (showGuide1 = !showGuide1)}
+		>
+			{t.converterGuide.guide1}
+			{showGuide1 ? '▲' : '▼'}
+		</button>
+
+		{#if showGuide1}
+			<div class="flex flex-col gap-1 rounded border border-gray-200 p-2 dark:border-gray-700">
+				<div>{t.converterGuide.g1}</div>
+				<img src="{base}/images/manual1.png" class="w-full" alt="sample1" />
+				<div>{t.converterGuide.g2}</div>
+				<br />
+				<div>{t.converterGuide.g3}</div>
+				<img src="{base}/images/manual2.png" class="w-full" alt="sample2" />
+				<div>{t.converterGuide.g4}</div>
+			</div>
+		{/if}
+
+		<button
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-800"
+			onclick={() => (showGuide2 = !showGuide2)}
+		>
+			{t.converterGuide.guide2}
+			{showGuide2 ? '▲' : '▼'}
+		</button>
+
+		{#if showGuide2}
+			<div class="flex flex-col gap-1 rounded border border-gray-200 p-2 dark:border-gray-700">
+				<img src="{base}/images/manual5.png" class="w-full" alt="sample3" />
+				<img src="{base}/images/manual6.png" class="w-full" alt="sample4" />
+			</div>
+		{/if}
 	</div>
 </Modal>

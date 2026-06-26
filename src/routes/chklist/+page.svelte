@@ -58,19 +58,23 @@
 		let totalNpLv = 0;
 		let ownedCount = 0;
 		let np5PlusCount = 0;
-		let totalAvailable = 0;
 
+		const uniqueIds = new Set();
 		for (const ids of Object.values(currentData)) {
-			totalAvailable += ids.length;
 			for (const id of ids) {
-				const state = svtStates.get(id);
-				if (state && state.npLv >= 1) {
-					ownedCount++;
-					totalNpLv += state.npLv; // 총 보구 레벨 합
+				uniqueIds.add(id);
+			}
+		}
+		const totalAvailable = uniqueIds.size;
 
-					if (state.npLv >= 5) {
-						np5PlusCount++; // NP5 이상
-					}
+		for (const id of uniqueIds) {
+			const state = svtStates.get(id);
+			if (state && state.npLv >= 1) {
+				ownedCount++;
+				totalNpLv += state.npLv;
+
+				if (state.npLv >= 5) {
+					np5PlusCount++;
 				}
 			}
 		}
@@ -87,6 +91,18 @@
 			np5Ratio
 		};
 	});
+
+	function getClassImageName(server, group) {
+		if (server !== 'luckyBag') {
+			return group;
+		}
+
+		const lowerGroup = group.toLowerCase();
+		if (lowerGroup.startsWith('q')) return 'quick';
+		if (lowerGroup.startsWith('a')) return 'arts';
+		if (lowerGroup.startsWith('b')) return 'buster';
+		return 'class_1001';
+	}
 
 	function handleLeftClick(e, id, zoneAction) {
 		e.stopPropagation();
@@ -115,7 +131,7 @@
 		if (!captureArea || isLoading) return;
 		isLoading = true;
 
-		// 2️⃣ 캡처에 필요한 픽셀 너비 계산
+		// 캡처에 필요한 픽셀 너비 계산
 		const classArrays = Object.values(filteredData);
 		const maxServantsCount =
 			classArrays.length > 0 ? Math.max(...classArrays.map((ids) => ids.length)) : 0;
@@ -124,13 +140,21 @@
 		if (iconSize === 's') iconPx = 44;
 		if (iconSize === 'l') iconPx = 72;
 
-		let servantsPerRow = maxServantsCount;
-		if (layout === 'double') servantsPerRow = Math.ceil(maxServantsCount / 2);
+		let targetWidth;
+		if (currentServer == 'luckyBag') {
+			const itemsPerRow = 1 + maxServantsCount;
+			const singleClassWidth = itemsPerRow * iconPx + (itemsPerRow - 1) * 8 + 60;
+			targetWidth = Math.max(singleClassWidth * 2 + 32, 800); // 2열 너비 + 여백
+		} else {
+			// 일반 모드: 한줄(single) 또는 두줄(double)
+			let servantsPerRow = maxServantsCount;
+			if (layout === 'double') servantsPerRow = Math.ceil(maxServantsCount / 2);
 
-		const itemsPerRow = 1 + servantsPerRow;
-		const targetWidth = Math.max(itemsPerRow * iconPx + (itemsPerRow - 1) * 8 + 60, 600);
+			const itemsPerRow = 1 + servantsPerRow;
+			targetWidth = Math.max(itemsPerRow * iconPx + (itemsPerRow - 1) * 8 + 60, 600);
+		}
 
-		// 3️⃣ 로딩창 뒤에서 진짜 DOM의 너비를 강제로 늘리기
+		// 로딩창 뒤에서 진짜 DOM의 너비를 강제로 늘리기
 		exportTargetWidth = targetWidth;
 
 		try {
@@ -143,12 +167,12 @@
 				backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
 			});
 
-			// 4️⃣ 파일명에 들어갈 현재 시간 생성
+			// 파일명에 들어갈 현재 시간 생성
 			const now = new Date();
 			const pad = (n) => String(n).padStart(2, '0');
 			const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
 
-			// 5️⃣ 이미지 즉시 다운로드
+			// 이미지 즉시 다운로드
 			const link = document.createElement('a');
 			link.download = `SVT_Checklist_${timestamp}.png`;
 			link.href = dataUrl;
@@ -157,7 +181,7 @@
 			console.error('캡처 에러:', error);
 			alert('이미지 저장 중 오류가 발생했습니다.');
 		} finally {
-			// 6️⃣ 작업이 끝나면 화면을 원상 복구하고 로딩창 끄기
+			// 작업이 끝나면 화면을 원상 복구하고 로딩창 끄기
 			exportTargetWidth = 0;
 			await new Promise((resolve) => setTimeout(resolve, 50));
 			isLoading = false;
@@ -450,12 +474,21 @@
 	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
 		<button class="option-btn color-green" onclick={importCSVBtn}> 데이터 불러오기 </button>
 		<button class="option-btn color-orange" onclick={resetData}> 데이터 초기화 </button>
-		<button class="option-btn color-blue" onclick={() => saveAsImage('single')}>
-			한줄로 저장
-		</button>
-		<button class="option-btn color-blue" onclick={() => saveAsImage('double')}>
-			두줄로 저장
-		</button>
+		{#if currentServer == 'luckyBag'}
+			<button
+				class="option-btn color-blue col-span-2 md:col-span-2"
+				onclick={() => saveAsImage('luckyBag')}
+			>
+				저장
+			</button>
+		{:else}
+			<button class="option-btn color-blue" onclick={() => saveAsImage('single')}>
+				한줄로 저장
+			</button>
+			<button class="option-btn color-blue" onclick={() => saveAsImage('double')}>
+				두줄로 저장
+			</button>
+		{/if}
 	</div>
 </div>
 <input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
@@ -471,14 +504,16 @@
 >
 	<div
 		class="svt-list-container {currentServer === 'luckyBag'
-			? 'grid grid-cols-1 gap-4 md:grid-cols-2'
+			? exportTargetWidth > 0
+				? 'grid grid-cols-2 gap-4'
+				: 'grid grid-cols-1 gap-4 md:grid-cols-2'
 			: 'flex flex-col gap-4'}"
 	>
 		{#each Object.entries(filteredData) as [groupName, ids] (groupName)}
 			{#if ids.length > 0}
 				<div class="flex flex-wrap gap-2">
 					<img
-						src="{base}/images/class/{currentServer === 'luckyBag' ? 'class_1001' : groupName}.png"
+						src="{base}/images/class/{getClassImageName(currentServer, groupName)}.png"
 						alt={groupName}
 						class="{iconClass} object-contain transition-all duration-300"
 					/>
@@ -563,8 +598,8 @@
     				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
 		>
 			<div>Total NP Lv : {stats.totalNpLv}</div>
-			<div>Ownership Rate : {stats.ownedRatio}%</div>
 			<div>NP5 Rate : {stats.np5Ratio}%</div>
+			<div>Ownership Rate : {stats.ownedRatio}%</div>
 			<div>unic31.github.io/fgo-converter</div>
 		</div>
 	</div>
