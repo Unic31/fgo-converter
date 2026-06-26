@@ -353,7 +353,7 @@
 	<meta property="og:url" content="https://unic31.github.io/fgo-converter/chklist" />
 
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" />
 </svelte:head>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
@@ -373,13 +373,13 @@
 		onclick={() => globalState.toggleDarkMode()}
 	>
 		<img
-			src="{base}/images/bansi1_no_bg.png"
+			src="{base}/images/etc/bansi1_no_bg.png"
 			alt="Bansi Light Mode"
 			class="block h-full w-full object-contain dark:hidden"
 		/>
 
 		<img
-			src="{base}/images/bansi3_no_bg.png"
+			src="{base}/images/etc/bansi3_no_bg.png"
 			alt="Bansi Dark Mode"
 			class="hidden h-full w-full object-contain dark:block"
 		/>
@@ -599,7 +599,7 @@
 {#if isLoading}
 	<div class="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 		<div class="flex flex-col items-center rounded-xl bg-white p-8 shadow-2xl dark:bg-gray-800">
-			<img src="{base}/images/davinci.webp" class="w-100" alt="davinci" />
+			<img src="{base}/images/etc/davinci.webp" class="w-100" alt="davinci" />
 			<div class="text-xl font-bold dark:text-white">다빈치가 이미지를 그리는중...</div>
 		</div>
 	</div>

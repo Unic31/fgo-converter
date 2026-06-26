@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://unic31.github.io/fgo-converter/">
-    <img alt="logo" src="https://unic31.github.io/fgo-converter/images/nunnos.png" width="128">
+    <img alt="logo" src="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" width="128">
   </a>
 </p>
 <p align="center">

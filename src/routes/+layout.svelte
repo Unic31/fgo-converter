@@ -58,7 +58,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href="{base}/images/nunnos.png" />
+	<link rel="icon" href="{base}/images/etc/nunnos.png" />
 </svelte:head>
 {#if dev}
 	<aside
@@ -68,7 +68,7 @@
 		<div class="flex h-full flex-col overflow-y-auto">
 			<div class="mb-8 flex items-center justify-between">
 				<div class="h-15 w-15">
-					<img src="{base}/images/nunnos.png" alt="nunnos" />
+					<img src="{base}/images/etc/nunnos.png" alt="nunnos" />
 				</div>
 				<button class="text-2xl dark:text-white" onclick={() => globalState.toggleSidebar()}
 					>✕</button
@@ -173,7 +173,7 @@
 						: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
 				>
 					<div class="flex items-center gap-3">
-						<img src="{base}/images/nunnos.png" class="h-10 w-10" alt="Main Logo" />
+						<img src="{base}/images/etc/nunnos.png" class="h-10 w-10" alt="Main Logo" />
 						<div>Home</div>
 					</div>
 				</a>

@@ -541,7 +541,7 @@
 	<meta property="og:url" content="https://unic31.github.io/fgo-converter/" />
 
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" />
 </svelte:head>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
@@ -561,13 +561,13 @@
 		onclick={() => globalState.toggleDarkMode()}
 	>
 		<img
-			src="{base}/images/bansi1_no_bg.png"
+			src="{base}/images/etc/bansi1_no_bg.png"
 			alt="Bansi Light Mode"
 			class="block h-full w-full object-contain dark:hidden"
 		/>
 
 		<img
-			src="{base}/images/bansi3_no_bg.png"
+			src="{base}/images/etc/bansi3_no_bg.png"
 			alt="Bansi Dark Mode"
 			class="hidden h-full w-full object-contain dark:block"
 		/>
@@ -596,7 +596,7 @@
 	<div class="my-svt-div">
 		{#if svtData.length === 0 && !mcData}
 			<img
-				src="{base}/images/bansi_mystic_code.png"
+				src="{base}/images/etc/bansi_mystic_code.png"
 				alt="bansi_mystic_code"
 				class="h-full w-full rounded-lg object-cover"
 			/>
@@ -620,7 +620,7 @@
 		{#each emptySvtList as svtName, idx (idx)}
 			<div class="my-svt-div">
 				<img
-					src="{base}/images/{svtName}.png"
+					src="{base}/images/etc/{svtName}.png"
 					alt={svtName}
 					class="h-full w-full rounded-lg object-cover"
 				/>
@@ -633,7 +633,7 @@
 					<!-- 서번트 -->
 					<div class="mb-2 flex-1 overflow-hidden rounded-lg bg-white dark:bg-gray-800">
 						<img
-							src={item.svtImg || `${base}/images/nunnos.png`}
+							src={item.svtImg || `${base}/images/etc/nunnos.png`}
 							alt={item.details.name}
 							onclick={() => console.log('svtData :', $state.snapshot(item))}
 							class="h-full w-full object-cover transition-opacity hover:opacity-80"

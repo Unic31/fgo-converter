@@ -28,11 +28,11 @@
 	<meta property="og:url" content="https://unic31.github.io/fgo-converter/" />
 
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/nunnos.png" />
+	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" />
 </svelte:head>
 
 <div class="flex justify-center">
-	<img src="{base}/images/nunnos.png" alt="nunnos" class="h-50 w-50" />
+	<img src="{base}/images/etc/nunnos.png" alt="nunnos" class="h-50 w-50" />
 </div>
 
 <nav class="space-y-6">

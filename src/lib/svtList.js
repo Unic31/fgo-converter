@@ -46,4 +46,14 @@ export const serverServantIds = {
         '10_alterego': [224],
         '12_mooncancer': [244],
     },
+    luckyBag2026: [
+        {
+            name: "qf1",
+            id: [68, 270, 276, 70]
+        },
+        {
+            name: "qf2",
+            id: [317, 384, 368]
+        },
+    ]
 };
