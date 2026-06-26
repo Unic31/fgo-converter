@@ -4,7 +4,7 @@
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
-	import { serverServantIds } from '$lib/svtList.js';
+	import { serverServantIds, svtClassMap } from '$lib/svtList.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
 	import { toPng } from 'html-to-image';
@@ -18,8 +18,8 @@
 	let rightClickMode = $state('decrease');
 	let isManualModal = $state(false);
 	let currentServer = $state('KR');
-	let fileInput; // csv file input
 	let currentData = $derived(serverServantIds[currentServer]);
+	let fileInput; // csv file input
 	const defaultAccounts = {
 		accountA: { name: 'A', svt_data: {} },
 		accountB: { name: 'B', svt_data: {} },
@@ -353,7 +353,10 @@
 	<meta property="og:url" content="https://unic31.github.io/fgo-converter/chklist" />
 
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png" />
+	<meta
+		property="og:image"
+		content="https://unic31.github.io/fgo-converter/images/etc/nunnos.png"
+	/>
 </svelte:head>
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
@@ -400,7 +403,8 @@
 			<select bind:value={currentServer} class="option-select">
 				<option value="KR">KR</option>
 				<option value="JP">JP</option>
-				<option value="svt5">5성 선택권</option>
+				<option value="luckyBag">확정가챠</option>
+				<!-- <option value="svt5">5성 선택권</option> -->
 			</select>
 		</label>
 		<label class="option-label">
@@ -455,7 +459,6 @@
 	</div>
 </div>
 <input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
-
 <div
 	bind:this={captureArea}
 	class="relative space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
@@ -466,96 +469,104 @@
 		? `width: ${exportTargetWidth}px; min-width: ${exportTargetWidth}px; max-width: none; margin: 0 !important;`
 		: 'width: 100%;'}
 >
-	{#each Object.entries(filteredData) as [classFolder, ids] (classFolder)}
-		{#if ids.length > 0}
-			<div class="flex flex-wrap gap-2">
-				<img
-					src="{base}/images/class/{classFolder}.png"
-					alt={classFolder}
-					class="{iconClass} object-contain transition-all duration-300"
-				/>
-
-				{#each ids as id (id)}
-					<div
-						class="relative {iconClass} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
-						oncontextmenu={(e) => handleRightClick(e, id)}
-					>
-						<img
-							src="{base}/images/svt/{classFolder}/{id}.png"
-							alt={id}
-							onclick={(e) => handleLeftClick(e, id, 'npLv')}
-							class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(id)
-								?.npLv >= 1
-								? 'brightness-100'
-								: 'brightness-[0.9] grayscale'}"
-						/>
-
-						{#if svtStates.get(id)?.npLv >= 1}
+	<div
+		class="svt-list-container {currentServer === 'luckyBag'
+			? 'grid grid-cols-1 gap-4 md:grid-cols-2'
+			: 'flex flex-col gap-4'}"
+	>
+		{#each Object.entries(filteredData) as [groupName, ids] (groupName)}
+			{#if ids.length > 0}
+				<div class="flex flex-wrap gap-2">
+					<img
+						src="{base}/images/class/{currentServer === 'luckyBag' ? 'class_1001' : groupName}.png"
+						alt={groupName}
+						class="{iconClass} object-contain transition-all duration-300"
+					/>
+					{#each ids as id (id)}
+						{@const classFolder = svtClassMap[id]}
+						{#if classFolder}
 							<div
-								class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-black/80 to-transparent"
-							></div>
-
-							<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
-								<button
-									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
-									onclick={(e) => handleLeftClick(e, id, 'isGrail')}
-								>
-									{#if svtStates.get(id)?.isGrail}
-										<img
-											src="{base}/images/grail12.png"
-											alt="grail"
-											class="w-full object-contain drop-shadow-md"
-										/>
-									{/if}
-								</button>
-								<button
-									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
-									onclick={(e) => handleLeftClick(e, id, 'isGrand')}
-								>
-									{#if svtStates.get(id)?.isGrand}
-										<img
-											src="{base}/images/grand5.png"
-											alt="grand"
-											class="w-full object-contain drop-shadow-md"
-										/>
-									{/if}
-								</button>
-								<button
-									class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+								class="relative {iconClass} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
+								oncontextmenu={(e) => handleRightClick(e, id)}
+							>
+								<img
+									src="{base}/images/svt/{classFolder}/{id}.png"
+									alt="SVT {id}"
 									onclick={(e) => handleLeftClick(e, id, 'npLv')}
-								>
-									<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
-										<text
-											x="50%"
-											y="85%"
-											text-anchor="middle"
-											fill={svtStates.get(id).npLv >= 6 ? '#ef4444' : 'white'}
-											stroke="black"
-											stroke-width="5"
-											paint-order="stroke fill"
-											font-family="sans-serif"
-											font-weight="900"
-											font-size="40"
+									class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(
+										id
+									)?.npLv >= 1
+										? 'brightness-100'
+										: 'brightness-[0.9] grayscale'}"
+								/>
+								{#if svtStates.get(id)?.npLv >= 1}
+									<div
+										class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-black/80 to-transparent"
+									></div>
+
+									<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
+										<button
+											class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+											onclick={(e) => handleLeftClick(e, id, 'isGrail')}
 										>
-											{svtStates.get(id).npLv}
-										</text>
-									</svg>
-								</button>
+											{#if svtStates.get(id)?.isGrail}
+												<img
+													src="{base}/images/grail12.png"
+													alt="grail"
+													class="w-full object-contain drop-shadow-md"
+												/>
+											{/if}
+										</button>
+										<button
+											class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+											onclick={(e) => handleLeftClick(e, id, 'isGrand')}
+										>
+											{#if svtStates.get(id)?.isGrand}
+												<img
+													src="{base}/images/grand5.png"
+													alt="grand"
+													class="w-full object-contain drop-shadow-md"
+												/>
+											{/if}
+										</button>
+										<button
+											class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
+											onclick={(e) => handleLeftClick(e, id, 'npLv')}
+										>
+											<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
+												<text
+													x="50%"
+													y="85%"
+													text-anchor="middle"
+													fill={svtStates.get(id).npLv >= 6 ? '#ef4444' : 'white'}
+													stroke="black"
+													stroke-width="5"
+													paint-order="stroke fill"
+													font-family="sans-serif"
+													font-weight="900"
+													font-size="40"
+												>
+													{svtStates.get(id).npLv}
+												</text>
+											</svg>
+										</button>
+									</div>
+								{/if}
 							</div>
 						{/if}
-					</div>
-				{/each}
-			</div>
-		{/if}
-	{/each}
-	<div
-		class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
+					{/each}
+				</div>
+			{/if}
+		{/each}
+		<div
+			class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
     				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
-	>
-		<div>Total NP Lv : {stats.totalNpLv}</div>
-		<div>Ownership Rate : {stats.ownedRatio}%</div>
-		<div>NP5 Rate : {stats.np5Ratio}%</div>
-		<div>unic31.github.io/fgo-converter</div>
+		>
+			<div>Total NP Lv : {stats.totalNpLv}</div>
+			<div>Ownership Rate : {stats.ownedRatio}%</div>
+			<div>NP5 Rate : {stats.np5Ratio}%</div>
+			<div>unic31.github.io/fgo-converter</div>
+		</div>
 	</div>
 </div>
 <div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
