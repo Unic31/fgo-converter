@@ -415,7 +415,7 @@
 <div class="my-div flex flex-col gap-2">
 	<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2">
 		<label class="option-label">
-			<span class="option-title"> 계정 </span>
+			<span class="option-title"> {t.listOption1} </span>
 			<select value={currentId} onchange={handleAccountChange} class="option-select">
 				{#each Object.keys(accounts) as id (id)}
 					<option value={id}>{accounts[id].name}</option>
@@ -423,7 +423,7 @@
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 선택 </span>
+			<span class="option-title"> {t.listOption2} </span>
 			<select bind:value={currentServer} class="option-select">
 				<option value="KR">KR</option>
 				<option value="JP">JP</option>
@@ -432,15 +432,15 @@
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 출력 </span>
+			<span class="option-title"> {t.listOption3} </span>
 			<select bind:value={filterMode} class="option-select">
-				<option value="all">전체</option>
-				<option value="owned">보유</option>
-				<option value="unowned">미보유</option>
+				<option value="all">{t.listOption3a}</option>
+				<option value="owned">{t.listOption3b}</option>
+				<option value="unowned">{t.listOption3c}</option>
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 크기 </span>
+			<span class="option-title"> {t.listOption4} </span>
 			<select bind:value={iconSize} class="option-select">
 				<option value="s">S</option>
 				<option value="m">M</option>
@@ -448,26 +448,26 @@
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 좌클릭 </span>
+			<span class="option-title"> {t.listOption5} </span>
 			<select bind:value={leftClickMode} class="option-select">
-				<option value="click">구역</option>
-				<option value="grail">성배</option>
-				<option value="grand">관위</option>
+				<option value="click">{t.listOption5a}</option>
+				<option value="grail">{t.listOption5b}</option>
+				<option value="grand">{t.listOption5c}</option>
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 우클릭 </span>
+			<span class="option-title"> {t.listOption6} </span>
 			<select bind:value={rightClickMode} class="option-select">
-				<option value="decrease">감소</option>
-				<option value="grail">성배</option>
-				<option value="grand">관위</option>
+				<option value="decrease">{t.listOption6a}</option>
+				<option value="grail">{t.listOption6b}</option>
+				<option value="grand">{t.listOption6c}</option>
 			</select>
 		</label>
 		<label class="option-label">
-			<span class="option-title"> 보구 상한 </span>
+			<span class="option-title"> {t.listOption7} </span>
 			<select bind:value={isLimitNp} class="option-select">
-				<option value={false}>5레벨</option>
-				<option value={true}>무제한</option>
+				<option value={false}>{t.listOption7a}</option>
+				<option value={true}>{t.listOption7b}</option>
 			</select>
 		</label>
 	</div>
@@ -635,10 +635,10 @@
 </div>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
 	<div class="flex flex-col gap-1">
-		<div>{t.manualGuide2.step1}</div>
+		<div>{t.chkListGuide.step1}</div>
 		<img src="{base}/images/manual3.png" class="w-full" alt="manual3" />
 		<br />
-		<div>{t.manualGuide2.step2}</div>
+		<div>{t.chkListGuide.step2}</div>
 		<img src="{base}/images/manual4.png" class="w-full" alt="manual4" />
 	</div>
 </Modal>
