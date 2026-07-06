@@ -2,10 +2,9 @@ name: Auto Update Servant Data
 
 on:
   schedule:
-    # 깃허브 크론탭 시간은 UTC 기준입니다. 
-    # 한국 시간(KST) 자정(00:00)에 실행하려면 UTC 기준 15:00로 설정합니다.
+    # 한국 시간 밤 12시에 실행 (UTC 15:00)
     - cron: '0 15 * * *'
-  
+
   # 수동으로 실행하고 싶을 때 쓰는 버튼 활성화 옵션
   workflow_dispatch:
 
@@ -24,10 +23,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 3. 패키지 설치 (의존성)
+      - name: 3. 패키지 설치
         run: npm install
 
-      - name: 4. 페그오 데이터 크롤링 스크립트 실행
+      - name: 4. 스크립트 실행
         run: node updateSvt.js
 
       - name: 5. 변경된 데이터 자동 커밋 및 푸시
@@ -35,9 +34,12 @@ jobs:
           # 깃허브 봇 계정으로 설정
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          
+
           # 변경된 모든 파일(svtList.js, 새로 받은 이미지, update_log.txt 등) 스테이징
           git add .
-          
+
           # 변경사항이 있을 때만 커밋하고 푸시 (에러 방지)
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: 신규 서번트 데이터 및 이미지 추가" && git push)
+          
+      - name: 6. 깃허브 페이지 자동 배포 (gh-pages 브랜치)
+        run: npm run deploy
