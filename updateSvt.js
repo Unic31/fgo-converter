@@ -19,7 +19,7 @@ const classMapping = {
     berserker: '07_berserker',
     ruler: '08_ruler',
     avenger: '09_avenger',
-    altergo: '10_altergo',
+    alterego: '10_alterego',
     foreigner: '11_foreigner',
     mooncancer: '12_mooncancer',
     pretender: '13_pretender',
@@ -74,7 +74,7 @@ function appendIdToFile(server, className, collectionNo) {
     const contentFromServer = content.substring(serverStartIndex);
 
     // 4. 잘라낸 텍스트 안에서 해당 클래스의 배열 찾기 (예: '01_saber': [2, 8, 68])
-    const classRegex = new RegExp(`(?:'|"|\\b)${listKey}(?:'|")?\\s*:\\s*\\[([^\\]]*)\\]`);
+    const classRegex = new RegExp(`(?:'|"|\\b)${listKey}(?:'|")?\\s*:\\s*\\[([^\\]]*)\\]`, 'i');
     const classMatch = contentFromServer.match(classRegex);
 
     if (!classMatch) {
@@ -119,10 +119,11 @@ async function run(server) {
         const todayStr = getTodayString();
 
         for (const servant of fiveStarServants) {
-            const { collectionNo, className, face } = servant;
+            let { collectionNo, className, face } = servant;
+            className = className.toLowerCase();
 
             if (banList.has(collectionNo)) continue;
-            
+
             const isExistInServer = existingIds.has(collectionNo);
 
             if (!isExistInServer) {
