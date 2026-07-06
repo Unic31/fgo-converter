@@ -1,2 +1,3 @@
 2026.06.29-15:28 [JP] NEW SVT - no: 466, name: ジャック・ド・モレー, class: saber
 2026.06.29-17:04 [JP] NEW SVT - no: 466, name: ジャック・ド・モレー, class: saber
+2026.07.07-00:02 [JP] NEW SVT - no: 471, name: アスカラポス, class: alterEgo
