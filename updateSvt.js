@@ -98,7 +98,7 @@ function appendIdToFile(server, className, collectionNo) {
     const finalContent = content.substring(0, serverStartIndex) + replacedContentFromServer;
 
     fs.writeFileSync(SVT_LIST_PATH, finalContent, 'utf-8');
-    return `\n svtList.js 업데이트 완료: ${listKey} 배열에 ${collectionNo} 추가`
+    return `\nsvtList.js 업데이트 완료: ${listKey} 배열에 ${collectionNo} 추가`
 }
 
 async function run(server) {
