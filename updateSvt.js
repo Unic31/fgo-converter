@@ -64,8 +64,7 @@ function appendIdToFile(server, className, collectionNo) {
     const serverMatch = content.match(serverRegex);
 
     if (!serverMatch) {
-        console.error(`❌ [${server}] 서버 블록을 svtList.js에서 찾을 수 없습니다.`);
-        return;
+        return `\n서버 블록을 svtList.js에서 찾을 수 없습니다.`
     }
 
     const serverStartIndex = serverMatch.index;
@@ -78,8 +77,7 @@ function appendIdToFile(server, className, collectionNo) {
     const classMatch = contentFromServer.match(classRegex);
 
     if (!classMatch) {
-        console.error(`❌ [${server}] 안에 ${listKey} 배열이 존재하지 않습니다.`);
-        return;
+        return `\n${listKey} 배열이 존재하지 않습니다.`
     }
 
     // 매칭된 전체 문자열과, 괄호 [] 안의 숫자들 추출
@@ -87,7 +85,7 @@ function appendIdToFile(server, className, collectionNo) {
     const innerNumbers = classMatch[1].trim(); // 예: "2, 8, 68"
 
     // 안전장치: 이미 번호가 있는지 정규식으로 한 번 더 확인 (예방 차원)
-    if (new RegExp(`\\b${collectionNo}\\b`).test(innerNumbers)) return;
+    if (new RegExp(`\\b${collectionNo}\\b`).test(innerNumbers)) return '';
 
     // 5. 기존 숫자들이 있으면 뒤에 쉼표(,)를 붙이고 번호 추가
     const newInner = innerNumbers.length > 0 ? `${innerNumbers}, ${collectionNo}` : `${collectionNo}`;
@@ -100,26 +98,25 @@ function appendIdToFile(server, className, collectionNo) {
     const finalContent = content.substring(0, serverStartIndex) + replacedContentFromServer;
 
     fs.writeFileSync(SVT_LIST_PATH, finalContent, 'utf-8');
-    console.log(`[${server}] svtList.js 업데이트 완료: ${listKey} 배열에 ${collectionNo} 추가`);
+    return `\n svtList.js 업데이트 완료: ${listKey} 배열에 ${collectionNo} 추가`
 }
 
 async function run(server) {
+    let logContents = `${getTodayString()} - [${server}]`;
+    let isError = false;
+    let updatedCount = 0;
     try {
         const svtObject = serverServantIds[server] || {};
         const existingIds = new Set(Object.values(svtObject).flat());
 
-        console.log(`Fetching [${server}] FGO API data...`);
         const response = await axios.get(`https://api.atlasacademy.io/export/${server}/basic_servant.json`);
         const apiServants = response.data;
 
         const fiveStarServants = apiServants.filter(svt => svt.rarity === 5);
 
-        let updatedCount = 0;
-        let logContents = '';
-        const todayStr = getTodayString();
 
         for (const servant of fiveStarServants) {
-            let { collectionNo, className, face } = servant;
+            let { id, collectionNo, name, className, face } = servant;
             className = className.toLowerCase();
 
             if (banList.has(collectionNo)) continue;
@@ -127,33 +124,36 @@ async function run(server) {
             const isExistInServer = existingIds.has(collectionNo);
 
             if (!isExistInServer) {
-                const logMessage = `${todayStr} [${server}] NEW SVT - no: ${collectionNo}, name: ${servant.name}, class: ${className}`;
-                console.log(logMessage);
-                logContents += logMessage + '\n';
+                logContents += `\nNEW SVT - id:${id}, no: ${collectionNo}, name: ${name}, class: ${className}`;
 
                 // 리스트(js 파일)에 번호 추가
-                appendIdToFile(server, className, collectionNo);
+                const appendLog = appendIdToFile(server, className, collectionNo);
+                logContents += appendLog;
 
                 // ✅ 2. 누락되었던 이미지 자동 분류 및 다운로드 로직 복구
                 if (server === 'JP') {
                     const targetDirName = classMapping[className] || '00_updateSvt';
                     const imagePath = path.join(IMAGE_BASE_DIR, targetDirName, `${collectionNo}.png`);
-
-                    console.log(` -> Downloading face image to: ${targetDirName}/${collectionNo}.png`);
+                    logContents += `\n서번트 이미지 저장: ${targetDirName}/${collectionNo}.png`;
                     await downloadImage(face, imagePath);
                 }
 
                 updatedCount++;
             }
         }
-        if (updatedCount > 0) {
-            fs.appendFileSync(LOG_FILE_PATH, logContents, 'utf-8');
-            console.log(`\n[${server}] ${updatedCount}명의 신규 서번트가 있습니다`);
-        } else {
-            console.log(`\n[${server}] 업데이트할 새로운 5성 서번트가 없습니다.`);
-        }
     } catch (error) {
-        console.error('스크립트 실행 중 에러 발생:', error);
+        isError = true;
+        const errorContents = `스크립트 실행 중 에러 발생: ${error.message}`
+        logContents += `\n${errorContents}`;
+        console.error(errorContents);
+    } finally {
+        if (updatedCount > 0 || isError) {
+            logContents += `총 ${updatedCount}건 업데이트 완료.\n`;
+            fs.appendFileSync(LOG_FILE_PATH, logContents, 'utf-8');
+            console.log(`[${server}] 업데이트 완료`);
+        } else {
+            console.log(`[${server}] 새로운 5성 서번트가 없습니다.`);
+        }
     }
 }
 async function main() {
