@@ -40,6 +40,13 @@ jobs:
 
           # 변경사항이 있을 때만 커밋하고 푸시 (에러 방지)
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: 신규 서번트 데이터 및 이미지 추가" && git push)
-          
+
       - name: 6. 깃허브 페이지 자동 배포 (gh-pages 브랜치)
-        run: npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # gh-pages 패키지가 인증할 수 있도록 URL에 토큰 추가
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+
+          # 배포 스크립트 실행
+          npm run deploy
