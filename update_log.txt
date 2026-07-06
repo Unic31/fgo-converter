@@ -1,0 +1,4 @@
+2026.07.06-17:10 - [JP]
+NEW SVT - id:1002200, no: 471, name: アスカラポス, class: alterego
+svtList.js 업데이트 완료: 10_alterego 배열에 471 추가
+서번트 이미지 저장: 10_alterego/471.png총 1건 업데이트 완료.
