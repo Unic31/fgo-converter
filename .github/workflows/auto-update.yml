@@ -21,7 +21,7 @@ jobs:
       - name: 2. Node.js 환경 세팅
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: 3. 패키지 설치
         run: npm install
@@ -34,12 +34,10 @@ jobs:
           # 깃허브 봇 계정으로 설정
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-          # 변경된 모든 파일(svtList.js, 새로 받은 이미지, update_log.txt 등) 스테이징
           git add .
 
           # 변경사항이 있을 때만 커밋하고 푸시 (에러 방지)
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update: 신규 서번트 데이터 및 이미지 추가" && git push)
+          (git diff --quiet && git diff --staged --quiet) || (git commit -m "Auto-update: 신규 서번트 데이터 및 이미지 추가" && git push)
 
       - name: 6. 깃허브 페이지 자동 배포 (gh-pages 브랜치)
         env:
