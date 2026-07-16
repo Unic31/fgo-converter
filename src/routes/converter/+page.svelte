@@ -147,21 +147,13 @@
 			];
 			svtData = await fetchSvtDetails(team);
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
-			if (!dev) {
-				// eslint-disable-next-line svelte/prefer-svelte-reactivity
-				const params = new URLSearchParams();
-				team.forEach((svt) => {
-					if (svt && svt.svtId) {
-						params.append('svtId', svt.svtId);
-					}
-				});
-				console.log(params.toString());
-				fetch(
-					`https://n8n.kstr.dev/webhook/6daee07e-8a2e-4a5e-982e-f07ee83c900f?${params.toString()}`
-				).catch((err) => {
+			// if (!dev) {
+				fetch('https://fgo.uenic31.workers.dev/api/count', {
+					method: 'POST'
+				}).catch((err) => {
 					console.warn('카운트 API 호출 실패(무시됨):', err);
 				});
-			}
+			// }
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
 			isError = true;
