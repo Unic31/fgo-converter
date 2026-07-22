@@ -2,3 +2,6 @@
 NEW SVT - id:1002200, no: 471, name: アスカラポス, class: alterego
 svtList.js 업데이트 완료: 10_alterego 배열에 471 추가
 서번트 이미지 저장: 10_alterego/471.png총 1건 업데이트 완료.
+2026.07.22-04:47 - [KR]
+NEW SVT - id:705000, no: 429, name: 로우히, class: berserker
+svtList.js 업데이트 완료: 07_berserker 배열에 429 추가총 1건 업데이트 완료.
