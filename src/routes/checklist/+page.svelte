@@ -427,6 +427,7 @@
 			<select bind:value={currentServer} class="option-select">
 				<option value="KR">KR</option>
 				<option value="JP">JP</option>
+				<option value="NA">NA</option>
 				<option value="luckyBag">확정가챠</option>
 				<!-- <option value="svt5">5성 선택권</option> -->
 			</select>

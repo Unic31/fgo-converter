@@ -159,5 +159,6 @@ async function run(server) {
 async function main() {
     await run("JP");
     await run("KR");
+    await run("NA");
 }
 main()
