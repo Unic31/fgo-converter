@@ -106,10 +106,10 @@
 						FGO Converter
 					</a>
 					<a
-						href={resolve('/chklist')}
+						href={resolve('/checklist')}
 						class="w-full cursor-pointer rounded-md bg-blue-100 px-2.5 py-1 font-semibold text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60"
 					>
-						SVT CheckList
+						FGO CheckList
 					</a>
 				</div>
 			</nav>
@@ -187,9 +187,9 @@
 					Converter
 				</a>
 				<a
-					href={resolve('/chklist')}
+					href={resolve('/checklist')}
 					class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
-        			{$page.url.pathname === resolve('/chklist')
+        			{$page.url.pathname === resolve('/checklist')
 						? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
 						: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
 				>

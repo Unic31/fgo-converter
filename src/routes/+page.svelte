@@ -60,7 +60,7 @@
 	<hr class="border border-gray-500" />
 	<div class="flex flex-col gap-5">
 		<a href={resolve('/converter')} class="a-tag"> FGO Converter </a>
-		<a href={resolve('/chklist')} class="a-tag"> SVT CheckList </a>
+		<a href={resolve('/checklist')} class="a-tag"> FGO CheckList </a>
 	</div>
 	<hr class="border border-gray-500" />
 	<div class="flex flex-col gap-5 text-right">

@@ -174,7 +174,7 @@
 
 			// 이미지 즉시 다운로드
 			const link = document.createElement('a');
-			link.download = `SVT_Checklist_${timestamp}.png`;
+			link.download = `FGO_Checklist_${timestamp}.png`;
 			link.href = dataUrl;
 			link.click();
 		} catch (error) {
@@ -359,22 +359,22 @@
 </script>
 
 <svelte:head>
-	<title>페그오 서번트 체크리스트 (SVT CheckList)</title>
+	<title>페그오 서번트 체크리스트 (FGO CheckList)</title>
 	<meta
 		name="description"
 		content="페그오(FGO) 서번트 소지율, 보구 레벨 상태를 한눈에 확인하고 이미지로 저장할 수 있는 서번트 체크리스트입니다."
 	/>
 	<meta
 		name="keywords"
-		content="페그오 체크리스트, 서번트 체크리스트, FGO 서번트, 페그오 소지율, SVT CheckList, CheckList"
+		content="페그오 체크리스트, 서번트 체크리스트, FGO 서번트, 페그오 소지율, FGO CheckList, CheckList"
 	/>
 
-	<meta property="og:title" content="페그오 서번트 체크리스트 (SVT CheckList)" />
+	<meta property="og:title" content="페그오 서번트 체크리스트 (FGO CheckList)" />
 	<meta
 		property="og:description"
 		content="페그오(FGO) 서번트 소지율, 보구 레벨 상태를 한눈에 확인하고 이미지로 저장할 수 있는 서번트 체크리스트입니다."
 	/>
-	<meta property="og:url" content="https://unic31.github.io/fgo-converter/chklist" />
+	<meta property="og:url" content="https://unic31.github.io/fgo-converter/checklist" />
 
 	<meta property="og:type" content="website" />
 	<meta
@@ -385,7 +385,7 @@
 
 <div class="grid w-full grid-cols-[1fr_auto] grid-rows-[1fr_auto] gap-x-3 gap-y-2">
 	<h1 class="col-start-1 row-start-1 flex">
-		<span class="my-font self-end text-3xl leading-none">SVT CheckList</span>
+		<span class="my-font self-end text-3xl leading-none">FGO CheckList</span>
 	</h1>
 
 	<div class="col-span-2 row-start-2 self-start md:col-span-1 md:col-start-1">
@@ -635,10 +635,10 @@
 </div>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
 	<div class="flex flex-col gap-1">
-		<div>{t.chkListGuide.step1}</div>
+		<div>{t.checkListGuide.step1}</div>
 		<img src="{base}/images/manual3.png" class="w-full" alt="manual3" />
 		<br />
-		<div>{t.chkListGuide.step2}</div>
+		<div>{t.checkListGuide.step2}</div>
 		<img src="{base}/images/manual4.png" class="w-full" alt="manual4" />
 	</div>
 </Modal>
