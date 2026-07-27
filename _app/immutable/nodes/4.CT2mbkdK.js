@@ -1,0 +1,1 @@
+import{R as o}from"../chunks/CYgJF_JY.js";import{b as r}from"../chunks/syf0VSij.js";function i(e,t){throw new o(e,t.toString())}function n(){throw i(307,`${r}/checklist`)}const l=Object.freeze(Object.defineProperty({__proto__:null,load:n},Symbol.toStringTag,{value:"Module"}));export{l as universal};
