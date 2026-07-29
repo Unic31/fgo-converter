@@ -5,3 +5,6 @@ svtList.js 업데이트 완료: 10_alterego 배열에 471 추가
 2026.07.22-04:47 - [KR]
 NEW SVT - id:705000, no: 429, name: 로우히, class: berserker
 svtList.js 업데이트 완료: 07_berserker 배열에 429 추가총 1건 업데이트 완료.
+2026.07.29-16:16 - [NA]
+NEW SVT - id:2300600, no: 421, name: BB Dubai, class: mooncancer
+svtList.js 업데이트 완료: 12_mooncancer 배열에 421 추가총 1건 업데이트 완료.
