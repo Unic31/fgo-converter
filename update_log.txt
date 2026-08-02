@@ -8,3 +8,7 @@ svtList.js 업데이트 완료: 07_berserker 배열에 429 추가총 1건 업데
 2026.07.29-16:16 - [NA]
 NEW SVT - id:2300600, no: 421, name: BB Dubai, class: mooncancer
 svtList.js 업데이트 완료: 12_mooncancer 배열에 421 추가총 1건 업데이트 완료.
+2026.08.02-15:55 - [JP]
+NEW SVT - id:605300, no: 474, name: ハサン・サッバーハ, class: assassin
+svtList.js 업데이트 완료: 06_assassin 배열에 474 추가
+서번트 이미지 저장: 06_assassin/474.png총 1건 업데이트 완료.
