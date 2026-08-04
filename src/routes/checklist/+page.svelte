@@ -601,7 +601,7 @@
 			<div>Total NP Lv : {stats.totalNpLv}</div>
 			<div>NP5 Rate : {stats.np5Ratio}%</div>
 			<div>Ownership Rate : {stats.ownedRatio}%</div>
-			<div>unic31.github.io/fgo-converter</div>
+			<div>https://unic31.github.io/fgo-converter</div>
 		</div>
 	</div>
 </div>
