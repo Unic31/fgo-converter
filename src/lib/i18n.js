@@ -30,7 +30,7 @@ export const i18n = {
 		copy: '복사',
 		desc2: '보유중인 서번트를 테이블 형태로 표시합니다.',
 		checkListGuide: {
-			step1: '1. 터치 영역',
+			step1: '1. 터치 구역',
 			step2: '2. 칼데아앱에 등록된 서번트를 CSV 형태로 가져오기',
 		},
 		listOption1: '계정',
@@ -41,7 +41,7 @@ export const i18n = {
 		listOption3c: '미보유',
 		listOption4: '크기',
 		listOption5: '좌클릭',
-		listOption5a: '영역',
+		listOption5a: '구역',
 		listOption5b: '성배',
 		listOption5c: '관위',
 		listOption6: '우클릭',
