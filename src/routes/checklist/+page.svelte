@@ -161,22 +161,36 @@
 			// 브라우저가 화면을 재배열할 시간(0.3초) 대기
 			await new Promise((resolve) => setTimeout(resolve, 300));
 
-			// 진짜 DOM을 캡처
 			const dataUrl = await toPng(captureArea, {
 				pixelRatio: 2,
 				backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
 			});
-
-			// 파일명에 들어갈 현재 시간 생성
 			const now = new Date();
 			const pad = (n) => String(n).padStart(2, '0');
 			const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+			const fileName = `FGO_Checklist_${timestamp}.png`;
 
-			// 이미지 즉시 다운로드
-			const link = document.createElement('a');
-			link.download = `FGO_Checklist_${timestamp}.png`;
-			link.href = dataUrl;
-			link.click();
+			const res = await fetch(dataUrl);
+			const blob = await res.blob();
+			const file = new File([blob], fileName, { type: 'image/png' });
+
+			// 모바일 기기의 공유기능으로 연결
+			if (navigator.canShare && navigator.canShare({ files: [file] })) {
+				await navigator.share({
+					files: [file],
+					title: 'FGO Checklist'
+				});
+			} else {
+				// PC 환경이거나 Web Share API 미지원 시 기존 a 태그 다운로드 방식 폴백
+				const objectUrl = URL.createObjectURL(blob);
+				const link = document.createElement('a');
+				link.download = fileName;
+				link.href = objectUrl;
+				link.click();
+
+				// 메모리 정리
+				setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+			}
 		} catch (error) {
 			console.error('캡처 에러:', error);
 			alert('이미지 저장 중 오류가 발생했습니다.');
@@ -596,7 +610,7 @@
 		{/each}
 	</div>
 	<div
-		class="p-1 whitespace-wrap flex flex-wrap justify-start gap-x-10 text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
+		class="whitespace-wrap flex flex-wrap justify-start gap-x-10 p-1 text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
 	>
 		<div>Total NP Lv : {stats.totalNpLv}</div>
 		<div>NP5 Rate : {stats.np5Ratio}%</div>
