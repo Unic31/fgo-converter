@@ -174,13 +174,13 @@
 			const blob = await res.blob();
 			const file = new File([blob], fileName, { type: 'image/png' });
 
-			// 모바일 기기의 공유기능으로 연결
-			if (navigator.canShare && navigator.canShare({ files: [file] })) {
-				await navigator.share({
-					files: [file],
-					title: 'FGO Checklist'
-				});
-			} else {
+			// // 모바일 기기의 공유기능으로 연결
+			// if (navigator.canShare && navigator.canShare({ files: [file] })) {
+			// 	await navigator.share({
+			// 		files: [file],
+			// 		title: 'FGO Checklist'
+			// 	});
+			// } else {
 				// PC 환경이거나 Web Share API 미지원 시 기존 a 태그 다운로드 방식 폴백
 				const objectUrl = URL.createObjectURL(blob);
 				const link = document.createElement('a');
@@ -190,7 +190,7 @@
 
 				// 메모리 정리
 				setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-			}
+			// }
 		} catch (error) {
 			console.error('캡처 에러:', error);
 			alert('이미지 저장 중 오류가 발생했습니다.');
