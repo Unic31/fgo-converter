@@ -495,7 +495,7 @@
 <input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
 <div
 	bind:this={captureArea}
-	class="relative space-y-5 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
+	class="relative space-y-2 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
 	0
 		? ''
 		: 'mx-auto'}"
@@ -594,15 +594,14 @@
 				</div>
 			{/if}
 		{/each}
-		<div
-			class="flex flex-col items-end text-lg font-bold whitespace-nowrap text-gray-900 transition-colors dark:text-gray-100
-    				{exportTargetWidth > 0 ? 'absolute right-3 bottom-2' : 'md:absolute md:right-3 md:bottom-2'}"
-		>
-			<div>Total NP Lv : {stats.totalNpLv}</div>
-			<div>NP5 Rate : {stats.np5Ratio}%</div>
-			<div>Ownership Rate : {stats.ownedRatio}%</div>
-			<div>https://unic31.github.io/fgo-converter</div>
-		</div>
+	</div>
+	<div
+		class="p-1 whitespace-wrap flex flex-wrap justify-start gap-x-10 text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
+	>
+		<div>Total NP Lv : {stats.totalNpLv}</div>
+		<div>NP5 Rate : {stats.np5Ratio}%</div>
+		<div>Ownership Rate : {stats.ownedRatio}%</div>
+		<div>https://unic31.github.io/fgo-converter</div>
 	</div>
 </div>
 <div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
