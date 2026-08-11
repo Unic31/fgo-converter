@@ -148,11 +148,11 @@
 			svtData = await fetchSvtDetails(team);
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// if (!dev) {
-				fetch('https://fgo.uenic31.workers.dev/api/count', {
-					method: 'POST'
-				}).catch((err) => {
-					console.warn('카운트 API 호출 실패(무시됨):', err);
-				});
+			fetch('https://fgo.uenic31.workers.dev/api/count', {
+				method: 'POST'
+			}).catch((err) => {
+				console.warn('카운트 API 호출 실패(무시됨):', err);
+			});
 			// }
 		} catch (err) {
 			console.error('fncConvertBtn:', err);
@@ -571,12 +571,29 @@
 	</div>
 </div>
 
-<input
-	type="text"
-	bind:value={url}
-	placeholder="https://link.chaldea.center/laplace/share?data=..."
-	class="my-div my-desc-font outline-none focus:ring-2 focus:ring-blue-500 dark:placeholder-gray-400"
-/>
+<div class="my-div flex w-full items-center gap-2 focus-within:ring-2 focus-within:ring-blue-500">
+	<input
+		type="text"
+		bind:value={url}
+		placeholder="https://link.chaldea.center/laplace/share?data=..."
+		class="my-desc-font flex-1 outline-none dark:placeholder-gray-400"
+	/>
+
+	<button
+		type="button"
+		onclick={() => url = ''}
+		class="my-desc-font"
+		aria-label="Clear url"
+	>
+		<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+			/>
+		</svg>
+	</button>
+</div>
 <button
 	onclick={fncConvertBtn}
 	class="w-full cursor-pointer rounded-lg bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 active:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600"

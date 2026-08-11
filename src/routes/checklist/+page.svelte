@@ -179,7 +179,7 @@
 			link.href = objectUrl;
 			link.download = fileName;
 
-			// 🚨 핵심: iOS Safari를 위해 a 태그를 실제 DOM에 임시로 추가
+			// a 태그를 실제 DOM에 임시로 추가
 			document.body.appendChild(link);
 
 			// 클릭하여 다운로드 실행
