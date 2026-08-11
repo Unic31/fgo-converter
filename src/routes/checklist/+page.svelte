@@ -172,25 +172,24 @@
 
 			const res = await fetch(dataUrl);
 			const blob = await res.blob();
-			const file = new File([blob], fileName, { type: 'image/png' });
+			const objectUrl = URL.createObjectURL(blob);
 
-			// // 모바일 기기의 공유기능으로 연결
-			// if (navigator.canShare && navigator.canShare({ files: [file] })) {
-			// 	await navigator.share({
-			// 		files: [file],
-			// 		title: 'FGO Checklist'
-			// 	});
-			// } else {
-				// PC 환경이거나 Web Share API 미지원 시 기존 a 태그 다운로드 방식 폴백
-				const objectUrl = URL.createObjectURL(blob);
-				const link = document.createElement('a');
-				link.download = fileName;
-				link.href = objectUrl;
-				link.click();
+			// a 태그 생성
+			const link = document.createElement('a');
+			link.href = objectUrl;
+			link.download = fileName;
 
-				// 메모리 정리
-				setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-			// }
+			// 🚨 핵심: iOS Safari를 위해 a 태그를 실제 DOM에 임시로 추가
+			document.body.appendChild(link);
+
+			// 클릭하여 다운로드 실행
+			link.click();
+
+			// 다운로드 직후 DOM에서 제거
+			document.body.removeChild(link);
+
+			// 메모리 정리 
+			setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 		} catch (error) {
 			console.error('캡처 에러:', error);
 			alert('이미지 저장 중 오류가 발생했습니다.');
