@@ -15,3 +15,10 @@ svtList.js 업데이트 완료: 06_assassin 배열에 474 추가
 2026.08.04-08:07 - [KR]
 NEW SVT - id:2800900, no: 431, name: 판타즈문, class: pretender
 svtList.js 업데이트 완료: 13_pretender 배열에 431 추가총 1건 업데이트 완료.
+2026.08.12-15:53 - [JP]
+NEW SVT - id:705300, no: 475, name: 紅閻魔, class: berserker
+svtList.js 업데이트 완료: 07_berserker 배열에 475 추가
+서번트 이미지 저장: 07_berserker/475.png
+NEW SVT - id:2301200, no: 476, name: キングプロテア, class: mooncancer
+svtList.js 업데이트 완료: 12_mooncancer 배열에 476 추가
+서번트 이미지 저장: 12_mooncancer/476.png총 2건 업데이트 완료.
