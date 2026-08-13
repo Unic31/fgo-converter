@@ -161,7 +161,7 @@
 {/if}
 
 <!-- 본문 -->
-<div class="min-h-dvh bg-gray-100 transition-colors duration-300 pt-2 md:p-5 dark:bg-gray-900">
+<div class="min-h-dvh bg-gray-100 pt-2 transition-colors duration-300 md:p-5 dark:bg-gray-900">
 	<div class="mx-auto max-w-5xl">
 		<header>
 			<nav aria-label="main nav" class="flex w-fit max-w-full overflow-x-auto">
@@ -196,6 +196,17 @@
 					CheckList
 				</a>
 				{#if dev}
+					<a
+						href={resolve('/csv')}
+						class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
+        			{$page.url.pathname === resolve('/csv')
+							? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
+							: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
+					>
+						CSV
+					</a>
+				{/if}
+				{#if dev}
 					<button
 						onclick={() => globalState.toggleSidebar()}
 						class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
@@ -210,7 +221,7 @@
 		</header>
 		<main>
 			<div
-				class="flex flex-col space-y-4 rounded-b-xl bg-white p-2 md:p-5 shadow-lg transition-colors duration-300 dark:bg-gray-800"
+				class="flex flex-col space-y-4 rounded-b-xl bg-white p-2 shadow-lg transition-colors duration-300 md:p-5 dark:bg-gray-800"
 			>
 				<!-- 여기서 출력 -->
 				{@render children()}
