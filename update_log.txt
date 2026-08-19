@@ -22,3 +22,10 @@ svtList.js 업데이트 완료: 07_berserker 배열에 475 추가
 NEW SVT - id:2301200, no: 476, name: キングプロテア, class: mooncancer
 svtList.js 업데이트 완료: 12_mooncancer 배열에 476 추가
 서번트 이미지 저장: 12_mooncancer/476.png총 2건 업데이트 완료.
+2026.08.14-15:43 - [JP]
+NEW SVT - id:405900, no: 478, name: リリス, class: rider
+svtList.js 업데이트 완료: 04_rider 배열에 478 추가
+서번트 이미지 저장: 04_rider/478.png
+NEW SVT - id:1102300, no: 479, name: キングプロテア・オルタ, class: avenger
+svtList.js 업데이트 완료: 09_avenger 배열에 479 추가
+서번트 이미지 저장: 09_avenger/479.png총 2건 업데이트 완료.
