@@ -223,6 +223,18 @@
 			backSvtList = newBackList;
 		};
 
+		// 일반적인 경우 functions에 funcTargetType이 'ptOne'인 항목이 있지만,
+		// "선택한 대상이 자신이냐 아니냐에 따라 효과가 갈라지는" 분기형 스킬(예: 605300 2스킬)은
+		// 최상위 skill.functions가 비어있고, 실제 효과는 script.condBranchSkillInfo가 가리키는
+		// 분기 스킬(970921/970922 등)에 들어있다. 이런 분기 구조 자체가 이미 대상 선택이 필요하다는
+		// 뜻이므로 함께 확인한다.
+		const isPtOneTargetingSkill = (skillObj) => {
+			if (!skillObj) return false;
+			if (skillObj.functions?.some((f) => f.funcTargetType === 'ptOne')) return true;
+			if (skillObj.script?.condBranchSkillInfo?.length > 0) return true;
+			return false;
+		};
+
 		actions.forEach((action) => {
 			let enemyTargetCmd = '';
 			if (action.type === 'skill') {
@@ -254,7 +266,7 @@
 					// 마스터 스킬
 					const skillData = mcData.skills[action.skill];
 					const isOrderChange = skillData.functions.some((f) => f.funcType === 'replaceMember');
-					const isTargeting = skillData.functions.some((f) => f.funcTargetType === 'ptOne');
+					const isTargeting = isPtOneTargetingSkill(skillData);
 
 					if (isOrderChange && swapList.length > 0) {
 						const swap = swapList.shift();
@@ -284,7 +296,7 @@
 					const svtInfo = frontSvtList[action.svt];
 					if (svtInfo?.details?.skills) {
 						const latestSkill = svtInfo.activeSkills[action.skill];
-						const isTargeting = latestSkill?.functions?.some((f) => f.funcTargetType === 'ptOne');
+						const isTargeting = isPtOneTargetingSkill(latestSkill);
 
 						// 하베트롯(404200) 3스킬 -> 턴 종료 시 자폭
 						if (svtInfo.svtId === 404200 && action.skill === 2) {
@@ -302,9 +314,16 @@
 						else if (svtInfo.svtId === 1101600 && action.skill === 1) {
 							delayedActions.push({ type: 'retreat', svtIdx: action.svt });
 						}
-						// 앙리마유(1100100) 3스킬 -> 5턴 타이머 부여
+						// 앙리마유(1100100) 3스킬 -> 5턴 즉사 타이머 부여
 						else if (svtInfo.svtId === 1100100 && action.skill === 2) {
 							svtInfo.deathTimer = 5;
+						}
+						// 아스칼리포스(1002200) 3스킬 -> 대상에게 3턴 뒤 즉사 타이머 부여
+						else if (svtInfo.svtId === 1002200 && action.skill === 2) {
+							const targetIdx = action.options?.playerTarget;
+							if (targetIdx !== undefined && frontSvtList[targetIdx]) {
+								frontSvtList[targetIdx].deathTimer = 3;
+							}
 						}
 
 						let skillCmd = svtSkillMap[action.svt][action.skill];
