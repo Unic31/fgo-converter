@@ -29,3 +29,6 @@ svtList.js 업데이트 완료: 04_rider 배열에 478 추가
 NEW SVT - id:1102300, no: 479, name: キングプロテア・オルタ, class: avenger
 svtList.js 업데이트 완료: 09_avenger 배열에 479 추가
 서번트 이미지 저장: 09_avenger/479.png총 2건 업데이트 완료.
+2026.08.28-00:11 - [KR]
+NEW SVT - id:305700, no: 433, name: 비쇼네, class: lancer
+svtList.js 업데이트 완료: 03_lancer 배열에 433 추가총 1건 업데이트 완료.
