@@ -32,3 +32,7 @@ svtList.js 업데이트 완료: 09_avenger 배열에 479 추가
 2026.08.28-00:11 - [KR]
 NEW SVT - id:305700, no: 433, name: 비쇼네, class: lancer
 svtList.js 업데이트 완료: 03_lancer 배열에 433 추가총 1건 업데이트 완료.
+2026.09.16-18:35 - [JP]
+NEW SVT - id:705400, no: 482, name: ダイダロス, class: berserker
+svtList.js 업데이트 완료: 07_berserker 배열에 482 추가
+서번트 이미지 저장: 07_berserker/482.png총 1건 업데이트 완료.
