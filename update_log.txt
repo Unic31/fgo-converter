@@ -36,3 +36,6 @@ svtList.js 업데이트 완료: 03_lancer 배열에 433 추가총 1건 업데이
 NEW SVT - id:705400, no: 482, name: ダイダロス, class: berserker
 svtList.js 업데이트 완료: 07_berserker 배열에 482 추가
 서번트 이미지 저장: 07_berserker/482.png총 1건 업데이트 완료.
+2026.09.23-18:45 - [KR]
+NEW SVT - id:505800, no: 435, name: 오노노 코마치, class: caster
+svtList.js 업데이트 완료: 05_caster 배열에 435 추가총 1건 업데이트 완료.
