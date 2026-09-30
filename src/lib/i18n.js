@@ -13,7 +13,6 @@ export const i18n = {
 		unsupportedTitle: '계산하지 않는 로직',
 		unsupportedList: [
 			'예장, 스킬 효과로 인한 거츠',
-			'턴 종료시 다음 라운드로 넘어가지 않는 경우'
 		],
 		orderChangeWarning:
 			'시뮬레이터 파티 편성시 서번트와 서번트 사이에 빈자리가 있는 전투 데이터를 커맨드로 변환할 경우 에러가 발생할 수 있습니다. ',
@@ -66,7 +65,6 @@ export const i18n = {
 		unsupportedTitle: '計算対象外のロジック',
 		unsupportedList: [
 			'概念礼装、またはスキル効果によるガッツ',
-			'ターン終了時に次ステージへ移行しない場合'
 		],
 		orderChangeWarning: 'シミュレーターでのパーティ編成時、サーヴァントとサーヴァントの間に空き枠がある状態の戦闘データをコマンドに変換すると、エラーが発生する可能性があります。',
 		detailsBtn: '詳細',
@@ -118,7 +116,6 @@ export const i18n = {
 		unsupportedTitle: 'Unsupported Logic',
 		unsupportedList: [
 			'Guts granted by Craft Essences or Skills',
-			'If not transitioning to the next stage upon turn end'
 		],
 		orderChangeWarning: 'When setting up your party in the simulator, converting battle data with an empty slot between Servants into a command may cause an error.',
 		detailsBtn: 'Details',
