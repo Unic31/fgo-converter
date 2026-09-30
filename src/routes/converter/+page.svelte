@@ -748,7 +748,7 @@
 				: 'border-gray-300 bg-gray-100 text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400'}"
 			onclick={toggleSeparatorTooltip}
 		>
-			💬 {showSeparatorTooltip ? '웨이브 안내 켜짐' : '웨이브 안내 꺼짐'}
+			💬 {t.wave1}
 		</button>
 	</div>
 	<div
@@ -784,7 +784,7 @@
 									toggleTurnSeparator(i);
 								}}
 							>
-								{turnSeparatorStates[i] ? '다음 웨이브' : '동일 웨이브 다음턴'}
+								{turnSeparatorStates[i] ? t.wave2 : t.wave3}
 								<span
 									class="absolute left-1/2 -translate-x-1/2 border-4 border-transparent {i % 2 === 0
 										? 'top-full'
