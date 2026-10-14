@@ -42,3 +42,6 @@ svtList.js 업데이트 완료: 05_caster 배열에 435 추가총 1건 업데이
 2026.09.25-19:04 - [NA]
 NEW SVT - id:1001800, no: 426, name: Kazuradrop, class: alterego
 svtList.js 업데이트 완료: 10_alterego 배열에 426 추가총 1건 업데이트 완료.
+2026.10.14-19:06 - [KR]
+NEW SVT - id:2801000, no: 437, name: 단테 알리기에리, class: pretender
+svtList.js 업데이트 완료: 13_pretender 배열에 437 추가총 1건 업데이트 완료.
