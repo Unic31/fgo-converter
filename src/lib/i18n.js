@@ -33,7 +33,7 @@ export const i18n = {
 		desc2: '보유 중인 서번트를 테이블 형태로 표시합니다.',
 		checkListGuide: {
 			step1: '1. 터치 구역',
-			step2: '2. 칼데아앱에 등록된 서번트를 CSV 형태로 가져오기',
+			step2: '2. 칼데아앱 사용자 데이터(JSON)에서 서번트 가져오기',
 		},
 		listOption1: '계정',
 		listOption2: '목록',
@@ -87,7 +87,7 @@ export const i18n = {
 		desc2: '所持しているサーヴァントをテーブル形式で表示します。',
 		checkListGuide: {
 			step1: '1. タップ領域',
-			step2: '2. カルデアアプリに登録されたサーヴァントをCSV形式でインポート',
+			step2: '2. カルデアアプリのユーザーデータ(JSON)からサーヴァントをインポート',
 		},
 		listOption1: 'アカウント',
 		listOption2: 'リスト',
@@ -141,7 +141,7 @@ export const i18n = {
 		desc2: 'Displays your owned Servants in a table format.',
 		checkListGuide: {
 			step1: '1. Interaction Area',
-			step2: '2. Import Servants registered in the Chaldea App via CSV',
+			step2: '2. Import Servants from the Chaldea App userdata (JSON)',
 		},
 		listOption1: 'Account',
 		listOption2: 'List',

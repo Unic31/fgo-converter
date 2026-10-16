@@ -19,7 +19,7 @@
 	let isManualModal = $state(false);
 	let currentServer = $state('KR');
 	let currentData = $derived(serverServantIds[currentServer]);
-	let fileInput; // csv file input
+	let fileInput; // json file input
 	const defaultAccounts = {
 		accountA: { name: 'A', svt_data: {} },
 		accountB: { name: 'B', svt_data: {} },
@@ -201,53 +201,51 @@
 		}
 	}
 
-	function importCSVBtn() {
+	function importJSONBtn() {
 		if (fileInput) {
 			fileInput.click();
 		}
 	}
-	function importCSV(event) {
+
+	// 칼데아 userdata JSON → 체크리스트 상태. favorite이 칼데아의 보유 표시이며, 미보유 서번트는 상태를 만들지 않는다.
+	function parseChaldeaUserdata(data) {
+		const user = data?.users?.[data.curUserKey ?? 0];
+		if (!user?.servants) return null;
+
+		const checklistIds = new Set(Object.keys(svtClassMap).map(Number));
+		const result = new Map();
+		for (const [key, svt] of Object.entries(user.servants)) {
+			const id = Number(key);
+			const cur = svt?.cur;
+			if (!checklistIds.has(id) || !cur?.favorite) continue;
+			result.set(id, {
+				npLv: Math.max(Number(cur.npLv) || 1, 1),
+				isGrail: (Number(cur.grail) || 0) >= 15,
+				isGrand: !!svt.grandSvt
+			});
+		}
+		return result;
+	}
+
+	function importJSON(event) {
 		const file = event.target.files[0];
 		if (!file) return;
 
 		const reader = new FileReader();
 		reader.onload = (e) => {
-			const text = e.target.result;
-			const lines = text.split('\n').filter((line) => line.trim() !== '');
-			if (lines.length < 1) return;
-
-			const headers = lines[0].split(',').map((h) => h.trim().toLowerCase());
-			const idIdx = headers.indexOf('id');
-			const grailIdx = headers.indexOf('grail');
-			const npIdx = headers.indexOf('nplv');
-			const rarityIdx = headers.indexOf('rarity');
-
-			if (idIdx === -1) {
-				alert("CSV에 'id' 컬럼이 필요합니다.");
-				return;
+			let parsed = null;
+			try {
+				parsed = parseChaldeaUserdata(JSON.parse(e.target.result));
+			} catch {
+				parsed = null;
 			}
-
-			let importCount = 0;
-			svtStates.clear();
-			lines.slice(1).forEach((line) => {
-				const values = line.split(',').map((v) => v.trim());
-				const id = Number(values[idIdx]);
-				const rarity = Number(values[rarityIdx]);
-
-				if (!isNaN(id) && rarity === 5) {
-					const grail = grailIdx !== -1 ? Number(values[grailIdx]) : 0;
-					const npLv = npIdx !== -1 ? Number(values[npIdx]) : 1;
-					svtStates.set(id, {
-						npLv: npLv,
-						isGrail: grail >= 15,
-						isGrand: false
-					});
-					importCount++;
-				}
-			});
-			alert(`${importCount}개의 서번트 데이터를 불러왔습니다.`);
-			if (browser) {
+			if (!parsed) {
+				alert('칼데아 앱의 사용자 데이터 JSON 파일이 아닙니다.');
+			} else {
+				svtStates.clear();
+				for (const [id, state] of parsed) svtStates.set(id, state);
 				saveAccountsData();
+				alert(`${parsed.size}개의 서번트 데이터를 불러왔습니다.`);
 			}
 			event.target.value = '';
 		};
@@ -486,7 +484,7 @@
 		</label>
 	</div>
 	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
-		<button class="option-btn color-green" onclick={importCSVBtn}> 데이터 불러오기 </button>
+		<button class="option-btn color-green" onclick={importJSONBtn}> 데이터 불러오기 </button>
 		<button class="option-btn color-orange" onclick={resetData}> 데이터 초기화 </button>
 		{#if currentServer == 'luckyBag'}
 			<button
@@ -505,7 +503,7 @@
 		{/if}
 	</div>
 </div>
-<input bind:this={fileInput} type="file" class="hidden" accept=".csv" onchange={importCSV} />
+<input bind:this={fileInput} type="file" class="hidden" accept=".json" onchange={importJSON} />
 <div
 	bind:this={captureArea}
 	class="relative space-y-2 rounded-xl border border-blue-200 bg-blue-50/30 p-2 transition-all duration-300 dark:border-gray-600 dark:bg-gray-700/50 {exportTargetWidth >
