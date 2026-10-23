@@ -45,3 +45,7 @@ svtList.js 업데이트 완료: 10_alterego 배열에 426 추가총 1건 업데�
 2026.10.14-19:06 - [KR]
 NEW SVT - id:2801000, no: 437, name: 단테 알리기에리, class: pretender
 svtList.js 업데이트 완료: 13_pretender 배열에 437 추가총 1건 업데이트 완료.
+2026.10.23-18:49 - [JP]
+NEW SVT - id:406000, no: 483, name: タマモアリア, class: rider
+svtList.js 업데이트 완료: 04_rider 배열에 483 추가
+서번트 이미지 저장: 04_rider/483.png총 1건 업데이트 완료.
