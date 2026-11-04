@@ -40,14 +40,6 @@
 		if (isSeparatorLocked) return;
 		turnSeparatorStates[idx] = !turnSeparatorStates[idx];
 	}
-	// 턴 구분자 말풍선 표시 여부. 기본값 켜짐, 로컬스토리지에 저장해 다음 방문에도 유지
-	let showSeparatorTooltip = $state(true);
-	function toggleSeparatorTooltip() {
-		showSeparatorTooltip = !showSeparatorTooltip;
-		if (browser) {
-			localStorage.setItem('converter_show_wave_tooltip', showSeparatorTooltip ? '1' : '0');
-		}
-	}
 	let svtData = $state([]);
 	let mcData = $state(null);
 	let isError = $state(false);
@@ -583,10 +575,6 @@
 	}
 
 	onMount(() => {
-		const savedShowTooltip = localStorage.getItem('converter_show_wave_tooltip');
-		if (savedShowTooltip !== null) {
-			showSeparatorTooltip = savedShowTooltip === '1';
-		}
 		if (dev) {
 			url =
 				// 'https://link.chaldea.center/laplace/share?data=GH4sIADQdE2oA_91XzWojRxB-lz5XoH_nR7dIu8safIqcUzBLr6YtNZ4_z_QIhBEkh1yWvEIgh0BeIIe8U7zvkOqe0Uhe_8Cy60kIsjXuorqqvu-rKsm3pLDlvLN5RmapEEB0XR-OSQrkpjOtI7NbYr1FMhFzyoHUG90aMmNATGmK3VvdbsiMsHdUUvVOXmVZLGOyB1LVzlZl6wMUdr1xu8VG25LMXNMZIJlt9fvcvN6aEnNc6bxFY13Z0s27qyu8VXZ5DqS1RZdrZ761o1PI-h3avq97L8zljC58olIXWBq5--PHv3_76e7XPz_-_Mvdh98_fviLACl2rbOrRZWZUNJ4OkN0kgLJzdbkZBb50ss31uTZcuuwkB9uSbt13iuiklPvaQvrFlXnK8dje23z_CzzrilVSlFIadQ_YnxcDh7nW-_BKIQftLpsDMr86XwbWM3xkWJY7a7fVB2aqM-5qU8OK3PuS5g3Rl-PvKBxG-oxN52t2UG4nsf8ob_PQxFs29V11biLXe2pK6vSoHojZk5F-ilmeQ9zlCqhGERpwBylcfQAM-BrBBwijoBVX0jy3wEsKE2fV5mLJPFY8ZlKhM4RkHxGaJwrU2a9mUL_OumAPuPICO8rZfSEEn5KCR8oOQtjiWymDxjqZ6wnKAS6T9F4K39wZ0j9OE0YUjfZ0jWmXLuNKY-AFA2_iGlVFYUus36yvEPQ4_iWSEojnDf_VDzcyHXbziuM_Eo77WtcNxhhXpXZa1_20pOKy6Ncm6P2453lTacb07cZBwESFEQQQwJpEABbjwMTwCQwBSwCFgNLgKXAUUG8w1E_4BK4Ah4Bj4EnwFMQFAQDgSEFCAlCgYhAxCASECkgAMlAcpCYUYJUICOQMcgEZIpMALaF4qAEKCxIgYpAxaASUClEOCU4LxyhB6CLR7AcaFk67azfVMG436P9vV5dd_Wwm-6Te4myZSY3a9yOyCOe9GpYwrjFXK9k6FGUEvs9NFt_9i1-srHrXO9Mc6Gbtem9wtY9nNHXF14VflPhwW2w6k3lPzn8vO79OD2fjb1wthfFpJ1DDQgMf4yfESGIn5CAz7YXr4792lgUUedHA7r1oyW8qBNSzyfIRidtKzpZW93PNgWTbFIm2aRMssmYnE6v_9lCfXrV8cOqE0-uuuFbyLjp-PA16-TyN-OiHJyf3pOP3JafkfpzliyfdMmyryrHlzH6RWK-lBz_IkFftcxLn3iB6S7Cv6sh3f4fEaSFoYYPAAA%3D&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
@@ -766,24 +754,35 @@
 </div>
 
 <div class="my-div">
-	<div class="mb-2 flex items-center gap-2">
+	<div class="mb-2 flex flex-wrap items-center gap-x-4 gap-y-1">
 		<h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">
 			{t.commandText}
 		</h2>
-		<button
-			type="button"
-			class="rounded border px-2 py-0.5 text-xs transition-colors {showSeparatorTooltip
-				? 'border-blue-300 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/40 dark:text-blue-300'
-				: 'border-gray-300 bg-gray-100 text-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400'}"
-			onclick={toggleSeparatorTooltip}
+		<div
+			class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600 dark:text-gray-300"
 		>
-			💬 {t.wave1}
-		</button>
+			<span class="flex items-center gap-1 {isSingleWave ? 'line-through opacity-40' : ''}">
+				<span
+					class="rounded bg-blue-200 px-1 font-mono text-blue-900 dark:bg-blue-700 dark:text-blue-100"
+					>,#,</span
+				>
+				:
+				{t.wave2}
+			</span>
+			<span class="flex items-center gap-1 {isAllNextWave ? 'line-through opacity-40' : ''}">
+				<span
+					class="rounded bg-red-200 px-1 font-mono text-red-900 dark:bg-red-700 dark:text-red-100"
+					>,</span
+				>
+				:
+				{t.wave3}
+			</span>
+		</div>
 	</div>
 	<div
 		class="flex cursor-pointer items-center rounded border border-gray-200 bg-white p-3 font-mono break-all text-gray-900 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
 	>
-		<div class="flex flex-1 flex-wrap items-center {showSeparatorTooltip ? 'gap-y-8 py-8' : ''}">
+		<div class="flex flex-1 flex-wrap items-center">
 			{#each commandSegments as segment, i (i)}
 				<span>{segment}</span>
 				{#if i < commandSegments.length - 1}
@@ -799,34 +798,6 @@
 						}}
 					>
 						{turnSeparatorStates[i] ? ',#,' : ','}
-						{#if showSeparatorTooltip}
-							<span
-								class="absolute left-1/2 -translate-x-1/2 rounded px-2 py-1 text-xs whitespace-nowrap text-white {i %
-									2 ===
-								0
-									? 'bottom-full mb-1.5'
-									: 'top-full mt-1.5'} {turnSeparatorStates[i]
-									? 'bg-blue-600 dark:bg-blue-500'
-									: 'bg-red-600 dark:bg-red-500'}"
-								onclick={(e) => {
-									e.stopPropagation();
-									toggleTurnSeparator(i);
-								}}
-							>
-								{turnSeparatorStates[i] ? t.wave2 : t.wave3}
-								<span
-									class="absolute left-1/2 -translate-x-1/2 border-4 border-transparent {i % 2 === 0
-										? 'top-full'
-										: 'bottom-full'} {turnSeparatorStates[i]
-										? i % 2 === 0
-											? 'border-t-blue-600 dark:border-t-blue-500'
-											: 'border-b-blue-600 dark:border-b-blue-500'
-										: i % 2 === 0
-											? 'border-t-red-600 dark:border-t-red-500'
-											: 'border-b-red-600 dark:border-b-red-500'}"
-								></span>
-							</span>
-						{/if}
 					</span>
 				{/if}
 			{/each}
