@@ -5,6 +5,7 @@
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	import { serverServantIds, svtClassMap } from '$lib/svtList.js';
+	import { GRAIL_100, GRAIL_120, grailTier } from '$lib/grail.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
 	import { toPng } from 'html-to-image';
@@ -221,11 +222,14 @@
 			const id = Number(key);
 			const cur = svt?.cur;
 			if (!checklistIds.has(id) || !cur?.favorite) continue;
-			result.set(id, {
-				npLv: Math.max(Number(cur.npLv) || 1, 1),
-				isGrail: (Number(cur.grail) || 0) >= 15,
-				isGrand: !!svt.grandSvt
-			});
+			const state = { npLv: Math.max(Number(cur.npLv) || 1, 1) };
+			// 성배는 사용 개수 그대로 저장한다(0이면 생략). 12/13 표시 단계는 개수로 계산한다.
+			const grail = Math.max(Math.trunc(Number(cur.grail)) || 0, 0);
+			if (grail > 0) state.grail = grail;
+			if (svt.grandSvt) state.isGrand = true;
+			const bond = Math.min(Math.max(Math.trunc(Number(svt.bond)) || 0, 0), 16);
+			if (bond > 0) state.bond = bond;
+			result.set(id, state);
 		}
 		return result;
 	}
@@ -244,7 +248,15 @@
 			}
 			if (!parsed) {
 				alert('칼데아 앱의 사용자 데이터 JSON 파일이 아닙니다.');
+			} else if (parsed.size === 0) {
+				// 보유 서번트가 하나도 없으면 기존 데이터를 지우지 않는다
+				alert('데이터에 불러올 보유 서번트가 없어 기존 데이터를 유지합니다.');
 			} else {
+				try {
+					localStorage.setItem('multi_accounts_backup_before_import', JSON.stringify(accounts));
+				} catch (err) {
+					console.warn('가져오기 전 백업 실패(무시됨):', err);
+				}
 				svtStates.clear();
 				for (const [id, state] of parsed) svtStates.set(id, state);
 				saveAccountsData();
@@ -254,8 +266,6 @@
 		};
 		reader.readAsText(file, 'UTF-8');
 	}
-
-	// 여기서부터 위로 다시 공부
 
 	function handleAccountChange(e) {
 		const selectedId = e.target.value;
@@ -284,7 +294,7 @@
 	}
 
 	function updateServant(id, action) {
-		const currentState = svtStates.get(id) || { npLv: 0, isGrail: false, isGrand: false };
+		const currentState = svtStates.get(id) || { npLv: 0 };
 		let newState = { ...currentState };
 		if (action === 'npLv') {
 			if (isLimitNp) {
@@ -299,7 +309,20 @@
 				newState.npLv = currentState.npLv <= 0 ? 5 : currentState.npLv - 1;
 			}
 		} else {
-			newState[action] = !currentState[action];
+			if (action === 'isGrail') {
+				// 성배는 개수(grail)로 저장하고 없음 → Lv100(5개) → Lv120(15개) → 없음 순으로 순환한다.
+				// 없음이면 필드를 지운다. 예전 isGrail 필드는 함께 정리한다.
+				const tier = grailTier(currentState);
+				delete newState.isGrail;
+				if (tier === 0) newState.grail = GRAIL_100;
+				else if (tier === 100) newState.grail = GRAIL_120;
+				else delete newState.grail;
+			} else if (!currentState[action]) {
+				// 그 외(관위)는 켜질 때만 true로 저장하고, 꺼지면 필드를 지운다
+				newState[action] = true;
+			} else {
+				delete newState[action];
+			}
 			if (currentState.npLv === 0) {
 				newState.npLv = 1;
 			}
@@ -559,9 +582,9 @@
 											class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
 											onclick={(e) => handleLeftClick(e, id, 'isGrail')}
 										>
-											{#if svtStates.get(id)?.isGrail}
+											{#if grailTier(svtStates.get(id)) > 0}
 												<img
-													src="{base}/images/grail12.png"
+													src="{base}/images/grail{grailTier(svtStates.get(id))}.png"
 													alt="grail"
 													class="w-full object-contain drop-shadow-md"
 												/>
