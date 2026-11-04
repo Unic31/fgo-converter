@@ -52,7 +52,7 @@ export const i18n = {
 		listOption6c: '관위',
 		listOption7: '보구 상한',
 		listOption7a: 'Lv. 5',
-		listOption7b: '제한 없음',
+		listOption7b: '없음',
 	},
 	JP: {
 		translation: 'AIによる翻訳のため、一部不自然な表現が含まれる場合がございます。',
