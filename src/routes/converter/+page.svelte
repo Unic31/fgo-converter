@@ -921,7 +921,7 @@
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
 	<div class="flex flex-col gap-2">
 		<button
-			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-800"
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-700"
 			onclick={() => (showGuide1 = !showGuide1)}
 		>
 			{t.converterGuide.guide1}
@@ -941,7 +941,7 @@
 		{/if}
 
 		<button
-			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-800"
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-700"
 			onclick={() => (showGuide2 = !showGuide2)}
 		>
 			{t.converterGuide.guide2}

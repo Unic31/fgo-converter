@@ -25,18 +25,22 @@
 		onclick={closeModal}
 	>
 		<div
-			class="w-11/12 max-w-xl rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800 dark:text-white"
+			class="w-11/12 max-w-xl rounded-2xl bg-white p-5 shadow-2xl dark:bg-gray-800 dark:text-white"
 			onclick={(e) => e.stopPropagation()}
 		>
 			<div class="flex items-center justify-between">
-				<div class="text-xl font-bold">{header}</div>
-				<button class="my-font cursor-pointer text-3xl" onclick={closeModal}>✕</button>
+				<div class="text-lg font-bold">{header}</div>
+				<button
+					class="cursor-pointer text-2xl leading-none text-gray-400 transition-colors hover:text-gray-700 dark:hover:text-gray-200"
+					aria-label="Close"
+					onclick={closeModal}>✕</button
+				>
 			</div>
-			<hr class="-mx-4 my-4 border border-gray-500" />
+			<hr class="-mx-5 my-4 border-t border-gray-200 dark:border-gray-600" />
 			<div class="my-font max-h-[70vh] overflow-y-auto">
 				{@render children()}
 			</div>
-			<hr class="-mx-4 my-4 border border-gray-500" />
+			<hr class="-mx-5 my-4 border-t border-gray-200 dark:border-gray-600" />
 			<div class="flex items-center justify-end">
 				{#if footer}
 					<!-- 부모가 커스텀 HTML(버튼들)을 넘겼다면 그걸 그대로 출력 -->

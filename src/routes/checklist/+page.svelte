@@ -17,6 +17,9 @@
 	let leftClickMode = $state('click');
 	let rightClickMode = $state('decrease');
 	let isManualModal = $state(false);
+	// 사용방법 모달의 소제목별 펼침 상태
+	let showGuide1 = $state(false);
+	let showGuide2 = $state(false);
 	let currentServer = $state('KR');
 	let currentData = $derived(serverServantIds[currentServer]);
 	let fileInput; // json file input
@@ -188,7 +191,7 @@
 			// 다운로드 직후 DOM에서 제거
 			document.body.removeChild(link);
 
-			// 메모리 정리 
+			// 메모리 정리
 			setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 		} catch (error) {
 			console.error('캡처 에러:', error);
@@ -645,12 +648,34 @@
 	의 아이디어를 빌려 제작되었습니다.
 </div>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
-	<div class="flex flex-col gap-1">
-		<div>{t.checkListGuide.step1}</div>
-		<img src="{base}/images/manual3.png" class="w-full" alt="manual3" />
-		<br />
-		<div>{t.checkListGuide.step2}</div>
-		<img src="{base}/images/manual4.png" class="w-full" alt="manual4" />
+	<div class="flex flex-col gap-2">
+		<button
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-700"
+			onclick={() => (showGuide1 = !showGuide1)}
+		>
+			{t.checkListGuide.step1}
+			{showGuide1 ? '▲' : '▼'}
+		</button>
+
+		{#if showGuide1}
+			<div class="flex flex-col gap-1 rounded border border-gray-200 p-2 dark:border-gray-700">
+				<img src="{base}/images/manual3.png" class="w-full" alt="manual3" />
+			</div>
+		{/if}
+
+		<button
+			class="w-full cursor-pointer rounded bg-gray-100 p-2 text-left font-bold dark:bg-gray-700"
+			onclick={() => (showGuide2 = !showGuide2)}
+		>
+			{t.checkListGuide.step2}
+			{showGuide2 ? '▲' : '▼'}
+		</button>
+
+		{#if showGuide2}
+			<div class="flex flex-col gap-1 rounded border border-gray-200 p-2 dark:border-gray-700">
+				<img src="{base}/images/manual4.png" class="w-full" alt="manual4" />
+			</div>
+		{/if}
 	</div>
 </Modal>
 {#if isLoading}
