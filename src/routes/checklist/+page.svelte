@@ -51,6 +51,28 @@
 		}
 		return result;
 	});
+	// 관위 테두리 색 비교용(임시): 클래스 폴더별로 다른 색을 줘서 한 화면에서 비교한다.
+	// 색을 정하면 한 색으로 통일하고 이 표와 아래 style 지정을 지운다.
+	const defaultGrandBorder = '#00b4ff';
+	const grandBorderColors = {
+		// 세이버~라이더: 사용자가 어울린다고 한 색
+		'01_saber': '#00b4ff', // 하늘색(현재)
+		'02_archer': '#2979ff', // 선명한 파랑
+		'03_lancer': '#00e5ff', // 시안
+		'04_rider': '#4da6ff', // 밝은 하늘
+		// 나머지: 위 색과 비슷한 파랑~하늘색 계열(아처보다 어둡지 않고 서로 구분되게 고름)
+		'05_caster': '#7ae9ff',
+		'06_assassin': '#3ddfff',
+		'07_berserker': '#7ab8ff',
+		'08_ruler': '#0087f5',
+		'09_avenger': '#29bbff',
+		'10_alterego': '#5ccbff',
+		'11_foreigner': '#1f9aff',
+		'12_mooncancer': '#5286ff',
+		'13_pretender': '#1fdaff',
+		'14_beast': '#709bff',
+		'15_unbeast': '#00ccf5'
+	};
 	let iconSize = $state('m');
 	let iconClass = $derived.by(() => {
 		if (iconSize === 's') return 'h-11 w-11';
@@ -579,7 +601,8 @@
 
 									{#if svtStates.get(id)?.isGrand}
 										<div
-											class="pointer-events-none absolute inset-0 z-5 rounded-md border-[3px] border-blue-500"
+											class="pointer-events-none absolute inset-0 z-5 rounded-md border-4"
+											style="border-color: {grandBorderColors[classFolder] ?? defaultGrandBorder}"
 										></div>
 									{/if}
 
