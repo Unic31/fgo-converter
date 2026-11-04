@@ -22,11 +22,22 @@
 			return acc + (turnSeparatorStates[i - 1] ? ',#,' : ',') + seg;
 		}, '')
 	);
+	// 웨이브 수. null이면 알 수 없음(조회 실패 등)은 기존처럼 다음 웨이브 기본값
+	let waveCount = $state(null);
+	// 웨이브가 1개뿐인 퀘스트(관위전, 레이드 등)는 다음 웨이브로 갈 일이 없으므로 항상 동일 웨이브 다음턴(,)
+	let isSingleWave = $derived(waveCount === 1);
+	// 턴 전환 횟수(구분자 개수)가 웨이브 전환 횟수(웨이브 수 - 1)와 같으면 동일 웨이브가 없음(,#,)
+	let isAllNextWave = $derived(
+		waveCount !== null && waveCount > 1 && commandSegments.length - 1 === waveCount - 1
+	);
+	// 구분자 상태가 정해져 있어 토글할 수 없는 경우
+	let isSeparatorLocked = $derived(isSingleWave || isAllNextWave);
 	$effect(() => {
 		turnSeparatorStates =
-			commandSegments.length > 0 ? new Array(commandSegments.length - 1).fill(true) : [];
+			commandSegments.length > 0 ? new Array(commandSegments.length - 1).fill(!isSingleWave) : [];
 	});
 	function toggleTurnSeparator(idx) {
+		if (isSeparatorLocked) return;
 		turnSeparatorStates[idx] = !turnSeparatorStates[idx];
 	}
 	// 턴 구분자 말풍선 표시 여부. 기본값 켜짐, 로컬스토리지에 저장해 다음 방문에도 유지
@@ -125,8 +136,24 @@
 		}
 	}
 
+	async function fetchWaveCount(quest) {
+		if (!quest?.id) return null;
+		try {
+			const res = await fetch(
+				`https://api.atlasacademy.io/nice/JP/quest/${quest.id}/${quest.phase ?? 1}`
+			);
+			if (!res.ok) return null;
+			const data = await res.json();
+			return Array.isArray(data.stages) && data.stages.length > 0 ? data.stages.length : null;
+		} catch (err) {
+			console.warn('퀘스트 웨이브 수 조회 실패(무시됨):', err);
+			return null;
+		}
+	}
+
 	async function fncConvertBtn() {
 		try {
+			waveCount = null;
 			decodedData = null;
 			fgaCommand = '';
 			svtData = [];
@@ -171,6 +198,7 @@
 				...decodedData.team.backupSvts // [3, 4, 5]
 			];
 			svtData = await fetchSvtDetails(team);
+			waveCount = await fetchWaveCount(decodedData.quest);
 			fgaCommand = fncConvert(decodedData.actions, decodedData.delegate);
 			// if (!dev) {
 			fetch('https://fgo.uenic31.workers.dev/api/count', {
