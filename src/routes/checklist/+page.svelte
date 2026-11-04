@@ -577,6 +577,12 @@
 										class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-black/80 to-transparent"
 									></div>
 
+									{#if svtStates.get(id)?.isGrand}
+										<div
+											class="pointer-events-none absolute inset-0 z-5 rounded-md border-[3px] border-blue-500"
+										></div>
+									{/if}
+
 									<div class="absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
 										<button
 											class="flex h-full w-full items-end justify-center transition-colors hover:bg-white/20"
