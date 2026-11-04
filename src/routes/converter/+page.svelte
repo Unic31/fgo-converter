@@ -5,6 +5,7 @@
 	import { base } from '$app/paths';
 	import { globalState } from '$lib/globalState.svelte.js';
 	import { i18n } from '$lib/i18n.js';
+	import { devUrls } from '$lib/devUrls.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	import Modal from '$lib/components/modal.svelte';
 
@@ -561,7 +562,7 @@
 		if (dev) {
 			url =
 				// 'https://link.chaldea.center/laplace/share?data=GH4sIADQdE2oA_91XzWojRxB-lz5XoH_nR7dIu8safIqcUzBLr6YtNZ4_z_QIhBEkh1yWvEIgh0BeIIe8U7zvkOqe0Uhe_8Cy60kIsjXuorqqvu-rKsm3pLDlvLN5RmapEEB0XR-OSQrkpjOtI7NbYr1FMhFzyoHUG90aMmNATGmK3VvdbsiMsHdUUvVOXmVZLGOyB1LVzlZl6wMUdr1xu8VG25LMXNMZIJlt9fvcvN6aEnNc6bxFY13Z0s27qyu8VXZ5DqS1RZdrZ761o1PI-h3avq97L8zljC58olIXWBq5--PHv3_76e7XPz_-_Mvdh98_fviLACl2rbOrRZWZUNJ4OkN0kgLJzdbkZBb50ss31uTZcuuwkB9uSbt13iuiklPvaQvrFlXnK8dje23z_CzzrilVSlFIadQ_YnxcDh7nW-_BKIQftLpsDMr86XwbWM3xkWJY7a7fVB2aqM-5qU8OK3PuS5g3Rl-PvKBxG-oxN52t2UG4nsf8ob_PQxFs29V11biLXe2pK6vSoHojZk5F-ilmeQ9zlCqhGERpwBylcfQAM-BrBBwijoBVX0jy3wEsKE2fV5mLJPFY8ZlKhM4RkHxGaJwrU2a9mUL_OumAPuPICO8rZfSEEn5KCR8oOQtjiWymDxjqZ6wnKAS6T9F4K39wZ0j9OE0YUjfZ0jWmXLuNKY-AFA2_iGlVFYUus36yvEPQ4_iWSEojnDf_VDzcyHXbziuM_Eo77WtcNxhhXpXZa1_20pOKy6Ncm6P2453lTacb07cZBwESFEQQQwJpEABbjwMTwCQwBSwCFgNLgKXAUUG8w1E_4BK4Ah4Bj4EnwFMQFAQDgSEFCAlCgYhAxCASECkgAMlAcpCYUYJUICOQMcgEZIpMALaF4qAEKCxIgYpAxaASUClEOCU4LxyhB6CLR7AcaFk67azfVMG436P9vV5dd_Wwm-6Te4myZSY3a9yOyCOe9GpYwrjFXK9k6FGUEvs9NFt_9i1-srHrXO9Mc6Gbtem9wtY9nNHXF14VflPhwW2w6k3lPzn8vO79OD2fjb1wthfFpJ1DDQgMf4yfESGIn5CAz7YXr4792lgUUedHA7r1oyW8qBNSzyfIRidtKzpZW93PNgWTbFIm2aRMssmYnE6v_9lCfXrV8cOqE0-uuuFbyLjp-PA16-TyN-OiHJyf3pOP3JafkfpzliyfdMmyryrHlzH6RWK-lBz_IkFftcxLn3iB6S7Cv6sh3f4fEaSFoYYPAAA%3D&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
-				'https://link.chaldea.center/laplace/share?data=GH4sIAGlehWoA_91X227bOBD9Fz5PAV4l0W-122ID5GmdfVoEBWsxNhHdIlEGjMD_vkNKlp3mAhRt1GLhxAoHw5k558yMnUdSumrZuyInCy0EENM0p2OmgTz0tvNk8UhcsEgmUk45kGZnOksWDIitbHn4y3Q7siDsK5VUfZV3eZ7KlByB1I13ddWFAKXb7vxhtTOuIgvf9hZI7jrzrbCf97bCHHem6NDY1K7yy_7uDm9VfVEA6VzZF8bbj25yiln_Rts_zeCFubw1ZUhUmdKerpaHzrvNqs5tLGE6XSEaSYEUdm8LskhCqdUXZ4t8vfeY-N9H0u198Eqo5DR4utL5Vd2HSvHY3buiuMqDq6ZKKQqaJsMjxcft6HG9Dx6MQvxBq8-noCycrveRxQIfGsMaf_-l7tFEQ85dc3HY2OtQwrK15n7iAY37WI996F3DTkIN4Ivn_iEPRbBd3zR1628ODRJDqrqyqNaEmVOhv8csn2BOtBKKQaIj5kSnyTPMgK8JcIw4AVZDIdmfA1hQqt9WmYssC1jxqSVC5whIviE0zpGt8sFMYXhddMCQcWKED5UyekEJv6SEj5RcxTFENvUzhoaZGgiKgZ5SNN0qnt0ZU79ME4Y0bb72ra22fmerMyBF4y9i2tRlaap8mKzgEPU4v2WS0gTnLTwVjzcK03XLGiN_Mt6EGrctRljWVf45lL0OpOKyqLb2rP10Z_3Qm9YObcZBgAQFCaSQgY4CYOtxYAKYBKaAJcBSYBkwDRwVxDsc9QMugSvgCfAUeAZcg6AgGAgMKUBIEApEAiIFkYHQgAAkA8lBYkYJUoFMQKYgM5AamQBsC8VBCVBYkAKVgEpBZaA0JDglOC8coUegqxewnGhZe-Nd2FTReDyi_ZvZ3PfNuJueknuLsuW2sFvchsgjnsxmXLq4xfygZOxRlBL7PTbbcA4tfrGhm8IcbHtj2q0dvOKWPZ3RNxRel2FT4cHvsOpdHT4pwrwewzi9nY29c7Z3xWS8Rw0IjH9MnxExSJiQiM91N5_O_do6FNEUZwO6DaMlgqgzUs9nyEZnbSs6W1s9zTYHk2xWJtmsTLLZmJxPr__ZQn191fHTqhOvrrrxW8i06fj4Nevi8odpUY7Or-_JF27LH0j9I0uWz7pk2S-V4-cY_Skx30uO30jQLy3zNiReYbqb-O9pTHf8D5nLat12DwAA&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
+				'https://link.chaldea.center/laplace/share?data=GH4sIABq66moA_82XWW_bOBDHvwufpwBPHX6r3RYbIE_r7NPCKFiLtolQRyTKgBH4u--QkhUXiXukjbdIYpoUh__hbw47j6S01by3riCzXAggumlO05wDeehN58nskdiwIplIOcXlZqc7Q2YMiKlMefhLdzsyI-wzlVR9lpuiSGVKjkDqxtu66sIBpd3u_GGx07YiM9_2BkhhO_3FmY97U6HGRrsOF5vaVn7ebzZoVfXOAels2TvtzXs7bYqqf-PaP82wC7W80WUQqnRpTqblofN2vagLE12YZjd4G0mBOLM3Du9Bg6_VJ2tcsdx7VP73kXR7H7YlVHIattrS-kXdB1clOnVvnbspwtacKqUo5DQZhhSH1bjjdh92MArxdxX5mqoYluNq_MEHvpjUWJjd7iNfh0OO8trff6r74GpwZtecTdbmNvg2b42-nwjhIlriU_PQ24adQjhgcc_3B51Aoeubpm793aFBZGTTWvQWIznhkFSKb-NA_7lSDHAUEoHgKJPXE4mCfw6Rqq7MOQ-ONPLvABFZFjIDx1wGMCKn8geBjDhOjwYkg-bEhA--MnoGhZ9D4SOUm1jDNJXZM0ZDQQ6I4kFfQ5qs3DObUfplUHikboulb0219TtTDTGmoOj0h7da12Wpq2IozLAlxiS-ZJIGVnFM5DAqHo2c7rp5jcd_0F4HR7ctHjKvq-Jj8H0Z2GK7qbbmKQUmm-VDr1sTCQMHARIUJJBCBnmEzYBxYAKYBKaAJcBSYBmwHNMZONpwDCNwCVwBT4CnwDPgOQgKgoHAIwUICUKBSECkIDIQOeAFJAPJQaKiBKlAJiBTkBnIHGEAZofioAQodEiBSkCloDJQOSQUEgYJx6vHiy5euMsJy9Jrb0Ovi4vHI65_0ev7vhmb2xPf8LLC2BXGmS32U-SIM70e2za2QT-EM6YqxhPTPmbcMA_ldNbjG6cPpr3T7db4odRCnz7N0So4XpehfvGh36HXuzp81oSyPYaq-rYau4Iau5ra9wny16to7zHiBMY300daFAxFGd_Y7u7DU3W0FlNGu6cF3DZUsxg73pk1e401e5X26m0QXUgyfgU1-tbhv6DGrqp2DZLsaiSvdyd-1ezgb50dl1sRP7UDcbEdjF9Mpm7Ap14yGb-bWtG4-XIvecFa_oT0n9uI2G8Nx68R_aVgvlU4_kdAv9XNVRBeoNxd_Hc3yh3_Aw6paorGDwAA&questId=94137202&phase=1&enemyHash=1_0405_4fdd747';
 			// fncConvertBtn();
 		}
 	});
@@ -817,6 +818,30 @@
 	<div
 		class="flex flex-col gap-2 rounded-xl border border-blue-200 bg-blue-50/30 p-3 transition-colors dark:border-gray-600 dark:bg-gray-700/50"
 	>
+		<div
+			class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-600 dark:bg-gray-800"
+		>
+			<h3 class="mb-2 text-sm font-bold text-gray-700 dark:text-gray-200">
+				저장된 테스트 URL (src/lib/devUrls.js)
+			</h3>
+			<ul class="flex flex-col gap-2">
+				{#each devUrls as item, i (i)}
+					<li class="flex items-center gap-2">
+						<span class="flex-1 text-sm text-gray-900 dark:text-gray-100">{item.label}</span>
+						<button
+							type="button"
+							class="rounded bg-blue-600 px-3 py-1 text-xs font-bold text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+							onclick={() => {
+								url = item.url;
+								fncConvertBtn();
+							}}
+						>
+							변환
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</div>
 		<div class="flex items-end justify-between">
 			<h2 class="mb-2 text-lg font-bold text-gray-900 dark:text-gray-100">
 				커맨드를 기반으로 작성된 시뮬레이터 화면
