@@ -58,7 +58,8 @@ export const serverServantIds = {
         '05_caster': [37, 62, 113, 169, 201],
         '06_assassin': [75, 189, 235, 380],
         '07_berserker': [52, 97, 98, 226, 306],
-        '08_ruler': [59, 370, 407],
+        '08_ruler': [59],
+        '09_avenger': [370, 407],
         '10_alterego': [224],
         '12_mooncancer': [244]
     },
