@@ -12,6 +12,8 @@
 	let captureArea;
 	let isLoading = $state(false);
 	let isLimitNp = $state(false);
+	let isSvt5Border = $state(false);
+	const svt5Ids = new Set(Object.values(serverServantIds.svt5).flat());
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
 	let leftClickMode = $state('click');
@@ -321,7 +323,8 @@
 				iconSize,
 				leftClickMode,
 				rightClickMode,
-				isLimitNp
+				isLimitNp,
+				isSvt5Border
 			};
 			localStorage.setItem('svt_checklist_settings', JSON.stringify(settingsToSave));
 		}
@@ -346,6 +349,7 @@
 			if (parsedSettings.leftClickMode) leftClickMode = parsedSettings.leftClickMode;
 			if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
 			if (parsedSettings.isLimitNp !== undefined) isLimitNp = parsedSettings.isLimitNp;
+			if (parsedSettings.isSvt5Border !== undefined) isSvt5Border = parsedSettings.isSvt5Border;
 		}
 		const savedCurrentId = localStorage.getItem('current_id');
 		if (savedCurrentId) {
@@ -440,7 +444,7 @@
 				<option value="JP">JP</option>
 				<option value="NA">NA</option>
 				<option value="luckyBag">확정가챠</option>
-				<!-- <option value="svt5">5성 선택권</option> -->
+				<option value="svt5">{t.listOption2svt5}</option>
 			</select>
 		</label>
 		<label class="option-label">
@@ -481,6 +485,12 @@
 				<option value={false}>{t.listOption7a}</option>
 				<option value={true}>{t.listOption7b}</option>
 			</select>
+		</label>
+		<label class="option-label">
+			<span class="option-title"> {t.listOption8} </span>
+			<span class="option-select flex items-center justify-center">
+				<input type="checkbox" bind:checked={isSvt5Border} class="h-5 w-5 cursor-pointer" />
+			</span>
 		</label>
 	</div>
 	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
@@ -533,7 +543,9 @@
 						{@const classFolder = svtClassMap[id]}
 						{#if classFolder}
 							<div
-								class="relative {iconClass} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
+								class="relative {iconClass} {isSvt5Border && svt5Ids.has(id)
+									? 'ring-2 ring-red-500'
+									: ''} cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-all duration-300 hover:scale-105 active:scale-95 dark:bg-gray-700"
 								oncontextmenu={(e) => handleRightClick(e, id)}
 							>
 								<img
