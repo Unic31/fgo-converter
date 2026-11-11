@@ -9,6 +9,8 @@ export const i18n = {
 		commandText: '변환된 커맨드',
 		clipboardAlert: '클립보드에 저장되었습니다!',
 		warningTitle: '⚠️ 주의사항 ⚠️',
+		waveWarnMixed:
+			"웨이브가 {waves}개인데 턴 전환은 {turns}번입니다. '다음웨이브(,#,)' 와 '동일 웨이브 다음 턴(,)' 을 자동으로 구분할 수 없으니, 변환 결과의 구분자를 클릭하여 직접 변경해 주세요.",
 		warnings1: '반복 프리 퀘스트 외 특수 기믹이 있는 퀘스트나 스토리에 사용을 권장하지 않습니다.',
 		unsupportedTitle: '계산하지 않는 로직',
 		unsupportedList: [
@@ -69,6 +71,8 @@ export const i18n = {
 		commandText: '変換されたコマンド',
 		clipboardAlert: 'クリップボードにコピーしました！',
 		warningTitle: '⚠️ 注意事項 ⚠️',
+		waveWarnMixed:
+			'ウェーブが{waves}つですが、ターン切り替えは{turns}回です。「次のウェーブ(,#,)」と「同じウェーブの次のターン(,)」を自動で判別できないため、変換結果の区切りをクリックして直接変更してください。',
 		warnings1: '周回用のフリークエスト以外の、特殊なギミックがあるクエストやストーリーでの使用は推奨しません。',
 		unsupportedTitle: '計算対象外のロジック',
 		unsupportedList: [
@@ -128,6 +132,8 @@ export const i18n = {
 		commandText: 'Converted Command',
 		clipboardAlert: 'Copied to clipboard!',
 		warningTitle: '⚠️ Disclaimer ⚠️',
+		waveWarnMixed:
+			"There are {waves} waves but {turns} turn changes. 'Next wave (,#,)' and 'next turn in the same wave (,)' cannot be told apart automatically, so please click the separators in the converted result to change them manually.",
 		warnings1: 'We do not recommend using this for Story quests or quests with special gimmicks. Please use it mainly for repeatable Free Quests.',
 		unsupportedTitle: 'Unsupported Logic',
 		unsupportedList: [

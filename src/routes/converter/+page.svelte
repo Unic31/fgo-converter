@@ -32,6 +32,13 @@
 	);
 	// 구분자 상태가 정해져 있어 토글할 수 없는 경우
 	let isSeparatorLocked = $derived(isSingleWave || isAllNextWave);
+	// 웨이브가 2개 이상이고 턴 전환 횟수가 웨이브 수 - 1 과 다르면, 같은 웨이브 다음 턴(,)이 섞여 있을 수 있어
+	// 구분자를 직접 확인하라는 경고를 띄운다. 웨이브 1개(관위전, 레이드)와 턴 전환이 없는 경우는 제외.
+	let waveWarning = $derived.by(() => {
+		const turns = commandSegments.length - 1;
+		if (waveCount === null || waveCount <= 1 || turns < 1 || turns === waveCount - 1) return '';
+		return t.waveWarnMixed.replace('{waves}', waveCount).replace('{turns}', turns);
+	});
 	$effect(() => {
 		turnSeparatorStates =
 			commandSegments.length > 0 ? new Array(commandSegments.length - 1).fill(!isSingleWave) : [];
@@ -812,6 +819,11 @@
 			{t.copy}
 		</button>
 	</div>
+	{#if waveWarning}
+		<div class="mt-1 rounded-lg bg-red-200 p-3 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+			⚠️ {waveWarning}
+		</div>
+	{/if}
 </div>
 {#if dev}
 	<div
