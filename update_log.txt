@@ -49,3 +49,7 @@ svtList.js 업데이트 완료: 13_pretender 배열에 437 추가총 1건 업데
 NEW SVT - id:406000, no: 483, name: タマモアリア, class: rider
 svtList.js 업데이트 완료: 04_rider 배열에 483 추가
 서번트 이미지 저장: 04_rider/483.png총 1건 업데이트 완료.
+2026.11.11-14:07 - [JP]
+NEW SVT - id:2801400, no: 484, name: 卑弥呼＆壱与, class: pretender
+svtList.js 업데이트 완료: 13_pretender 배열에 484 추가
+서번트 이미지 저장: 13_pretender/484.png총 1건 업데이트 완료.
