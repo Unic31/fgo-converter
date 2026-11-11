@@ -106,6 +106,8 @@ export const serverServantIds = {
     }
 };
 
+export const destinyMaxId = 437; // 단테
+
 export const svtClassMap = {};
 
 for (const [classFolder, ids] of Object.entries(serverServantIds['JP'])) {

@@ -2,6 +2,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 .custom-scrollbar::-webkit-scrollbar {
 	height: 6px;
+	width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
 	background: transparent;

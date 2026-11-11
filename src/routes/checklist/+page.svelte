@@ -4,7 +4,7 @@
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
-	import { serverServantIds, svtClassMap } from '$lib/svtList.js';
+	import { serverServantIds, svtClassMap, destinyMaxId } from '$lib/svtList.js';
 	import { GRAIL_100, GRAIL_120, grailTier } from '$lib/grail.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
@@ -14,6 +14,31 @@
 	let isLoading = $state(false);
 	let isLimitNp = $state(false);
 	let isSvt5Border = $state(false);
+	let isDestiny = $state(false);
+	// 데스티니 줄: 클래스 폴더 순서(위 7칸 / 아래 7칸). 선택한 서번트 ID는 계정별로 따로 저장한다.
+	const destinyRows = [
+		['01_saber', '02_archer', '03_lancer', '04_rider', '05_caster', '06_assassin', '07_berserker'],
+		['08_ruler', '09_avenger', '10_alterego', '12_mooncancer', '11_foreigner', '13_pretender', '14_beast']
+	];
+	let destinyAll = $state({}); // { [accountId]: { [classFolder]: collectionNo } }
+	let destinyPicks = $derived(destinyAll[currentId] ?? {});
+	// 좁은 화면에서는 칸이 겹치지 않도록 열 너비에 맞춰 줄어들고, 넓을 때는 아이콘 크기 설정까지만 커진다.
+	let destinySizeClass = $derived(
+		iconSize === 's' ? 'max-w-11' : iconSize === 'l' ? 'max-w-18' : 'max-w-14'
+	);
+	let isDestinyModal = $state(false);
+	let destinyPickClass = $state('');
+	function openDestinyPicker(classFolder) {
+		destinyPickClass = classFolder;
+		isDestinyModal = true;
+	}
+	function pickDestiny(id) {
+		const picks = { ...(destinyAll[currentId] ?? {}) };
+		if (id) picks[destinyPickClass] = id;
+		else delete picks[destinyPickClass];
+		destinyAll[currentId] = picks;
+		isDestinyModal = false;
+	}
 	const svt5Ids = new Set(Object.values(serverServantIds.svt5).flat());
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
 	let isSettingsLoaded = $state(false);
@@ -53,28 +78,7 @@
 		}
 		return result;
 	});
-	// 관위 테두리 색 비교용(임시): 클래스 폴더별로 다른 색을 줘서 한 화면에서 비교한다.
-	// 색을 정하면 한 색으로 통일하고 이 표와 아래 style 지정을 지운다.
-	const defaultGrandBorder = '#00b4ff';
-	const grandBorderColors = {
-		// 세이버~라이더: 사용자가 어울린다고 한 색
-		'01_saber': '#00b4ff', // 하늘색(현재)
-		'02_archer': '#2979ff', // 선명한 파랑
-		'03_lancer': '#00e5ff', // 시안
-		'04_rider': '#4da6ff', // 밝은 하늘
-		// 나머지: 위 색과 비슷한 파랑~하늘색 계열(아처보다 어둡지 않고 서로 구분되게 고름)
-		'05_caster': '#7ae9ff',
-		'06_assassin': '#3ddfff',
-		'07_berserker': '#7ab8ff',
-		'08_ruler': '#0087f5',
-		'09_avenger': '#29bbff',
-		'10_alterego': '#5ccbff',
-		'11_foreigner': '#1f9aff',
-		'12_mooncancer': '#5286ff',
-		'13_pretender': '#1fdaff',
-		'14_beast': '#709bff',
-		'15_unbeast': '#00ccf5'
-	};
+	const grandBorderColor = '#0087f5';
 	let iconSize = $state('m');
 	let iconClass = $derived.by(() => {
 		if (iconSize === 's') return 'h-11 w-11';
@@ -372,9 +376,19 @@
 				leftClickMode,
 				rightClickMode,
 				isLimitNp,
-				isSvt5Border
+				isSvt5Border,
+				isDestiny
 			};
 			localStorage.setItem('svt_checklist_settings', JSON.stringify(settingsToSave));
+		}
+	});
+	$effect(() => {
+		if (browser && isSettingsLoaded) {
+			try {
+				localStorage.setItem('svt_destiny', JSON.stringify(destinyAll));
+			} catch (err) {
+				console.warn('데스티니 저장 실패:', err);
+			}
 		}
 	});
 	$effect(() => {
@@ -388,6 +402,12 @@
 		}
 	});
 	onMount(() => {
+		try {
+			const savedDestiny = JSON.parse(localStorage.getItem('svt_destiny') || '{}');
+			if (savedDestiny && typeof savedDestiny === 'object') destinyAll = savedDestiny;
+		} catch {
+			// 손상된 데이터는 무시
+		}
 		const savedSettings = localStorage.getItem('svt_checklist_settings');
 		if (savedSettings) {
 			const parsedSettings = JSON.parse(savedSettings);
@@ -398,6 +418,7 @@
 			if (parsedSettings.rightClickMode) rightClickMode = parsedSettings.rightClickMode;
 			if (parsedSettings.isLimitNp !== undefined) isLimitNp = parsedSettings.isLimitNp;
 			if (parsedSettings.isSvt5Border !== undefined) isSvt5Border = parsedSettings.isSvt5Border;
+			if (parsedSettings.isDestiny !== undefined) isDestiny = parsedSettings.isDestiny;
 		}
 		const savedCurrentId = localStorage.getItem('current_id');
 		if (savedCurrentId) {
@@ -540,6 +561,12 @@
 				<input type="checkbox" bind:checked={isSvt5Border} class="h-5 w-5 cursor-pointer" />
 			</span>
 		</label>
+		<label class="option-label">
+			<span class="option-title"> {t.listOption9} </span>
+			<span class="option-select flex items-center justify-center">
+				<input type="checkbox" bind:checked={isDestiny} class="h-5 w-5 cursor-pointer" />
+			</span>
+		</label>
 	</div>
 	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
 		<button class="option-btn color-green" onclick={importJSONBtn}> 데이터 불러오기 </button>
@@ -614,7 +641,7 @@
 									{#if svtStates.get(id)?.isGrand}
 										<div
 											class="pointer-events-none absolute inset-0 z-5 rounded-md border-4"
-											style="border-color: {grandBorderColors[classFolder] ?? defaultGrandBorder}"
+											style="border-color: {grandBorderColor}"
 										></div>
 									{/if}
 
@@ -673,6 +700,91 @@
 			{/if}
 		{/each}
 	</div>
+	{#if isDestiny}
+		<div class="mt-8 flex flex-col gap-3">
+			{#each destinyRows as row (row[0])}
+				<div class="grid grid-cols-7 justify-items-center gap-1 sm:gap-2">
+					{#each row as classFolder (classFolder)}
+						{@const pickedId = destinyPicks[classFolder]}
+						{@const pickedState = svtStates.get(pickedId)}
+						<div class="flex w-full min-w-0 flex-col items-center gap-1">
+							<img
+								src="{base}/images/class/{classFolder}.png"
+								alt={classFolder}
+								class="aspect-square w-full {destinySizeClass} object-contain"
+							/>
+							<button
+								type="button"
+								class="relative aspect-square w-full {destinySizeClass} cursor-pointer overflow-hidden rounded-md transition-all duration-300 hover:scale-105 active:scale-95 {pickedId
+									? 'bg-gray-200 dark:bg-gray-700'
+									: exportTargetWidth > 0
+										? 'opacity-0'
+										: 'border-2 border-dashed border-gray-400 text-gray-400 dark:border-gray-500'}"
+								onclick={() => openDestinyPicker(classFolder)}
+							>
+								{#if pickedId}
+									<img
+										src="{base}/images/svt/{classFolder}/{pickedId}.png"
+										alt="SVT {pickedId}"
+										class="absolute inset-0 h-full w-full object-cover"
+									/>
+									<div
+										class="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-1/2 bg-linear-to-t from-black/80 to-transparent"
+									></div>
+									{#if pickedState?.isGrand}
+										<div
+											class="pointer-events-none absolute inset-0 z-5 rounded-md border-4"
+											style="border-color: {grandBorderColor}"
+										></div>
+									{/if}
+									<div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 grid h-1/2 grid-cols-3">
+										<div class="flex h-full w-full items-end justify-center">
+											{#if grailTier(pickedState) > 0}
+												<img
+													src="{base}/images/grail{grailTier(pickedState)}.png"
+													alt="grail"
+													class="w-full object-contain drop-shadow-md"
+												/>
+											{/if}
+										</div>
+										<div class="flex h-full w-full items-end justify-center">
+											{#if pickedState?.isGrand}
+												<img
+													src="{base}/images/grand5.png"
+													alt="grand"
+													class="w-full object-contain drop-shadow-md"
+												/>
+											{/if}
+										</div>
+										<div class="flex h-full w-full items-end justify-center">
+											<svg viewBox="0 0 40 40" class="w-full drop-shadow-md">
+												<text
+													x="50%"
+													y="85%"
+													text-anchor="middle"
+													fill={(pickedState?.npLv ?? 0) >= 6 ? '#ef4444' : 'white'}
+													stroke="black"
+													stroke-width="5"
+													paint-order="stroke fill"
+													font-family="sans-serif"
+													font-weight="900"
+													font-size="40"
+												>
+													{pickedState?.npLv ?? 0}
+												</text>
+											</svg>
+										</div>
+									</div>
+								{:else}
+									<span class="text-2xl leading-none">+</span>
+								{/if}
+							</button>
+						</div>
+					{/each}
+				</div>
+			{/each}
+		</div>
+	{/if}
 	<div
 		class="whitespace-wrap flex flex-wrap justify-start gap-x-10 p-1 text-lg font-bold text-gray-900 transition-colors dark:text-gray-100"
 	>
@@ -711,6 +823,30 @@
 	</a>
 	의 아이디어를 빌려 제작되었습니다.
 </div>
+<Modal bind:isModal={isDestinyModal} header={t.destinyPick}>
+	<div class="custom-scrollbar flex max-h-[50vh] flex-wrap justify-center gap-2 overflow-y-scroll p-1">
+		{#each (serverServantIds.JP[destinyPickClass] ?? []).filter((id) => id <= (destinyMaxId ?? Infinity)) as id (id)}
+			<button
+				type="button"
+				class="h-14 w-14 cursor-pointer overflow-hidden rounded-md transition-transform hover:scale-105 active:scale-95 {destinyPicks[
+					destinyPickClass
+				] === id
+					? 'ring-2 ring-blue-500'
+					: ''}"
+				onclick={() => pickDestiny(id)}
+			>
+				<img
+					src="{base}/images/svt/{destinyPickClass}/{id}.png"
+					alt="SVT {id}"
+					class="h-full w-full object-cover"
+				/>
+			</button>
+		{/each}
+	</div>
+	{#snippet footer()}
+		<button class="my-btn" onclick={() => pickDestiny(0)}>{t.destinyClear}</button>
+	{/snippet}
+</Modal>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
 	<div class="flex flex-col gap-2">
 		<button
