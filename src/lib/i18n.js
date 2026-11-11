@@ -57,7 +57,7 @@ export const i18n = {
 		listOption7b: '없음',
 		listOption2svt5: '1억DL선택권',
 		listOption8: '1억DL선택권',
-		listOption9: '데스티니',
+		listOption9: '데스티니(KR)',
 		destinyPick: '서번트 선택',
 		destinyClear: '선택 해제',
 	},
@@ -118,7 +118,7 @@ export const i18n = {
 		listOption7b: '制限なし',
 		listOption2svt5: '1億DL選択券',
 		listOption8: '1億DL選択券',
-		listOption9: 'デスティニー',
+		listOption9: 'デスティニー(KR)',
 		destinyPick: 'サーヴァント選択',
 		destinyClear: '選択解除'
 	},
@@ -179,7 +179,7 @@ export const i18n = {
 		listOption7b: 'No Limit',
 		listOption2svt5: '100M DL Ticket',
 		listOption8: '100M DL Ticket',
-		listOption9: 'Destiny',
+		listOption9: 'Destiny (KR)',
 		destinyPick: 'Select Servant',
 		destinyClear: 'Clear'
 	}
