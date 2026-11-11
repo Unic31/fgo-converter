@@ -497,7 +497,7 @@
 	</div>
 </div>
 <div class="my-div flex flex-col gap-2">
-	<div class="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-2">
+	<div class="grid grid-cols-[repeat(auto-fill,minmax(max(160px,calc((100%_-_24px)/4)),1fr))] gap-2">
 		<label class="option-label">
 			<span class="option-title"> {t.listOption1} </span>
 			<select value={currentId} onchange={handleAccountChange} class="option-select">
