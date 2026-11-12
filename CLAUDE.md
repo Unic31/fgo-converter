@@ -41,4 +41,5 @@ SvelteKit(Svelte 5) + Tailwind 정적 사이트(GitHub Pages). 클라이언트 �
 - localStorage는 origin(포트 포함)별로 분리됨. 개발 시 `localhost` 주소가 다르면 데이터가 비어 보임(삭제된 것 아님)
 - 샘플 데이터: 다운로드 폴더의 `chaldea-userdata-*.json`, `chaldea_data_*.csv` (CSV는 보유 판정 검증용으로만 참고)
 - 이미지 저장은 `html-to-image`의 `toPng`(공통 함수 `capturePng`)
+- 다국어: 화면 문구는 `src/lib/i18n.js`의 KR/JP/EN에 같은 키로 추가하고 `t.키`로 읽는다. 값 자리는 `{이름}`(체크리스트는 `fmt`, 링크·아이콘을 끼울 땐 `splitTpl`). dev 전용 영역(`/csv`, 컨버터 디버그 패널)과 SEO용 `<title>`/meta는 한국어 유지
 - 검증: `npx svelte-check --threshold error`

@@ -217,7 +217,7 @@
 
 	function fncConvert(actions, delegate) {
 		if (actions.length <= 0) {
-			alert('URL에 등록된 전투 데이터가 없습니다.');
+			alert(t.noBattleData);
 			return '';
 		}
 		let command = '';

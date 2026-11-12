@@ -4,6 +4,19 @@
 	import { base } from '$app/paths';
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
+	const creditLinks = {
+		site: { href: 'https://leaflu0315.github.io/fgo/', label: 'Servant Checklist' },
+		a: { href: 'https://github.com/mgneko/mgneko.github.io', label: 'mgneko' },
+		b: { href: 'https://github.com/LeafLu0315/fgo', label: 'LeafLu' }
+	};
+	// i18n 문구의 {키} 자리를 값으로 채운다
+	const fmt = (str, vars) => str.replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m);
+	// 문구를 {키} 기준으로 텍스트/자리표시 조각으로 나눈다(링크·아이콘을 끼워 넣을 때 사용)
+	const splitTpl = (str) =>
+		str.split(/(\{\w+\})/).map((part) => {
+			const m = part.match(/^\{(\w+)\}$/);
+			return m ? { key: m[1] } : { text: part };
+		});
 	import { serverServantIds, svtClassMap, destinyMaxId } from '$lib/svtList.js';
 	import { GRAIL_100, GRAIL_120, getGrail, grailTier } from '$lib/grail.js';
 	import { SvelteMap } from 'svelte/reactivity';
@@ -198,7 +211,7 @@
 			await capturePng(captureArea, 'FGO_Checklist');
 		} catch (error) {
 			console.error('캡처 에러:', error);
-			alert('이미지 저장 중 오류가 발생했습니다.');
+			alert(t.imageSaveError);
 		} finally {
 			// 작업이 끝나면 화면을 원상 복구하고 로딩창 끄기
 			exportTargetWidth = 0;
@@ -222,7 +235,7 @@
 			await capturePng(destinyCaptureArea, 'FGO_CheckList_Destiny');
 		} catch (error) {
 			console.error('캡처 에러:', error);
-			alert('이미지 저장 중 오류가 발생했습니다.');
+			alert(t.imageSaveError);
 		} finally {
 			destinyExportWidth = 0;
 			await new Promise((resolve) => setTimeout(resolve, 50));
@@ -298,10 +311,10 @@
 				parsed = null;
 			}
 			if (!parsed) {
-				alert('칼데아 앱의 사용자 데이터 JSON 파일이 아닙니다.');
+				alert(t.importInvalid);
 			} else if (parsed.size === 0) {
 				// 보유 서번트가 하나도 없으면 기존 데이터를 지우지 않는다
-				alert('데이터에 불러올 보유 서번트가 없어 기존 데이터를 유지합니다.');
+				alert(t.importEmpty);
 			} else {
 				const items = findImportConflicts(parsed);
 				if (items.length > 0) {
@@ -422,8 +435,8 @@
 		saveAccountsData();
 		const kept = items.filter((item) => !item.useImported).length;
 		alert(
-			`${parsed.size}개의 서번트 데이터를 불러왔습니다.` +
-				(kept > 0 ? `\n(${kept}개 항목은 기존 값을 유지했습니다)` : '')
+			fmt(t.importDone, { count: parsed.size }) +
+				(kept > 0 ? '\n' + fmt(t.importKept, { count: kept }) : '')
 		);
 	}
 
@@ -441,10 +454,10 @@
 		loadServantsToMap(currentId);
 	}
 	function resetData() {
-		if (confirm('체크리스트 데이터가 삭제됩니다. 정말 초기화하시겠습니까?')) {
+		if (confirm(t.resetConfirm)) {
 			svtStates.clear();
 			saveAccountsData();
-			alert('데이터가 초기화되었습니다.');
+			alert(t.resetDone);
 		}
 	}
 
@@ -644,7 +657,7 @@
 				<option value="KR">KR</option>
 				<option value="JP">JP</option>
 				<option value="NA">NA</option>
-				<option value="luckyBag">확정가챠</option>
+				<option value="luckyBag">{t.listOption2luckyBag}</option>
 				<option value="svt5">{t.listOption2svt5}</option>
 			</select>
 		</label>
@@ -703,25 +716,25 @@
 	<!-- 1줄: 불러오기/초기화, 2줄: 저장 버튼들(데스티니 켜면 3개가 한 줄에 균등 배치) -->
 	<div class="flex flex-col gap-2 break-keep">
 		<div class="flex gap-2">
-			<button class="option-btn color-green flex-1" onclick={importJSONBtn}> 데이터 불러오기 </button>
-			<button class="option-btn color-orange flex-1" onclick={resetData}> 데이터 초기화 </button>
+			<button class="option-btn color-green flex-1" onclick={importJSONBtn}>{t.btnImport}</button>
+			<button class="option-btn color-orange flex-1" onclick={resetData}>{t.btnReset}</button>
 		</div>
 		<div class="flex gap-2">
 			{#if currentServer == 'luckyBag'}
 				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('luckyBag')}>
-					저장
+					{t.btnSave}
 				</button>
 			{:else}
 				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('single')}>
-					한줄로 저장
+					{t.btnSaveSingle}
 				</button>
 				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('double')}>
-					두줄로 저장
+					{t.btnSaveDouble}
 				</button>
 			{/if}
 			{#if isDestiny}
 				<button class="option-btn color-blue flex-1" onclick={saveDestinyImage}>
-					데스티니 저장
+					{t.btnSaveDestiny}
 				</button>
 			{/if}
 		</div>
@@ -940,33 +953,17 @@
 	</div>
 </div>
 <div class="text-right font-bold text-gray-900 transition-colors dark:text-gray-100">
-	<a
-		href="https://leaflu0315.github.io/fgo/"
-		target="_blank"
-		rel="noopener noreferrer"
-		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-	>
-		Servant Checklist
-	</a>
-	를 제작하신
-	<a
-		href="https://github.com/mgneko/mgneko.github.io"
-		target="_blank"
-		rel="noopener noreferrer"
-		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-	>
-		mgneko
-	</a>
-	와
-	<a
-		href="https://github.com/LeafLu0315/fgo"
-		target="_blank"
-		rel="noopener noreferrer"
-		class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
-	>
-		LeafLu
-	</a>
-	의 아이디어를 빌려 제작되었습니다.
+	{#each splitTpl(t.credit) as part, i (i)}
+		{#if part.key && creditLinks[part.key]}
+			<a
+				href={creditLinks[part.key].href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="transition-colors hover:text-gray-800 hover:underline dark:hover:text-gray-300"
+				>{creditLinks[part.key].label}</a
+			>
+		{:else}{part.text}{/if}
+	{/each}
 </div>
 <Modal bind:isModal={isDestinyModal} header={t.destinyPick}>
 	<div class="custom-scrollbar flex max-h-[50vh] flex-wrap justify-center gap-2 overflow-y-scroll p-1">
@@ -992,19 +989,18 @@
 		<button class="my-btn" onclick={() => pickDestiny(0)}>{t.destinyClear}</button>
 	{/snippet}
 </Modal>
-<Modal bind:isModal={isImportConflictModal} header="불러오기 확인">
+<Modal bind:isModal={isImportConflictModal} header={t.importConflict.title}>
 	{#if importPending}
 		<div class="flex flex-col gap-3 text-sm">
 			<div class="my-desc-font">
-				불러온 데이터에서 보구레벨·성배가 줄어들거나 관위 표시가 사라지는 서번트가 있습니다. 항목마다 반영할
-				값을 골라주세요. 나머지 서번트는 불러온 데이터로 반영됩니다.
+				{t.importConflict.desc}
 			</div>
 			<div class="flex gap-2">
 				<button class="option-btn color-blue py-1" onclick={() => setAllImportChoices(false)}>
-					모두 기존 유지
+					{t.importConflict.allKeep}
 				</button>
 				<button class="option-btn color-orange py-1" onclick={() => setAllImportChoices(true)}>
-					모두 불러온 값
+					{t.importConflict.allImported}
 				</button>
 			</div>
 			<div class="flex flex-col gap-2">
@@ -1020,22 +1016,26 @@
 						{/if}
 						<div class="min-w-0 flex-1 break-keep">
 							{#if item.kind === 'np'}
-								보구 {item.from} → {item.to >= 1 ? `보구 ${item.to}` : '미보유'}
+								{fmt(t.importConflict.np, { lv: item.from })} →
+								{item.to >= 1 ? fmt(t.importConflict.np, { lv: item.to }) : t.importConflict.unowned}
 							{:else if item.kind === 'grail'}
-								성배 {item.from}개 → {item.to > 0 ? `${item.to}개` : '없음'}
+								{fmt(t.importConflict.grail, { count: item.from })} →
+								{item.to > 0 ? fmt(t.importConflict.grail, { count: item.to }) : t.importConflict.none}
 							{:else}
 								{#if item.by.length > 0}
-									관위 →
-									{#each item.by as otherId (otherId)}
-										<img
-											src="{base}/images/svt/{svtClassMap[otherId]}/{otherId}.png"
-											alt="SVT {otherId}"
-											class="mx-0.5 inline-block h-6 w-6 rounded object-cover align-middle"
-										/>
+									{#each splitTpl(t.importConflict.grandChange) as part, i (i)}
+										{#if part.key === 'svt'}
+											{#each item.by as otherId (otherId)}
+												<img
+													src="{base}/images/svt/{svtClassMap[otherId]}/{otherId}.png"
+													alt="SVT {otherId}"
+													class="mx-0.5 inline-block h-6 w-6 rounded object-cover align-middle"
+												/>
+											{/each}
+										{:else}{part.text}{/if}
 									{/each}
-									(으)로 변경
 								{:else}
-									관위 해제
+									{t.importConflict.grandRemove}
 								{/if}
 							{/if}
 						</div>
@@ -1046,7 +1046,7 @@
 									: 'bg-blue-500 text-white'}"
 								onclick={() => (item.useImported = false)}
 							>
-								기존 유지
+								{t.importConflict.keep}
 							</button>
 							<button
 								class="cursor-pointer px-2 py-1 {item.useImported
@@ -1054,7 +1054,7 @@
 									: 'text-gray-500'}"
 								onclick={() => (item.useImported = true)}
 							>
-								불러온 값
+								{t.importConflict.imported}
 							</button>
 						</div>
 					</div>
@@ -1064,8 +1064,8 @@
 	{/if}
 	{#snippet footer()}
 		<div class="flex gap-2">
-			<button class="my-btn" onclick={cancelImport}>취소</button>
-			<button class="my-btn" onclick={confirmImport}>적용</button>
+			<button class="my-btn" onclick={cancelImport}>{t.importConflict.cancel}</button>
+			<button class="my-btn" onclick={confirmImport}>{t.importConflict.apply}</button>
 		</div>
 	{/snippet}
 </Modal>
@@ -1104,7 +1104,7 @@
 	<div class="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 		<div class="flex flex-col items-center rounded-xl bg-white p-8 shadow-2xl dark:bg-gray-800">
 			<img src="{base}/images/etc/davinci.webp" class="w-100" alt="davinci" />
-			<div class="text-xl font-bold dark:text-white">다빈치가 이미지를 그리는중...</div>
+			<div class="text-xl font-bold dark:text-white">{t.imageSaving}</div>
 		</div>
 	</div>
 {/if}
