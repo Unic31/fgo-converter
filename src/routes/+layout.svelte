@@ -196,17 +196,6 @@
 					CheckList
 				</a>
 				{#if dev}
-					<a
-						href={resolve('/csv')}
-						class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300
-        			{$page.url.pathname === resolve('/csv')
-							? 'bg-white text-blue-700 dark:bg-gray-800 dark:text-blue-300  '
-							: 'text-gray-500  hover:bg-white dark:bg-gray-900 dark:hover:bg-gray-800'}"
-					>
-						CSV
-					</a>
-				{/if}
-				{#if dev}
 					<button
 						onclick={() => globalState.toggleSidebar()}
 						class="flex shrink-0 items-center rounded-t-xl px-4 py-1 text-lg font-bold whitespace-nowrap transition-all duration-300

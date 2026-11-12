@@ -3,7 +3,6 @@
 SvelteKit(Svelte 5) + Tailwind 정적 사이트(GitHub Pages). 클라이언트 전용, 백엔드 없음.
 - `/converter`: 칼데아 전투 공유 URL → FGA 명령어 변환
 - `/checklist`: 서번트 체크리스트 (5성 보유/보구레벨/성배/관위 표시, 데스티니, PNG 저장)
-- `/csv`: 범용 칼데아 CSV 편집기 (체크리스트와 무관)
 - `src/lib/svtList.js`: 서버별(KR/JP/NA/luckyBag) 5성 collectionNo 목록, `svtClassMap`(ID→클래스 폴더), `destinyMaxId`. `updateSvt.js`가 Atlas Academy API로 갱신
 
 ## 체크리스트 데이터 규격 (기존 사용자 저장 데이터를 항상 읽을 수 있어야 함 — 저장 값이 사라지면 안 됨)
@@ -41,5 +40,5 @@ SvelteKit(Svelte 5) + Tailwind 정적 사이트(GitHub Pages). 클라이언트 �
 - localStorage는 origin(포트 포함)별로 분리됨. 개발 시 `localhost` 주소가 다르면 데이터가 비어 보임(삭제된 것 아님)
 - 샘플 데이터: 다운로드 폴더의 `chaldea-userdata-*.json`, `chaldea_data_*.csv` (CSV는 보유 판정 검증용으로만 참고)
 - 이미지 저장은 `html-to-image`의 `toPng`(공통 함수 `capturePng`)
-- 다국어: 화면 문구는 `src/lib/i18n.js`의 KR/JP/EN에 같은 키로 추가하고 `t.키`로 읽는다. 값 자리는 `{이름}`(체크리스트는 `fmt`, 링크·아이콘을 끼울 땐 `splitTpl`). dev 전용 영역(`/csv`, 컨버터 디버그 패널)과 SEO용 `<title>`/meta는 한국어 유지
+- 다국어: 화면 문구는 `src/lib/i18n.js`의 KR/JP/EN에 같은 키로 추가하고 `t.키`로 읽는다. 값 자리는 `{이름}`(체크리스트는 `fmt`, 링크·아이콘을 끼울 땐 `splitTpl`). dev 전용 영역(컨버터 디버그 패널, Dev 사이드바)과 SEO용 `<title>`/meta는 한국어 유지
 - 검증: `npx svelte-check --threshold error`
