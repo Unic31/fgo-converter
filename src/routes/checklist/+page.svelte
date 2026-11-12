@@ -5,7 +5,7 @@
 	import { i18n } from '$lib/i18n.js';
 	let t = $derived(i18n[globalState.language] || i18n['KR']);
 	import { serverServantIds, svtClassMap, destinyMaxId } from '$lib/svtList.js';
-	import { GRAIL_100, GRAIL_120, grailTier } from '$lib/grail.js';
+	import { GRAIL_100, GRAIL_120, getGrail, grailTier } from '$lib/grail.js';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { browser } from '$app/environment';
 	import { toPng } from 'html-to-image';
@@ -41,6 +41,8 @@
 	}
 	const svt5Ids = new Set(Object.values(serverServantIds.svt5).flat());
 	let exportTargetWidth = $state(0); // 0이면 기본 폭, 숫자가 들어가면 캡처용 고정 폭
+	let destinyExportWidth = $state(0); // 데스티니 단독 저장 시 캡처용 고정 폭
+	let destinyCaptureArea = $state();
 	let isSettingsLoaded = $state(false);
 	let leftClickMode = $state('click');
 	let rightClickMode = $state('decrease');
@@ -193,35 +195,7 @@
 			// 브라우저가 화면을 재배열할 시간(0.3초) 대기
 			await new Promise((resolve) => setTimeout(resolve, 300));
 
-			const dataUrl = await toPng(captureArea, {
-				pixelRatio: 2,
-				backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
-			});
-			const now = new Date();
-			const pad = (n) => String(n).padStart(2, '0');
-			const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-			const fileName = `FGO_Checklist_${timestamp}.png`;
-
-			const res = await fetch(dataUrl);
-			const blob = await res.blob();
-			const objectUrl = URL.createObjectURL(blob);
-
-			// a 태그 생성
-			const link = document.createElement('a');
-			link.href = objectUrl;
-			link.download = fileName;
-
-			// a 태그를 실제 DOM에 임시로 추가
-			document.body.appendChild(link);
-
-			// 클릭하여 다운로드 실행
-			link.click();
-
-			// 다운로드 직후 DOM에서 제거
-			document.body.removeChild(link);
-
-			// 메모리 정리
-			setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+			await capturePng(captureArea, 'FGO_Checklist');
 		} catch (error) {
 			console.error('캡처 에러:', error);
 			alert('이미지 저장 중 오류가 발생했습니다.');
@@ -231,6 +205,55 @@
 			await new Promise((resolve) => setTimeout(resolve, 50));
 			isLoading = false;
 		}
+	}
+
+	// 데스티니 7x2 칸만 따로 저장
+	async function saveDestinyImage() {
+		if (!destinyCaptureArea || isLoading) return;
+		isLoading = true;
+
+		let iconPx = 56;
+		if (iconSize === 's') iconPx = 44;
+		if (iconSize === 'l') iconPx = 72;
+		destinyExportWidth = 7 * iconPx + 6 * 8 + 32; // 7칸 + 간격 + 좌우 여백
+
+		try {
+			await new Promise((resolve) => setTimeout(resolve, 300));
+			await capturePng(destinyCaptureArea, 'FGO_CheckList_Destiny');
+		} catch (error) {
+			console.error('캡처 에러:', error);
+			alert('이미지 저장 중 오류가 발생했습니다.');
+		} finally {
+			destinyExportWidth = 0;
+			await new Promise((resolve) => setTimeout(resolve, 50));
+			isLoading = false;
+		}
+	}
+
+	async function capturePng(node, prefix) {
+		const dataUrl = await toPng(node, {
+			pixelRatio: 2,
+			backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#f3f4f6'
+		});
+		const now = new Date();
+		const pad = (n) => String(n).padStart(2, '0');
+		const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+		const fileName = `${prefix}_${timestamp}.png`;
+
+		const res = await fetch(dataUrl);
+		const blob = await res.blob();
+		const objectUrl = URL.createObjectURL(blob);
+
+		// a 태그를 DOM에 임시로 붙여 클릭해 다운로드 후 제거
+		const link = document.createElement('a');
+		link.href = objectUrl;
+		link.download = fileName;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+
+		// 메모리 정리
+		setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
 	}
 
 	function importJSONBtn() {
@@ -280,19 +303,128 @@
 				// 보유 서번트가 하나도 없으면 기존 데이터를 지우지 않는다
 				alert('데이터에 불러올 보유 서번트가 없어 기존 데이터를 유지합니다.');
 			} else {
-				try {
-					localStorage.setItem('multi_accounts_backup_before_import', JSON.stringify(accounts));
-				} catch (err) {
-					console.warn('가져오기 전 백업 실패(무시됨):', err);
+				const items = findImportConflicts(parsed);
+				if (items.length > 0) {
+					// 보구 하락·관위 해제가 있으면 항목별로 고르게 한다(기본값은 기존 유지)
+					importPending = { parsed, items };
+					isImportConflictModal = true;
+				} else {
+					applyImport(parsed, []);
 				}
-				svtStates.clear();
-				for (const [id, state] of parsed) svtStates.set(id, state);
-				saveAccountsData();
-				alert(`${parsed.size}개의 서번트 데이터를 불러왔습니다.`);
 			}
 			event.target.value = '';
 		};
 		reader.readAsText(file, 'UTF-8');
+	}
+
+	// 가져오기 충돌 확인용 상태: { parsed: Map, items: [{ key, kind, id, from, to, by, useImported }] }
+	let importPending = $state(null);
+	let isImportConflictModal = $state(false);
+
+	// 기존 체크리스트와 비교해 보구레벨이 낮아지거나(미보유 포함) 관위가 사라지는 서번트를 찾는다
+	function findImportConflicts(parsed) {
+		const items = [];
+		const ids = [...svtStates.keys()].sort((a, b) => a - b);
+		for (const id of ids) {
+			const cur = svtStates.get(id);
+			const curNp = Number(cur?.npLv) || 0;
+			const nextNp = parsed.get(id)?.npLv ?? 0;
+			if (curNp >= 1 && nextNp < curNp) {
+				items.push({ key: `np-${id}`, kind: 'np', id, from: curNp, to: nextNp, useImported: false });
+			}
+		}
+		for (const id of ids) {
+			const cur = svtStates.get(id);
+			const imported = parsed.get(id);
+			// 불러온 데이터에 없는(미보유) 서번트는 보구 항목에서 통째로 고르므로 제외한다.
+			// 예전 isGrail: true 는 getGrail 로 5개로 읽는다.
+			if (!imported || !(Number(cur?.npLv) >= 1)) continue;
+			const curGrail = getGrail(cur);
+			const nextGrail = getGrail(imported);
+			if (nextGrail < curGrail) {
+				items.push({ key: `grail-${id}`, kind: 'grail', id, from: curGrail, to: nextGrail, useImported: false });
+			}
+		}
+		for (const id of ids) {
+			const cur = svtStates.get(id);
+			// 예전 데이터의 isGrand: false 때문에 참/거짓으로만 판정한다
+			if (!cur?.isGrand || !(Number(cur.npLv) >= 1) || parsed.get(id)?.isGrand) continue;
+			// 같은 클래스에서 새로 관위가 되는 서번트(덮어쓰기 대상)
+			const by = [...parsed.entries()]
+				.filter(
+					([otherId, s]) =>
+						otherId !== id &&
+						s.isGrand &&
+						!svtStates.get(otherId)?.isGrand &&
+						svtClassMap[otherId] === svtClassMap[id]
+				)
+				.map(([otherId]) => otherId);
+			items.push({ key: `grand-${id}`, kind: 'grand', id, by, useImported: false });
+		}
+		return items;
+	}
+
+	function setAllImportChoices(useImported) {
+		if (!importPending) return;
+		for (const item of importPending.items) item.useImported = useImported;
+	}
+
+	function confirmImport() {
+		if (!importPending) return;
+		applyImport(importPending.parsed, importPending.items);
+		importPending = null;
+		isImportConflictModal = false;
+	}
+
+	function cancelImport() {
+		importPending = null;
+		isImportConflictModal = false;
+	}
+
+	// 가져온 데이터로 교체하되, '기존 유지'로 고른 항목은 기존 값을 살린다
+	function applyImport(parsed, items) {
+		try {
+			localStorage.setItem('multi_accounts_backup_before_import', JSON.stringify(accounts));
+		} catch (err) {
+			console.warn('가져오기 전 백업 실패(무시됨):', err);
+		}
+		const result = new Map(parsed);
+		for (const item of items) {
+			if (item.useImported || item.kind !== 'np') continue;
+			const imported = result.get(item.id);
+			// 가져온 데이터에 없으면(미보유) 기존 상태를 통째로 유지한다
+			result.set(item.id, imported ? { ...imported, npLv: item.from } : { ...svtStates.get(item.id) });
+		}
+		for (const item of items) {
+			if (item.useImported || item.kind !== 'grail') continue;
+			const imported = result.get(item.id);
+			if (!imported) continue;
+			// 기존 개수를 새 형태(grail 개수)로 저장한다
+			const next = { ...imported, grail: item.from };
+			delete next.isGrail;
+			result.set(item.id, next);
+		}
+		for (const item of items) {
+			if (item.useImported || item.kind !== 'grand') continue;
+			const base = result.get(item.id) ?? { ...svtStates.get(item.id) };
+			result.set(item.id, { ...base, isGrand: true });
+			// 같은 클래스에 새로 들어온 관위는 받지 않는다
+			for (const otherId of item.by) {
+				const other = result.get(otherId);
+				if (!other) continue;
+				const next = { ...other };
+				delete next.isGrand;
+				result.set(otherId, next);
+			}
+		}
+		svtStates.clear();
+		for (const [id, state] of result) svtStates.set(id, state);
+		saveAccountsData();
+		const kept = items.filter((item) => !item.useImported).length;
+		alert(
+			`${parsed.size}개의 서번트 데이터를 불러왔습니다.` +
+				(kept > 0 ? `\n(${kept}개 항목은 기존 값을 유지했습니다)` : '')
+		);
 	}
 
 	function handleAccountChange(e) {
@@ -568,24 +700,31 @@
 			</span>
 		</label>
 	</div>
-	<div class="grid grid-cols-2 gap-2 md:grid-cols-4">
-		<button class="option-btn color-green" onclick={importJSONBtn}> 데이터 불러오기 </button>
-		<button class="option-btn color-orange" onclick={resetData}> 데이터 초기화 </button>
-		{#if currentServer == 'luckyBag'}
-			<button
-				class="option-btn color-blue col-span-2 md:col-span-2"
-				onclick={() => saveAsImage('luckyBag')}
-			>
-				저장
-			</button>
-		{:else}
-			<button class="option-btn color-blue" onclick={() => saveAsImage('single')}>
-				한줄로 저장
-			</button>
-			<button class="option-btn color-blue" onclick={() => saveAsImage('double')}>
-				두줄로 저장
-			</button>
-		{/if}
+	<!-- 1줄: 불러오기/초기화, 2줄: 저장 버튼들(데스티니 켜면 3개가 한 줄에 균등 배치) -->
+	<div class="flex flex-col gap-2 break-keep">
+		<div class="flex gap-2">
+			<button class="option-btn color-green flex-1" onclick={importJSONBtn}> 데이터 불러오기 </button>
+			<button class="option-btn color-orange flex-1" onclick={resetData}> 데이터 초기화 </button>
+		</div>
+		<div class="flex gap-2">
+			{#if currentServer == 'luckyBag'}
+				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('luckyBag')}>
+					저장
+				</button>
+			{:else}
+				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('single')}>
+					한줄로 저장
+				</button>
+				<button class="option-btn color-blue flex-1" onclick={() => saveAsImage('double')}>
+					두줄로 저장
+				</button>
+			{/if}
+			{#if isDestiny}
+				<button class="option-btn color-blue flex-1" onclick={saveDestinyImage}>
+					데스티니 저장
+				</button>
+			{/if}
+		</div>
 	</div>
 </div>
 <input bind:this={fileInput} type="file" class="hidden" accept=".json" onchange={importJSON} />
@@ -701,7 +840,13 @@
 		{/each}
 	</div>
 	{#if isDestiny}
-		<div class="mt-8 flex flex-col gap-3">
+		<div
+			bind:this={destinyCaptureArea}
+			class="flex flex-col gap-3 {destinyExportWidth > 0 ? 'm-0! rounded-xl p-4' : 'mt-8'}"
+			style={destinyExportWidth > 0
+				? `width: ${destinyExportWidth}px; min-width: ${destinyExportWidth}px; max-width: none;`
+				: ''}
+		>
 			{#each destinyRows as row (row[0])}
 				<div class="grid grid-cols-7 justify-items-center gap-1 sm:gap-2">
 					{#each row as classFolder (classFolder)}
@@ -717,7 +862,7 @@
 								type="button"
 								class="relative aspect-square w-full {destinySizeClass} cursor-pointer overflow-hidden rounded-md transition-all duration-300 hover:scale-105 active:scale-95 {pickedId
 									? 'bg-gray-200 dark:bg-gray-700'
-									: exportTargetWidth > 0
+									: exportTargetWidth > 0 || destinyExportWidth > 0
 										? 'opacity-0'
 										: 'border-2 border-dashed border-gray-400 text-gray-400 dark:border-gray-500'}"
 								onclick={() => openDestinyPicker(classFolder)}
@@ -845,6 +990,83 @@
 	</div>
 	{#snippet footer()}
 		<button class="my-btn" onclick={() => pickDestiny(0)}>{t.destinyClear}</button>
+	{/snippet}
+</Modal>
+<Modal bind:isModal={isImportConflictModal} header="불러오기 확인">
+	{#if importPending}
+		<div class="flex flex-col gap-3 text-sm">
+			<div class="my-desc-font">
+				불러온 데이터에서 보구레벨·성배가 줄어들거나 관위 표시가 사라지는 서번트가 있습니다. 항목마다 반영할
+				값을 골라주세요. 나머지 서번트는 불러온 데이터로 반영됩니다.
+			</div>
+			<div class="flex gap-2">
+				<button class="option-btn color-blue py-1" onclick={() => setAllImportChoices(false)}>
+					모두 기존 유지
+				</button>
+				<button class="option-btn color-orange py-1" onclick={() => setAllImportChoices(true)}>
+					모두 불러온 값
+				</button>
+			</div>
+			<div class="flex flex-col gap-2">
+				{#each importPending.items as item (item.key)}
+					{@const classFolder = svtClassMap[item.id]}
+					<div class="flex items-center gap-2 rounded-lg bg-gray-100 p-2 dark:bg-gray-700">
+						{#if classFolder}
+							<img
+								src="{base}/images/svt/{classFolder}/{item.id}.png"
+								alt="SVT {item.id}"
+								class="h-10 w-10 shrink-0 rounded-md object-cover"
+							/>
+						{/if}
+						<div class="min-w-0 flex-1 break-keep">
+							{#if item.kind === 'np'}
+								보구 {item.from} → {item.to >= 1 ? `보구 ${item.to}` : '미보유'}
+							{:else if item.kind === 'grail'}
+								성배 {item.from}개 → {item.to > 0 ? `${item.to}개` : '없음'}
+							{:else}
+								{#if item.by.length > 0}
+									관위 →
+									{#each item.by as otherId (otherId)}
+										<img
+											src="{base}/images/svt/{svtClassMap[otherId]}/{otherId}.png"
+											alt="SVT {otherId}"
+											class="mx-0.5 inline-block h-6 w-6 rounded object-cover align-middle"
+										/>
+									{/each}
+									(으)로 변경
+								{:else}
+									관위 해제
+								{/if}
+							{/if}
+						</div>
+						<div class="flex shrink-0 overflow-hidden rounded-md border border-gray-300 dark:border-gray-500">
+							<button
+								class="cursor-pointer px-2 py-1 {item.useImported
+									? 'text-gray-500'
+									: 'bg-blue-500 text-white'}"
+								onclick={() => (item.useImported = false)}
+							>
+								기존 유지
+							</button>
+							<button
+								class="cursor-pointer px-2 py-1 {item.useImported
+									? 'bg-orange-500 text-white'
+									: 'text-gray-500'}"
+								onclick={() => (item.useImported = true)}
+							>
+								불러온 값
+							</button>
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	{/if}
+	{#snippet footer()}
+		<div class="flex gap-2">
+			<button class="my-btn" onclick={cancelImport}>취소</button>
+			<button class="my-btn" onclick={confirmImport}>적용</button>
+		</div>
 	{/snippet}
 </Modal>
 <Modal bind:isModal={isManualModal} header={t.howtouse}>
