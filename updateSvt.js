@@ -4,7 +4,7 @@ import axios from 'axios';
 import { serverServantIds } from './src/lib/svtList.js';
 
 const SVT_LIST_PATH = path.resolve('./src/lib/svtList.js');
-const IMAGE_BASE_DIR = path.resolve('./static/images/svt');
+const IMAGE_BASE_DIR = path.resolve('./static/images/svt5');
 const LOG_FILE_PATH = path.resolve('./update_log.txt');
 
 const banList = new Set([83, 149, 151, 152, 168, 240, 333]);
@@ -27,18 +27,13 @@ const classMapping = {
     unbeast: '15_unbeast',
 };
 
+// 다운로드가 끝난 뒤에만 파일을 쓴다(실패 시 빈 파일이 남지 않도록)
 async function downloadImage(url, downloadPath) {
     const dir = path.dirname(downloadPath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-    const writer = fs.createWriteStream(downloadPath);
-    const response = await axios({ url, method: 'GET', responseType: 'stream' });
-    response.data.pipe(writer);
-
-    return new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-    });
+    const response = await axios({ url, method: 'GET', responseType: 'arraybuffer', timeout: 30000 });
+    fs.writeFileSync(downloadPath, Buffer.from(response.data));
 }
 
 function getTodayString() {
@@ -156,9 +151,76 @@ async function run(server) {
         }
     }
 }
+// 4성 서번트 이미지(JP 기준)를 static/images/svt4/<클래스>/<collectionNo>.png 로 받는다.
+// svtList.js는 건드리지 않고, 이미 받은 이미지는 건너뛴다. 서번트별 에러는 모아서 따로 기록한다.
+const IMAGE_4STAR_DIR = path.resolve('./static/images/svt4');
+const ERROR_4STAR_LOG_PATH = path.resolve('./update_svt4_errors.txt');
+
+async function run4Star() {
+    const server = 'JP';
+    let logContents = `${getTodayString()} - [${server} 4성]`;
+    const errors = [];
+    let downloadedCount = 0;
+    let skippedCount = 0;
+    try {
+        const response = await axios.get(`https://api.atlasacademy.io/export/${server}/basic_servant.json`);
+        const fourStarServants = response.data.filter(svt => svt.rarity === 4);
+
+        for (const servant of fourStarServants) {
+            const { id, collectionNo, name, face } = servant;
+            const className = String(servant.className || '').toLowerCase();
+            const label = `id:${id}, no: ${collectionNo}, name: ${name}, class: ${className}`;
+
+            const targetDirName = classMapping[className];
+            // svt4에는 비스트/언비스트 폴더를 두지 않는다
+            if (!targetDirName || targetDirName === '14_beast' || targetDirName === '15_unbeast') {
+                errors.push(`[클래스 폴더 없음] ${label}`);
+                continue;
+            }
+            if (!face) {
+                errors.push(`[이미지 URL 없음] ${label}`);
+                continue;
+            }
+
+            const imagePath = path.join(IMAGE_4STAR_DIR, targetDirName, `${collectionNo}.png`);
+            if (fs.existsSync(imagePath) && fs.statSync(imagePath).size > 0) {
+                skippedCount++;
+                continue;
+            }
+
+            try {
+                await downloadImage(face, imagePath);
+                downloadedCount++;
+                logContents += `\n서번트 이미지 저장: svt4/${targetDirName}/${collectionNo}.png (${name})`;
+            } catch (error) {
+                errors.push(`[다운로드 실패] ${label} - ${error.message} (${face})`);
+            }
+        }
+    } catch (error) {
+        errors.push(`[목록 조회 실패] ${error.message}`);
+    } finally {
+        if (downloadedCount > 0) {
+            logContents += `\n총 ${downloadedCount}건 저장 완료.\n`;
+            fs.appendFileSync(LOG_FILE_PATH, logContents, 'utf-8');
+        }
+        if (errors.length > 0) {
+            const errorContents = `${getTodayString()} - [${server} 4성] 에러 ${errors.length}건\n${errors.join('\n')}\n`;
+            fs.appendFileSync(ERROR_4STAR_LOG_PATH, errorContents, 'utf-8');
+            console.error(errorContents);
+        }
+        console.log(`[${server} 4성] 저장 ${downloadedCount}건, 이미 있음 ${skippedCount}건, 에러 ${errors.length}건`);
+    }
+}
+
 async function main() {
+    // `node updateSvt.js 4star` 로 실행하면 4성 이미지만 받는다
+    if (process.argv[2] === '4star') {
+        await run4Star();
+        return;
+    }
     await run("JP");
     await run("KR");
     await run("NA");
+    await run4Star();
 }
 main()

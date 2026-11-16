@@ -776,7 +776,7 @@
 								oncontextmenu={(e) => handleRightClick(e, id)}
 							>
 								<img
-									src="{base}/images/svt/{classFolder}/{id}.png"
+									src="{base}/images/svt5/{classFolder}/{id}.png"
 									alt="SVT {id}"
 									onclick={(e) => handleLeftClick(e, id, 'npLv')}
 									class="absolute inset-0 h-full w-full object-cover transition-all {svtStates.get(
@@ -882,7 +882,7 @@
 							>
 								{#if pickedId}
 									<img
-										src="{base}/images/svt/{classFolder}/{pickedId}.png"
+										src="{base}/images/svt5/{classFolder}/{pickedId}.png"
 										alt="SVT {pickedId}"
 										class="absolute inset-0 h-full w-full object-cover"
 									/>
@@ -978,7 +978,7 @@
 				onclick={() => pickDestiny(id)}
 			>
 				<img
-					src="{base}/images/svt/{destinyPickClass}/{id}.png"
+					src="{base}/images/svt5/{destinyPickClass}/{id}.png"
 					alt="SVT {id}"
 					class="h-full w-full object-cover"
 				/>
@@ -1009,7 +1009,7 @@
 					<div class="flex items-center gap-2 rounded-lg bg-gray-100 p-2 dark:bg-gray-700">
 						{#if classFolder}
 							<img
-								src="{base}/images/svt/{classFolder}/{item.id}.png"
+								src="{base}/images/svt5/{classFolder}/{item.id}.png"
 								alt="SVT {item.id}"
 								class="h-10 w-10 shrink-0 rounded-md object-cover"
 							/>
@@ -1027,7 +1027,7 @@
 										{#if part.key === 'svt'}
 											{#each item.by as otherId (otherId)}
 												<img
-													src="{base}/images/svt/{svtClassMap[otherId]}/{otherId}.png"
+													src="{base}/images/svt5/{svtClassMap[otherId]}/{otherId}.png"
 													alt="SVT {otherId}"
 													class="mx-0.5 inline-block h-6 w-6 rounded object-cover align-middle"
 												/>

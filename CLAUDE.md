@@ -4,6 +4,7 @@ SvelteKit(Svelte 5) + Tailwind 정적 사이트(GitHub Pages). 클라이언트 �
 - `/converter`: 칼데아 전투 공유 URL → FGA 명령어 변환
 - `/checklist`: 서번트 체크리스트 (5성 보유/보구레벨/성배/관위 표시, 데스티니, PNG 저장)
 - `src/lib/svtList.js`: 서버별(KR/JP/NA/luckyBag) 5성 collectionNo 목록, `svtClassMap`(ID→클래스 폴더), `destinyMaxId`. `updateSvt.js`가 Atlas Academy API로 갱신
+- 서번트 얼굴 이미지: 5성 `static/images/svt5/<클래스폴더>/<collectionNo>.png`, 4성 `static/images/svt4/...`(비스트/언비스트 폴더 없음, 아직 화면에서 안 씀). 4성은 `node updateSvt.js 4star`로 JP 기준 이미지만 받음(svtList.js 미변경, 있는 파일은 건너뜀, 서번트별 에러는 `update_svt4_errors.txt`). 인자 없이 실행하면 5성 갱신 후 4성도 받음
 
 ## 체크리스트 데이터 규격 (기존 사용자 저장 데이터를 항상 읽을 수 있어야 함 — 저장 값이 사라지면 안 됨)
 - localStorage 키
