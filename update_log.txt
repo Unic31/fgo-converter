@@ -56,3 +56,7 @@ svtList.js 업데이트 완료: 13_pretender 배열에 484 추가
 2026.11.13-17:08 - [NA]
 NEW SVT - id:205300, no: 427, name: Tutankhamun, class: archer
 svtList.js 업데이트 완료: 02_archer 배열에 427 추가총 1건 업데이트 완료.
+2026.11.16-19:31 - [JP]
+NEW SVT - id:2501700, no: 487, name: ダイナマイト利休, class: foreigner
+svtList.js 업데이트 완료: 11_foreigner 배열에 487 추가
+서번트 이미지 저장: 11_foreigner/487.png총 1건 업데이트 완료.
