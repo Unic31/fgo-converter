@@ -53,3 +53,6 @@ svtList.js 업데이트 완료: 04_rider 배열에 483 추가
 NEW SVT - id:2801400, no: 484, name: 卑弥呼＆壱与, class: pretender
 svtList.js 업데이트 완료: 13_pretender 배열에 484 추가
 서번트 이미지 저장: 13_pretender/484.png총 1건 업데이트 완료.
+2026.11.13-17:08 - [NA]
+NEW SVT - id:205300, no: 427, name: Tutankhamun, class: archer
+svtList.js 업데이트 완료: 02_archer 배열에 427 추가총 1건 업데이트 완료.
